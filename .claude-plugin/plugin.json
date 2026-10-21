@@ -1,0 +1,10 @@
+{
+  "name": "jrhagents",
+  "version": "19.0.0",
+  "description": "Practical project inspection and AI coding workflows. Includes portable agent skill instructions.",
+  "author": {"name": "JRHagents contributors"},
+  "homepage": "https://github.com/Jidy23/JRHagents",
+  "repository": "https://github.com/Jidy23/JRHagents",
+  "license": "MIT",
+  "keywords": ["agent-skill", "code-audit", "project-planning"]
+}

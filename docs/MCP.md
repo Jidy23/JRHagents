@@ -1,28 +1,33 @@
-# MCP stdio server (local, read-only)
+# Menghubungkan MCP JRHagents
 
-Install the Python package from the checked-out source first:
+MCP adalah cara aplikasi AI yang kompatibel memanggil alat yang kamu izinkan. JRHagents memiliki **5 tool nyata yang hanya membaca data proyek**: `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, dan `jrh_status`.
 
-```bash
-python -m pip install .
-python -m jrhagents.mcp --project .
-```
+## Cara termudah: setup otomatis
 
-**The second command is a server, not a normal terminal chat**. It waits for JSON-RPC messages on standard input.
-Tools: `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, `jrh_status`. All are bounded and read-only. Tools only access the selected local project. No credentials, network access, file writes, build commands or autonomous coding.
-
-Generate a config snippet matching your installed interpreter, instead of guessing a Python location:
+Setelah menginstal paket Python [sesuai panduan](INSTALL.md), buka terminal **di folder proyek**. Contoh untuk Cursor:
 
 ```bash
-jrhagents mcp-config --client claude --project /absolute/project/path
-jrhagents mcp-config --client vscode --project /absolute/project/path
+./.jrh-venv/bin/python -m jrhagents setup --mode mcp --client cursor --project .
 ```
 
-Copy the returned JSON into your **existing** client's MCP configuration, merging under `mcpServers` (Claude Desktop/Cursor/generic) or `servers` (VS Code). Do not overwrite other registered servers. Different client versions may require adjustments; refer to their official MCP settings docs. The `mcp.json` inside this repo is for Agent Plugins 1.0 and assumes a working `python` with JRHagents installed.
+Windows: gunakan `.\.jrh-venv\Scripts\python.exe`.
 
-## Test handshake locally
+Opsi client: `claude`, `cursor`, `gemini`, `copilot`, `vscode`. JRHagents akan membuat/menambah pengaturan sesuai format client, mempertahankan pengaturan lain, melakukan backup bila berkas sebelumnya ada, dan tidak mengganti entri `jrhagents` yang berbeda.
+
+Periksa dulu tanpa menulis:
 
 ```bash
-python -m unittest tests.test_mcp -v
+./.jrh-venv/bin/python -m jrhagents setup --mode mcp --client cursor --project . --dry-run
 ```
 
-MCP transport is JSON-RPC 2.0 over line-delimited UTF-8 stdio. There is no HTTP or SSE endpoint, no network permissions and no background daemon.
+Restart aplikasi dan lihat apakah server JRHagents muncul. Jika tidak, cek log dan pengaturan MCP aplikasi terkait.
+
+## Alternatif manual
+
+```bash
+./.jrh-venv/bin/python -m jrhagents mcp-config --client claude --project .
+```
+
+Salin JSON yang dihasilkan ke pengaturan klien yang sesuai. Untuk Codex dan platform lain yang memiliki format selain JSON, ikuti panduan MCP resmi platform tersebut. Jangan menempel JSON ke file konfigurasi tanpa memastikan struktur benar.
+
+**Keamanan:** alat MCP tidak menjalankan kode proyek, tidak memodifikasi file, dan tidak mengirim data ke layanan eksternal. Server tetap berjalan dengan izin file akun komputer pengguna dan hanya diberi satu root proyek. Jangan hubungkan MCP dari repositori yang tidak kamu percayai.

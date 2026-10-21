@@ -205,7 +205,7 @@ class InstallerTests(unittest.TestCase):
         dest = Path(install("codex", project=self.root)["installed_at"])
         p = subprocess.run([sys.executable, "-m", "jrhagents", "--version"], capture_output=True, text=True, timeout=20)
         self.assertEqual(p.returncode, 0, p.stderr)
-        self.assertIn("17.0.0", p.stdout)
+        self.assertIn("19.0.0", p.stdout)
 
     def test_invalid_client(self):
         with self.assertRaises(ValueError): destination("unknown", project=self.root)

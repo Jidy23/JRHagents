@@ -1,41 +1,87 @@
-# 3 steps to JRHagents — Windows, macOS, Linux
+# Cara pasang JRHagents — bahasa sederhana
 
-## Step 1 — Get the source and install Python package
+**Kalau cuma ingin mencoba, tidak perlu pasang apa pun.** Buka [Audit Cepat di website](https://jidy23.github.io/JRHagents/#coba), pilih berkas, dan lihat hasil. Data tidak dikirim ke server.
 
-Download and extract https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip, open a terminal in the extracted directory, and run:
+Kalau ingin Skill atau MCP bekerja di aplikasi AI coding, ikuti ini:
 
-```bash
-python -m pip install .
+## 1. Siapkan Python
+
+Unduh Python 3.9 atau lebih baru dari https://www.python.org/downloads/. Buka terminal di folder **proyek kamu sendiri**, bukan folder JRHagents.
+
+- Windows: PowerShell → `py --version`
+- macOS / Linux: Terminal → `python3 --version`
+
+Jika Python belum dikenali, install Python dan buka terminal baru. Jangan menyalin perintah instalasi yang belum kamu baca dari sumber tidak resmi.
+
+## 2. Pasang toolkit dari GitHub
+
+Perintah berikut membuat lingkungan khusus dalam proyek sehingga tidak mengganggu Python lain. **Jalankan satu baris setiap kali.**
+
+### Windows PowerShell
+
+```powershell
+py -m venv .jrh-venv
+.\.jrh-venv\Scripts\python.exe -m pip install "https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip"
+.\.jrh-venv\Scripts\python.exe -m jrhagents --version
 ```
 
-On Windows use `py -m pip install .` when the `python` command is unavailable. Python 3.9+ is required. For isolated installs, a virtual environment or pipx is recommended.
-
-## Step 2 — Install a skill into your project
+### macOS / Linux
 
 ```bash
-jrhagents install --client codex --project /path/to/project
+python3 -m venv .jrh-venv
+./.jrh-venv/bin/python -m pip install "https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip"
+./.jrh-venv/bin/python -m jrhagents --version
 ```
 
-Replace `codex` with `claude`, `gemini`, `cursor`, `copilot`, `opencode` or `windsurf`. Run `jrhagents install --client all --project PATH` to create all seven skill locations. This is optional: use just the platform you need.
+Pemasangan membutuhkan internet dan akses GitHub. Jika unduhan gagal, cek koneksi atau unduh ZIP dari halaman repo, ekstrak, lalu jalankan `python -m pip install /lokasi/folder-hasil-ekstrak` menggunakan Python dari `.jrh-venv`.
 
-If a skill already exists, installation will refuse to overwrite it. `--dry-run` previews, and `--upgrade` makes a timestamped backup and replaces it. `--scope user` installs for one account (not supported with `--client all`). Restart the client or reload skills as documented by its vendor.
+## 3. Pilih mode
 
-## Step 3 — Use a plain-language request
+### Skill — paling mudah
 
-> JRHagents, audit this project, prioritize real issues, and show verification evidence.
-
-## MCP separately (optional)
+Pilih **satu** aplikasi yang benar-benar kamu gunakan: `codex`, `claude`, `gemini`, `cursor`, `copilot`, `opencode`, atau `windsurf`.
 
 ```bash
-jrhagents mcp-config --client claude --project /path/to/project
+# Contoh dengan Python di venv yang telah dibuat:
+./.jrh-venv/bin/python -m jrhagents setup --mode skill --client cursor --project .
 ```
 
-See [MCP](MCP.md) for connecting an actual read-only MCP server. For portable plugin format see [Platforms](PLATFORMS.md).
+Windows: ganti awal perintah dengan `.\.jrh-venv\Scripts\python.exe`.
 
-## When things fail
+Restart aplikasi AI. Skill memberi instruksi; AI coding tetap perlu model, izin, dan tool yang tersedia pada aplikasinya.
 
-- `jrhagents: command not found` → use `python -m jrhagents install ...` in the Python environment used for installation.
-- `No module named jrhagents` → ensure `python -m pip install .` succeeded in the same environment.
-- Existing skill → `--dry-run` and then `--upgrade` to preserve old files.
-- Untrusted project → never enable project-defined build/test commands before reviewing their content.
-- GitHub Pages not working → check repository Settings → Pages → Build and deployment → GitHub Actions. Docs website cannot force GitHub Pages to be enabled via source code.
+### MCP — 5 alat pemeriksaan lokal
+
+```bash
+./.jrh-venv/bin/python -m jrhagents setup --mode mcp --client cursor --project .
+```
+
+Pilihan yang bisa dikonfigurasi otomatis: `claude`, `cursor`, `gemini`, `copilot`, `vscode`. Konfigurasi lama dipertahankan; jika terjadi konflik, program berhenti dan menjelaskan langkah manual. MCP server berisi `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, dan `jrh_status`. Tidak bisa mengirim email, memasang plugin lain, atau mengedit kode.
+
+Untuk melihat perubahan tanpa menulis: tambahkan `--dry-run`. Setelah install, restart aplikasi AI dan periksa daftar server MCP.
+
+### Plugin — hanya untuk klien yang kompatibel
+
+Manifest Claude Code tersedia di `.claude-plugin/plugin.json` dalam repositori. Plugin berbeda dari paket Python dan Skill. Gunakan fitur plugin resmi Claude Code. Jika klien AI-mu tidak mendukung format plugin itu, gunakan mode Skill atau MCP.
+
+## Contoh fungsi nyata
+
+```bash
+./.jrh-venv/bin/python -m jrhagents doctor --project .
+./.jrh-venv/bin/python -m jrhagents audit --project .
+./.jrh-venv/bin/python -m jrhagents plan "rapikan navigasi website" --project .
+./.jrh-venv/bin/python -m jrhagents report --project .
+```
+
+## Jika error
+
+- **`No module named jrhagents`** → gunakan Python dari `.jrh-venv`, bukan Python lain.
+- **`No module named venv`** (sebagian distro Linux) → pasang modul `python3-venv` dari pengelola paket sistem.
+- **`Access denied`** → pilih folder proyek milikmu sendiri; jangan menjalankan sebagai administrator tanpa alasan.
+- **`No internet / SSL error`** → periksa koneksi dan akses domain GitHub; hindari mematikan verifikasi SSL.
+- **`Existing skill`** → gunakan `--dry-run`; bila ingin upgrade, `--upgrade` membuat backup skill.
+- **`Existing jrhagents MCP entry differs`** → buka pengaturan MCP dan periksa secara manual. Program sengaja tidak menimpa pengaturan tersebut.
+- **Tidak muncul di AI coding** → restart aplikasinya, periksa versi dan lokasi Skill/MCP yang didukung; setiap vendor bisa mengubah lokasi standar.
+- **macOS gagal venv / externally managed** → gunakan Python dari instalasi resmi / Homebrew dan lingkungan virtual. Jangan paksa global pip.
+
+[Open issue](https://github.com/Jidy23/JRHagents/issues/new/choose) jika masih gagal; sertakan sistem operasi, versi Python, perintah, dan pesan error, **tanpa API key**.

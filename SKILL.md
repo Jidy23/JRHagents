@@ -3,7 +3,7 @@ name: jrhagents
 description: Practical development assistant for auditing codebases, routing project tasks, improving UI/UX, researching sources, checking build readiness, and working with read-only MCP tools when available.
 license: MIT
 ---
-# JRHagents V17 — one skill, practical results
+# JRHagents V19 — one skill, practical results
 
 Default mode: simple. Understand Indonesian and English naturally; do not force slash commands. Route requests to the relevant subset of the 26 reference capabilities. Read `references/CAPABILITIES.md` only when needed.
 

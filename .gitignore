@@ -13,3 +13,6 @@ build/
 .jrhagents/
 node_modules/
 coverage/
+
+.jrh-venv/
+*.jrh-backup-*

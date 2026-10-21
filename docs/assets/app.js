@@ -1,188 +1,48 @@
-/* JRHagents Pages — progressive enhancement; static and offline-readable. */
-(function () {
-  'use strict';
-  const model = globalThis.JRHModel;
-  if (!model) return;
-  const $ = (selector, parent=document) => parent.querySelector(selector);
-  const $$ = (selector, parent=document) => Array.from(parent.querySelectorAll(selector));
-  const body=document.body;
-  const state={os:'windows',mode:'skill',category:'All',expanded:false,example:'all',previousFocus:null};
-  const preview={
-    skill:{icon:'✦',title:'Beri instruksi seperti biasa',description:'AI coding membaca panduan JRHagents dan membantu mengerjakan tugas.',sample:'“Tolong cek proyek ini dan jelaskan masalahnya.”'},
-    mcp:{icon:'⬡',title:'Gunakan alat pemeriksaan lokal',description:'Klien yang mendukung MCP dapat memanggil lima tool read-only.',sample:'Cek lingkungan, audit, rute tugas, rencana, atau status.'},
-    plugin:{icon:'▧',title:'Paket untuk platform kompatibel',description:'Manifest plugin membantu platform yang mendukung format tersebut mengenali paket.',sample:'Impor plugin lewat aplikasi yang menyediakan fitur ini.'}
-  };
-  const modeDescriptions={
-    skill:'AI coding membaca aturan kerja JRHagents untuk membantu kamu mengaudit, merencanakan, atau memperbaiki proyek.',
-    mcp:'Klien MCP yang kompatibel bisa mengakses lima tool lokal read-only. Perlu menambahkan konfigurasi JSON ke aplikasi AI.',
-    plugin:'Manifest plugin disediakan untuk platform yang mendukung Agent Plugins. Impor dilakukan dari pengaturan platform tersebut.'
-  };
-  function setPreview(mode){
-    if (!preview[mode]) return;
-    $$('.preview-tab').forEach(btn=>{const active=btn.dataset.preview===mode;btn.classList.toggle('active',active);btn.setAttribute('aria-selected',String(active));});
-    $('#previewIcon').textContent=preview[mode].icon;
-    $('#previewTitle').textContent=preview[mode].title;
-    $('#previewDescription').textContent=preview[mode].description;
-    $('#previewSample').textContent=preview[mode].sample;
-  }
-  $$('.preview-tab').forEach(btn=>btn.addEventListener('click',()=>setPreview(btn.dataset.preview)));
-  function setOS(os){
-    if(!['windows','mac','linux'].includes(os))return;
-    state.os=os;
-    $$('[data-os]').forEach(btn=>{const a=btn.dataset.os===os;btn.classList.toggle('active',a);btn.setAttribute('aria-pressed',String(a));});
-    updateInstall();
-  }
-  function setMode(mode){
-    if(!modeDescriptions[mode])return;
-    state.mode=mode;
-    $$('[data-mode]').forEach(btn=>{const a=btn.dataset.mode===mode;btn.classList.toggle('active',a);btn.setAttribute('aria-pressed',String(a));});
-    $('#selectedModeDescription').textContent=modeDescriptions[mode];
-    updateInstall();
-  }
-  function updateInstall(){
-    const py=state.os==='windows'?'py':'python3';
-    $('#packageCommand').textContent=py+' -m pip install .';
-    $('#verifyCommand').textContent=py+' -m jrhagents --version';
-    const path=$('#projectPath').value;
-    const client=$('#client').value;
-    const isPlugin=state.mode==='plugin';
-    $('#integrationStepTitle').textContent=state.mode==='skill'?'Pasang Skill ke proyekmu':state.mode==='mcp'?'Buat konfigurasi MCP':'Periksa paket Plugin';
-    $('#integrationStepDescription').textContent=state.mode==='skill'?'Jalankan dari folder JRHagents, lalu mulai ulang aplikasi AI coding.':state.mode==='mcp'?'Salin hasil JSON ke pengaturan MCP aplikasi dan mulai ulang. Jangan menimpa koneksi lain.':'Buka plugin.json dan ikuti cara impor resmi aplikasi yang kompatibel.';
-    $('#integrationTip').textContent=state.mode==='skill'?'Folder proyek harus sudah ada. Tanda titik (.) berarti folder saat ini.':state.mode==='mcp'?'Perintah hanya menampilkan konfigurasi; koneksi MCP belum aktif sampai kamu mengaturnya di aplikasi.':'Tidak semua aplikasi AI menerima Agent Plugins. Jangan menganggap plugin aktif otomatis.';
-    $('#installWarning').textContent=state.mode==='skill'?'Skill dapat digunakan oleh AI coding yang mendukung pembacaan SKILL.md. Pemasangan tidak otomatis membuka akses API atau menjalankan AI.':state.mode==='mcp'?'Server MCP JRHagents mempunyai lima tool lokal read-only. Konfigurasi memerlukan versi aplikasi yang mendukung MCP.': 'Manifest plugin adalah paket integrasi, bukan plugin universal yang pasti dapat dipasang di semua aplikasi.';
-    const copyButton=$('#installCopy');
-    try{
-      const cmd=model.installCommand(client,state.os,path,'project',state.mode);
-      $('#installCommand').textContent=state.mode==='plugin'?'https://github.com/Jidy23/JRHagents/blob/main/plugin.json':cmd;
-      $('#pathError').hidden=true;
-      copyButton.disabled=false;
-    }catch(err){
-      $('#installCommand').textContent='Periksa lokasi folder proyek di atas.';
-      $('#pathError').textContent=err.message;
-      $('#pathError').hidden=false;
-      copyButton.disabled=true;
-    }
-  }
-  $$('[data-os]').forEach(btn=>btn.addEventListener('click',()=>setOS(btn.dataset.os)));
-  $$('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>setMode(btn.dataset.mode)));
-  $$('[data-choose]').forEach(btn=>btn.addEventListener('click',()=>{setMode(btn.dataset.choose);$('#setup').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}));
-  $('#projectPath').addEventListener('input',updateInstall);
-  $('#client').addEventListener('change',updateInstall);
-  updateInstall();
-  // Real examples, not a simulated execution environment.
-  function setExamples(type){
-    state.example=type;
-    $$('.example-tab').forEach(btn=>{const on=btn.dataset.example===type;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on));});
-    $$('[data-example-kind]').forEach(card=>{card.hidden=type!=='all'&&card.dataset.exampleKind!==type;});
-  }
-  $$('.example-tab').forEach(btn=>btn.addEventListener('click',()=>setExamples(btn.dataset.example)));
-  // Capability status intentionally distinguishes installed tools from agent guidance.
-  const nativeTerms=['Native CLI','Native reports','Native project context','Opt-in CLI','Native CLI heuristic'];
-  function statusFor(feature){
-    const name=feature.status;
-    if(nativeTerms.includes(name))return {name:'Fungsi lokal',cls:'native'};
-    if(name==='Guidance only'||name==='Skill guidance'||name==='Native workflow')return {name:'Panduan kerja',cls:'guidance'};
-    if(name.startsWith('Inspired by'))return {name:'Referensi desain',cls:'external'};
-    return {name:'Panduan / alur',cls:'guidance'};
-  }
-  const categoryLabels={All:'Semua',Core:'Dasar',Engineering:'Kode',Design:'Desain',Research:'Riset',Quality:'Kualitas'};
-  const iconFor={Core:'✦',Engineering:'⌘',Design:'◈',Research:'⌕',Quality:'✓'};
-  const chips=$('#featureFilters');
-  model.categories.forEach(cat=>{
-    const btn=document.createElement('button');btn.type='button';btn.className='filter-chip';btn.textContent=categoryLabels[cat]||cat;
-    btn.dataset.category=cat;
-    btn.setAttribute('aria-pressed',String(cat==='All'));
-    btn.addEventListener('click',()=>{state.category=cat;state.expanded=false;renderFeatures();});
-    chips.appendChild(btn);
-  });
-  function renderFeatures(){
-    const term=$('#featureSearch').value;
-    const matches=model.filterFeatures(term,state.category);
-    const showAll=state.expanded||Boolean(term.trim())||state.category!=='All';
-    const shown=showAll?matches:matches.slice(0,8);
-    const grid=$('#featureGrid');grid.replaceChildren();
-    shown.forEach(feature=>{
-      const status=statusFor(feature);
-      const card=document.createElement('article');card.className='feature-card';
-      const top=document.createElement('div');top.className='feature-card-top';
-      const ico=document.createElement('span');ico.className='feature-icon';ico.textContent=iconFor[feature.category]||'✦';ico.setAttribute('aria-hidden','true');
-      const num=document.createElement('span');num.className='feature-id';num.textContent=String(feature.id).padStart(2,'0');
-      top.append(ico,num);
-      const heading=document.createElement('h3');heading.textContent=feature.name;
-      const p=document.createElement('p');p.textContent=feature.description;
-      const statusNode=document.createElement('span');statusNode.className='feature-status '+status.cls;statusNode.textContent=status.name;
-      card.append(top,heading,p,statusNode);grid.appendChild(card);
-    });
-    if(matches.length===0){const message=document.createElement('p');message.className='feature-empty';message.textContent='Belum ada kemampuan yang cocok. Coba kata kunci lain.';grid.appendChild(message);}
-    const more=$('#featureMore');more.hidden=Boolean(term.trim())||state.category!=='All'||matches.length<=8;
-    more.setAttribute('aria-expanded',String(state.expanded));more.textContent=state.expanded?'Tampilkan lebih sedikit ↑':'Lihat semua 26 kemampuan ↓';
-    $('#featureCount').textContent=shown.length+' dari '+matches.length+' kemampuan ditampilkan';
-    $$('.filter-chip').forEach(btn=>{const active=btn.dataset.category===state.category;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));});
-  }
-  $('#featureSearch').addEventListener('input',renderFeatures);
-  $('#featureMore').addEventListener('click',()=>{state.expanded=!state.expanded;renderFeatures();});
-  renderFeatures();
-  // Copy feedback is only shown after a successful copy.
-  const toast=$('#copyToast');let toastTimer;
-  async function copyText(text){
-    try{
-      if (navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(text);
-      else{
-        const field=document.createElement('textarea');field.value=text;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';document.body.appendChild(field);field.select();const ok=document.execCommand('copy');field.remove();if(!ok)throw new Error('Copy failed');
-      }
-      toast.textContent='Berhasil disalin. Tempel di tempat yang sesuai.';
-    }catch(err){toast.textContent='Belum bisa menyalin otomatis. Pilih teks lalu salin secara manual.';}
-    toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.hidden=true;},3300);
-  }
-  $$('[data-copy-target]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.disabled)return;const target=document.getElementById(btn.dataset.copyTarget);if(target)void copyText(target.textContent);}));
-  // Mobile navigation is a real menu; not just a decorative hamburger.
-  const menu=$('#menuToggle'),nav=$('#mobileNav');
-  function closeMenu(){nav.hidden=true;menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Buka menu');}
-  menu.addEventListener('click',()=>{nav.hidden=!nav.hidden;menu.setAttribute('aria-expanded',String(!nav.hidden));menu.setAttribute('aria-label',nav.hidden?'Buka menu':'Tutup menu');});
-  $$('a',nav).forEach(link=>link.addEventListener('click',closeMenu));
-  window.addEventListener('resize',()=>{if(window.innerWidth>920)closeMenu();});
-  // Keep light as default while allowing an optional dark content mode.
-  const theme=$('#themeToggle');
-  let initial='light';try{initial=localStorage.getItem('jrhagents-theme')==='dark'?'dark':'light';}catch(_){}
-  function setTheme(value){body.dataset.theme=value;theme.setAttribute('aria-pressed',String(value==='dark'));theme.setAttribute('aria-label',value==='dark'?'Gunakan tema terang':'Gunakan tema gelap');}
-  setTheme(initial);
-  theme.addEventListener('click',()=>{const value=body.dataset.theme==='dark'?'light':'dark';setTheme(value);try{localStorage.setItem('jrhagents-theme',value);}catch(_){}});
-  $('#copyrightYear').textContent=new Date().getFullYear();
-  // Search palette: anchors into real content; no fake search service.
-  const dialog=$('#searchDialog'),searchInput=$('#globalSearch'),results=$('#searchResults');
-  const basicLinks=[
-    {name:'Cara kerja dalam 3 langkah',description:'Lihat alur dari awal sampai selesai',href:'#how'},
-    {name:'Skill, MCP, dan Plugin',description:'Kenali perbedaan sebelum memilih',href:'#choose'},
-    {name:'Panduan instalasi',description:'Windows, macOS, dan Linux',href:'#setup'},
-    {name:'Contoh perintah',description:'Salin contoh yang benar-benar tersedia',href:'#examples'},
-    {name:'26 kemampuan',description:'Lihat daftar dan status fitur',href:'#capabilities'},
-    {name:'FAQ',description:'Pertanyaan dan solusi awal',href:'#faq'}
-  ];
-  function renderSearch(){
-    const q=searchInput.value.trim().toLocaleLowerCase('id');
-    const links=basicLinks.filter(item=>!q||(item.name+' '+item.description).toLocaleLowerCase('id').includes(q));
-    const matchingFeatures=q?model.filterFeatures(q,'All').slice(0,6).map(f=>({name:f.name,description:'Kemampuan #'+f.id+' · '+f.category,href:'#capabilities',focus:f.name})):[];
-    const found=[...links,...matchingFeatures].slice(0,11);
-    results.replaceChildren();
-    if(found.length===0){const p=document.createElement('p');p.className='feature-empty';p.textContent='Tidak ketemu. Coba kata seperti “instalasi”, “audit”, atau “desain”.';results.appendChild(p);return;}
-    found.forEach(item=>{
-      const a=document.createElement('a');a.href=item.href;a.className='search-result';a.setAttribute('role','option');
-      const strong=document.createElement('strong');strong.textContent=item.name;
-      const small=document.createElement('span');small.textContent=item.description;a.append(strong,small);
-      a.addEventListener('click',()=>{closeSearch();if(item.focus){$('#featureSearch').value=item.focus;state.category='All';renderFeatures();}});
-      results.appendChild(a);
-    });
-  }
-  function openSearch(){state.previousFocus=document.activeElement;dialog.hidden=false;searchInput.value='';renderSearch();document.body.style.overflow='hidden';searchInput.focus();}
-  function closeSearch(){dialog.hidden=true;document.body.style.overflow='';if(state.previousFocus?.focus)state.previousFocus.focus();}
-  $('#searchTrigger').addEventListener('click',openSearch);
-  $('#closeSearch').addEventListener('click',closeSearch);
-  $('[data-close-search]').addEventListener('click',closeSearch);
-  searchInput.addEventListener('input',renderSearch);
-  searchInput.addEventListener('keydown',e=>{if(e.key==='Enter'){const first=$('.search-result',results);if(first)first.click();}});
-  document.addEventListener('keydown',e=>{
-    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(dialog.hidden)openSearch();else closeSearch();}
-    if(e.key==='Escape'){if(!dialog.hidden)closeSearch();else if(!nav.hidden)closeMenu();}
-    if(e.key==='Tab'&&!dialog.hidden){const focusable=[searchInput,...$$('a',results),$('#closeSearch')];const index=focusable.indexOf(document.activeElement);if(e.shiftKey&&index===0){e.preventDefault();focusable[focusable.length-1].focus();}else if(!e.shiftKey&&index===focusable.length-1){e.preventDefault();focusable[0].focus();}}
-  });
+/* JRHagents static app: no network, no mocked API, real on-device audit. */
+(function(){'use strict';
+const $=(q,parent=document)=>parent.querySelector(q);const $$=(q,parent=document)=>Array.from(parent.querySelectorAll(q));
+const model=globalThis.JRHModel, installs=globalThis.JRHInstall, auditor=globalThis.JRHBrowserAudit;
+if(!model||!installs||!auditor)return;
+const state={os:'windows',mode:'skill',category:'All',expanded:false,result:null};
+const toast=$('#toast');let toastTimer;
+function notify(text){toast.textContent=text;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.hidden=true},3000);}
+async function copyText(value){try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(value);else{const node=document.createElement('textarea');node.value=value;node.style.position='fixed';node.style.opacity='0';document.body.appendChild(node);node.select();if(!document.execCommand('copy'))throw Error('copy');node.remove();}notify('Berhasil disalin.');return true;}catch(_){notify('Gagal menyalin otomatis. Pilih teks perintah lalu salin manual.');return false;}}
+$$('[data-copy]').forEach(btn=>btn.addEventListener('click',()=>copyText(btn.dataset.copy)));
+$('#copyPrompt').addEventListener('click',()=>copyText($('#promptText').textContent));
+const nav=$('#mobileNav'),menu=$('#menuToggle');menu.addEventListener('click',()=>{const active=!nav.classList.contains('open');nav.classList.toggle('open',active);menu.setAttribute('aria-expanded',String(active));});$$('a',nav).forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
+const themeKey='jrhagents-theme';let theme='light';try{theme=localStorage.getItem(themeKey)||'light';}catch(_){}document.body.dataset.theme=theme==='dark'?'dark':'light';
+$('#themeToggle').addEventListener('click',()=>{const next=document.body.dataset.theme==='dark'?'light':'dark';document.body.dataset.theme=next;try{localStorage.setItem(themeKey,next);}catch(_){}});
+function setMode(mode){if(!['skill','mcp','plugin'].includes(mode))return;state.mode=mode;$$('[data-mode]').forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on));});$$('[data-choose]').forEach(b=>b.classList.toggle('active',b.dataset.choose===mode));renderInstall();}
+function setOS(os){if(!['windows','mac','linux'].includes(os))return;state.os=os;$$('[data-os]').forEach(b=>{const on=b.dataset.os===os;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on));});renderInstall();}
+$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));$$('[data-os]').forEach(b=>b.addEventListener('click',()=>setOS(b.dataset.os)));
+$$('[data-choose]').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.choose);$('#install').scrollIntoView({behavior:'smooth',block:'start'});}));
+$('#client').addEventListener('change',renderInstall);$('#projectPath').addEventListener('input',renderInstall);
+function renderInstall(){const steps=$('#installSteps'),note=$('#installSupport');steps.replaceChildren();const client=$('#client').value;let data;
+try{data=installs.get(state.os,client,state.mode,$('#projectPath').value);}catch(err){note.textContent=err.message;note.className='support-note error';return;}
+note.textContent=data.supported?'Siap: '+(state.mode==='skill'?'Skill akan dipasang ke folder aplikasi.':'MCP akan digabungkan ke konfigurasi aplikasi.')+' '+data.help:'Belum didukung otomatis: '+data.help;note.className='support-note '+(data.supported?'good':'caution');
+$('#wizardTitle').textContent=data.supported?'Ikuti '+data.steps.length+' langkah ini':'Panduan '+state.mode+' untuk '+(installs.clients[client]||client);
+$('#wizardSubtitle').textContent=data.supported?'Buka Terminal terlebih dahulu, lalu salin perintah satu per satu.':'Jangan menjalankan perintah dari sumber yang belum diverifikasi.';
+if(!data.supported){const p=document.createElement('p');p.className='not-supported';p.textContent=data.help;const a=document.createElement('a');a.href=data.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Baca pilihan yang tersedia ↗';steps.append(p,a);return;}
+data.steps.forEach((step,i)=>{const block=document.createElement('section');block.className='step-item';const info=document.createElement('div');info.className='step-label';const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');const desc=document.createElement('div');const strong=document.createElement('strong');strong.textContent=step.title;const small=document.createElement('p');small.textContent=step.description;desc.append(strong,small);info.append(n,desc);
+const code=document.createElement('div');code.className='code';const text=document.createElement('code');text.textContent=step.command;const copy=document.createElement('button');copy.type='button';copy.className='copy';copy.textContent='Salin';copy.setAttribute('aria-label','Salin langkah '+(i+1));copy.addEventListener('click',()=>copyText(step.command));code.append(text,copy);block.append(info,code);steps.appendChild(block);});}
+renderInstall();
+const drop=$('#dropzone'),file=$('#fileInput'),folder=$('#folderInput');$('#chooseFiles').addEventListener('click',()=>file.click());$('#chooseFolder').addEventListener('click',()=>folder.click());
+file.addEventListener('change',()=>runAudit(file.files));folder.addEventListener('change',()=>runAudit(folder.files));
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('dragover');});drop.addEventListener('dragleave',()=>drop.classList.remove('dragover'));
+drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('dragover');if(e.dataTransfer?.files?.length)runAudit(e.dataTransfer.files);});
+$('#sampleAudit').addEventListener('click',()=>runAudit(auditor.exampleFiles));
+let auditToken=0;
+async function runAudit(files){const token=++auditToken;$('#resultIntro').textContent='Sedang membaca berkas di perangkatmu...';$('#auditResults').replaceChildren();$('#downloadReport').disabled=true;try{const data=await auditor.auditFiles(files);if(token!==auditToken)return;state.result=data;renderAudit(data);}catch(err){if(token!==auditToken)return;$('#resultIntro').textContent='Berkas belum bisa dibaca: '+err.message;notify('Pemeriksaan gagal. Coba pilih berkas yang lain.');}}
+const severityName={high:'Penting',medium:'Perlu dicek',info:'Catatan'};
+function renderAudit(data){$('#resultIntro').textContent=data.filesSelected+' berkas dipilih · '+data.filesSkipped+' dilewati karena format, ukuran, atau keamanan.';$('#metricFiles').textContent=data.filesScanned;$('#metricIssues').textContent=data.findings.length;$('#metricStack').textContent=data.stack.length;
+const target=$('#auditResults');target.replaceChildren();if(!data.findings.length){const box=document.createElement('div');box.className='result-empty';const h=document.createElement('strong');h.textContent='Tidak ditemukan pola yang dicari.';const p=document.createElement('p');p.textContent='Bukan jaminan proyek bebas error. Coba pemeriksaan lebih lengkap dengan CLI dan tes proyek.';box.append(h,p);target.append(box);}else{
+const sorted=[...data.findings].sort((a,b)=>({high:0,medium:1,info:2}[a.severity]-{high:0,medium:1,info:2}[b.severity]));sorted.slice(0,16).forEach(item=>{const row=document.createElement('article');row.className='finding';const status=document.createElement('span');status.className='finding-severity '+item.severity;status.textContent=severityName[item.severity];const head=document.createElement('div');const h=document.createElement('strong');h.textContent=item.name;const p=document.createElement('small');p.textContent=item.file+(item.line?':'+item.line:'')+' · '+item.advice;head.append(h,p);row.append(status,head);target.appendChild(row);});if(sorted.length>16){const rest=document.createElement('p');rest.className='remaining';rest.textContent='Masih ada '+(sorted.length-16)+' temuan lain dalam laporan JSON.';target.appendChild(rest);}}
+const limits=$('#auditLimits');limits.hidden=!data.limits.length;limits.textContent=data.limits.join(' ');$('#downloadReport').disabled=false;$('#clearAudit').disabled=false;}
+$('#downloadReport').addEventListener('click',()=>{if(!state.result)return;const blob=new Blob([JSON.stringify({...state.result,generatedAt:new Date().toISOString()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='jrhagents-audit.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Laporan JSON disiapkan untuk diunduh.');});
+$('#clearAudit').addEventListener('click',()=>{auditToken++;state.result=null;file.value='';folder.value='';$('#metricFiles').textContent='—';$('#metricIssues').textContent='—';$('#metricStack').textContent='—';$('#auditResults').replaceChildren();$('#resultIntro').textContent='Hasil dihapus dari halaman ini.';$('#downloadReport').disabled=true;$('#clearAudit').disabled=true;$('#auditLimits').hidden=true;});
+const statusFor=feature=>{const s=feature.status;if(/Native CLI|Native reports|Native project context|Opt-in CLI|Native CLI heuristic/.test(s))return ['Lokal','native'];if(/Inspired/.test(s))return ['Inspirasi','reference'];return ['Panduan','guidance'];};
+const categories={All:'Semua',Core:'Dasar',Engineering:'Kode',Design:'Desain',Research:'Riset',Quality:'Kualitas'};model.categories.forEach(cat=>{const b=document.createElement('button');b.type='button';b.className='filter';b.textContent=categories[cat]||cat;b.dataset.category=cat;b.addEventListener('click',()=>{state.category=cat;state.expanded=false;renderFeatures();});$('#featureFilters').appendChild(b);});
+function renderFeatures(){const term=$('#featureSearch').value;const all=model.filterFeatures(term,state.category);const shown=state.expanded||term.trim()||state.category!=='All'?all:all.slice(0,8);const grid=$('#featureGrid');grid.replaceChildren();shown.forEach(f=>{const c=document.createElement('article');c.className='feature-card';const id=document.createElement('span');id.className='feature-id';id.textContent=String(f.id).padStart(2,'0');const h=document.createElement('h3');h.textContent=f.name;const p=document.createElement('p');p.textContent=f.description;const status=document.createElement('span');const [s,k]=statusFor(f);status.className='feature-state '+k;status.textContent=s;c.append(id,h,p,status);grid.appendChild(c);});if(!all.length){const p=document.createElement('p');p.className='no-features';p.textContent='Tidak ditemukan. Coba kata kunci lain.';grid.append(p);}
+$('#featureCount').textContent=shown.length+' dari '+all.length+' kemampuan';$('#featureMore').hidden=Boolean(term.trim())||state.category!=='All'||all.length<=8;$('#featureMore').textContent=state.expanded?'Lebih sedikit ↑':'Lihat semua 26 kemampuan ↓';$$('.filter').forEach(b=>{const on=b.dataset.category===state.category;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});}
+$('#featureSearch').addEventListener('input',renderFeatures);$('#featureMore').addEventListener('click',()=>{state.expanded=!state.expanded;renderFeatures();});renderFeatures();
 })();

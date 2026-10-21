@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jrhagents"
-version = "17.0.0"
+version = "19.0.0"
 description = "Portable local-first agent skill, MCP stdio tools and platform installer"
 readme = "README.md"
 requires-python = ">=3.9"

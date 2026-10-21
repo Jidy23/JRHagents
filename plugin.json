@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "jrhagents",
-  "version": "17.0.0",
+  "version": "19.0.0",
   "description": "Portable project diagnosis and code review workflows with local read-only MCP tools",
   "repository": "https://github.com/Jidy23/JRHagents",
   "license": "MIT",

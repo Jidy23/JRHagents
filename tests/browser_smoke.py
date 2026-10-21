@@ -1,55 +1,47 @@
-"""Optional visual/browser smoke checks.
-
-Requires: pip install playwright, and a local Chromium browser.
-Runs static docs in memory to work in environments that block file:// navigation.
-No network access or external accounts are required.
-"""
+"""Optional real Chromium smoke check, no network calls or external services."""
 from pathlib import Path
 import os
 from playwright.sync_api import sync_playwright
-
-ROOT=Path(__file__).resolve().parents[1] / 'docs'
-html=(ROOT / 'index.html').read_text(encoding='utf-8')
-css=(ROOT / 'assets/style.css').read_text(encoding='utf-8')
-css=css.replace("@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');",'')
-html=html.replace('<link rel="stylesheet" href="assets/style.css">', f'<style>{css}</style>')
+ROOT=Path(__file__).resolve().parents[1]/'docs'
+html=(ROOT/'index.html').read_text(encoding='utf-8')
+css=(ROOT/'assets/style.css').read_text(encoding='utf-8')
+html=html.replace('<link rel="stylesheet" href="assets/style.css">','<style>'+css+'</style>')
 scripts=''
-for name in ('site-model.js','app.js'):
-    html=html.replace(f'<script src="assets/{name}" defer></script>', '')
-    scripts += f'<script>{(ROOT / "assets" / name).read_text(encoding="utf-8")}</script>'
-html=html.replace('</body>', scripts+'</body>')
-
-with sync_playwright() as playwright:
-    executable=os.environ.get('JRH_CHROMIUM_PATH')
-    browser=playwright.chromium.launch(headless=True, executable_path=executable or None)
+for name in ('site-model.js','site-model-v19.js','browser-audit.js','app.js'):
+    html=html.replace(f'<script src="assets/{name}" defer></script>','')
+    scripts += '<script>'+(ROOT/'assets'/name).read_text(encoding='utf-8').replace('</script>','<\\/script>')+'</script>'
+html=html.replace('</body>',scripts+'</body>')
+with sync_playwright() as p:
+    browser=p.chromium.launch(headless=True,executable_path=os.environ.get('JRH_CHROMIUM_PATH','/usr/bin/chromium'),args=['--no-sandbox'])
     for name,width,height in [('desktop',1440,900),('tablet',768,1000),('mobile',390,844),('small',320,690)]:
-        page=browser.new_page(viewport={'width':width,'height':height})
-        page.set_default_timeout(7000)
-        errors=[]
-        page.on('pageerror',lambda error:errors.append(str(error)))
-        page.set_content(html,wait_until='domcontentloaded',timeout=10000)
-        overflow=page.evaluate('document.documentElement.scrollWidth - window.innerWidth')
-        assert overflow<=1, f'{name} has {overflow}px horizontal overflow'
+        page=browser.new_page(viewport={'width':width,'height':height},accept_downloads=True)
+        errors=[];page.on('pageerror',lambda error:errors.append(str(error)))
+        page.set_content(html,wait_until='domcontentloaded')
+        page.locator('#sampleAudit').click()
+        page.wait_for_function('document.querySelector("#metricIssues").textContent !== "—"')
+        assert int(page.locator('#metricIssues').inner_text())>=2
+        assert page.locator('.finding').count()>=2
+        with page.expect_download() as dl:
+            page.locator('#downloadReport').click()
+        assert dl.value.suggested_filename=='jrhagents-audit.json'
         page.locator('[data-os="linux"]').click()
-        assert page.locator('#packageCommand').inner_text().startswith('python3')
+        page.locator('#client').select_option('cursor')
         page.locator('[data-mode="mcp"]').click()
-        assert 'mcp-config' in page.locator('#installCommand').inner_text()
-        page.locator('[data-example="mcp"]').click()
-        assert page.locator('[data-example-kind="mcp"]').count()==1
+        assert 'setup --mode mcp --client cursor' in page.locator('#installSteps').inner_text()
+        page.locator('#client').select_option('windsurf')
+        assert 'Belum didukung otomatis' in page.locator('#installSupport').inner_text()
         page.locator('#featureSearch').fill('kredensial')
         assert page.locator('.feature-card').count()>=1
-        page.locator('#searchTrigger').click()
-        page.locator('#globalSearch').fill('panduan')
-        assert page.locator('.search-result').count()>=1
-        page.keyboard.press('Escape')
-        assert page.locator('#searchDialog').is_hidden()
-        if width < 920:
-            page.locator('#menuToggle').click()
-            assert page.locator('#mobileNav').is_visible()
-            page.locator('#menuToggle').click()
         page.locator('#themeToggle').click()
         assert page.locator('body').get_attribute('data-theme')=='dark'
-        assert not errors, f'Browser errors: {errors}'
-        print(f'{name} {width}px: PASS')
+        if width<=820:
+            page.locator('#menuToggle').click();assert 'open' in page.locator('#mobileNav').get_attribute('class')
+            page.locator('#menuToggle').click()
+        assert page.evaluate('document.documentElement.scrollWidth-window.innerWidth')<=1
+        assert not errors,errors
+        page.locator('#themeToggle').click()
+        page.locator('#featureSearch').fill('')
+        page.screenshot(path=str(ROOT.parent/f'JRHagents_v19_{name}.png'),full_page=True)
+        print(name,width,'PASS')
         page.close()
     browser.close()

@@ -1,36 +1,21 @@
-const { test } = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const page = fs.readFileSync(path.join(__dirname, '../docs/index.html'), 'utf8');
-const script = fs.readFileSync(path.join(__dirname, '../docs/assets/app.js'), 'utf8');
-const styles = fs.readFileSync(path.join(__dirname, '../docs/assets/style.css'), 'utf8');
-
-test('homepage has understandable first-use workflow', () => {
-  for (const id of ['how', 'choose', 'setup', 'examples', 'capabilities', 'faq']) assert.match(page, new RegExp(`id="${id}"`));
-  for (const label of ['LANGKAH 1', 'LANGKAH 2', 'LANGKAH 3', 'Unduh JRHagents', 'Periksa']) assert.ok(page.includes(label));
+/* Regression tests for the new functional Pages. Historical filename retained for CI compatibility. */
+const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const path=require('node:path');
+const root=path.join(__dirname,'../docs');const page=fs.readFileSync(path.join(root,'index.html'),'utf8');const app=fs.readFileSync(path.join(root,'assets/app.js'),'utf8');const css=fs.readFileSync(path.join(root,'assets/style.css'),'utf8');
+test('homepage provides actual workspace and installation flow',()=>{
+ for(const id of ['coba','choose','install','contoh','fitur','faq','fileInput','folderInput','sampleAudit','auditResults','downloadReport','installSteps','client','projectPath'])assert.ok(page.includes(`id="${id}"`),id);
 });
-test('real commands rather than fictional runtime features', () => {
-  assert.match(page, /jrhagents doctor --project/);
-  assert.match(page, /jrhagents audit --project/);
-  assert.match(page, /jrhagents mcp-config/);
-  assert.doesNotMatch(page, /jrh run (web\.search|file\.read|image\.create)/);
-  assert.doesNotMatch(page, /pip install jrhagents\b/);
+test('page loads real static analyzer modules',()=>{
+ assert.match(page,/browser-audit\.js/);assert.match(page,/site-model-v19\.js/);assert.match(app,/auditFiles\(/);assert.match(app,/URL\.createObjectURL/);
 });
-test('interface has search, menu, theme and reachable content', () => {
-  for (const id of ['searchTrigger','searchDialog','globalSearch','menuToggle','mobileNav','themeToggle','featureGrid','featureSearch','featureFilters','projectPath','installCommand']) assert.ok(page.includes(`id="${id}"`));
-  for (const label of ['aria-label=', 'aria-pressed=', 'role="dialog"','role="status"']) assert.ok(page.includes(label));
+test('not a fictitious AI SaaS runtime',()=>{
+ assert.doesNotMatch(page,/jrh run web\.search/);assert.doesNotMatch(page,/jrh run image\.create/);assert.doesNotMatch(page,/pip install jrhagents\b/);
+ assert.match(page,/Tidak mengunggah berkas/);assert.match(page,/Tidak menjalankan kode/);
 });
-test('functional JavaScript wires mode selector, search and clipboard', () => {
-  for (const term of ['setMode(', 'updateInstall(', 'setExamples(', 'renderSearch(', 'copyText(', 'renderFeatures(', 'setTheme(']) assert.ok(script.includes(term));
+test('accessibility and copy control exist',()=>{
+ for(const term of ['aria-live','aria-label','aria-pressed','role="status"','aria-expanded'])assert.ok(page.includes(term),term);
+ assert.match(app,/function copyText\(/);assert.match(app,/copyText\(step\.command\)/);
 });
-test('responsive breakpoints and reduced-motion support exist', () => {
-  assert.ok(styles.includes('@media(max-width:650px)'));
-  assert.ok(styles.includes('@media(max-width:365px)'));
-  assert.ok(styles.includes('prefers-reduced-motion'));
+test('responsive layout includes small screens and reduced motion',()=>{
+ assert.match(css,/@media\(max-width:650px\)/);assert.match(css,/@media\(max-width:365px\)/);assert.match(css,/prefers-reduced-motion/);
 });
-test('external links use safe targets and source of truth', () => {
-  assert.ok(page.includes('https://github.com/Jidy23/JRHagents'));
-  assert.ok(page.includes('rel="noopener noreferrer"'));
-  assert.ok(page.includes('Fungsi lokal') === false); // statuses are derived dynamically, not fabricated in HTML.
-});
+test('public GitHub links are safe',()=>{assert.match(page,/github\.com\/Jidy23\/JRHagents/);assert.match(page,/rel="noopener noreferrer"/);});

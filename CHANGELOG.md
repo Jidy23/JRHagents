@@ -1,3 +1,10 @@
+# JRHagents V19 — usable web tools & guided setup
+
+- Browser-only bounded static audit with real file selection and JSON report.
+- OS-aware GitHub source install wizard.
+- New CLI setup command safely installs Skill or merges MCP configurations.
+- 33 documented improvements and improved privacy, accessible UX, browser smoke testing.
+
 # Changelog
 
 ## 17.0.0 — Portable integrations

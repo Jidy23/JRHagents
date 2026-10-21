@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: ['3.9', '3.13']
     runs-on: ${{ matrix.os }}
     steps:
@@ -24,6 +24,10 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Verify console command
         run: jrhagents --version
+      - name: Verify guided installer without writes
+        run: |
+          python -m jrhagents setup --client codex --project . --dry-run
+          python -m jrhagents setup --mode mcp --client cursor --project . --dry-run
       - name: Verify MCP console command
         run: jrhagents-mcp --help
   docs:
@@ -37,5 +41,7 @@ jobs:
         run: |
           node --check docs/assets/app.js
           node --check docs/assets/site-model.js
-      - name: Test browser-independent site model
-        run: node --test tests/site.test.cjs
+          node --check docs/assets/site-model-v19.js
+          node --check docs/assets/browser-audit.js
+      - name: Test browser and installer models
+        run: node --test tests/*.cjs

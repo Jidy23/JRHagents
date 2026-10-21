@@ -1,0 +1,7 @@
+{
+  "name": "jrhagents",
+  "owner": {"name": "JRHagents contributors"},
+  "plugins": [
+    {"name": "jrhagents", "source": "./", "description": "Project auditing, planning and safe code review workflows."}
+  ]
+}

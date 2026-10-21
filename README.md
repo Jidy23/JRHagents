@@ -1,59 +1,79 @@
 # JRHagents
 
-**One local-first toolkit. Three honest integration formats: Skill · MCP · Plugin.**
+**Periksa proyek. Pasang Skill atau MCP. Lihat hasil sebenarnya.**
 
-JRHagents V17 helps people inspect projects, plan fixes, and verify evidence. It works offline by default, costs nothing for local tools, and never pretends third-party AI integrations are connected.
+[Website interaktif](https://jidy23.github.io/JRHagents/) · [Panduan pemasangan](docs/INSTALL.md) · [Laporan tes](docs/TEST_REPORT.md) · [Laporkan bug](https://github.com/Jidy23/JRHagents/issues)
 
-**[Interactive guide](https://jidy23.github.io/JRHagents/)** · [Installation](docs/INSTALL.md) · [MCP](docs/MCP.md) · [Compatibility](docs/PLATFORMS.md) · [Source and tests](tests/)
+JRHagents adalah toolkit gratis dan open source untuk pemula, pengembang solo, dan pengguna AI coding. **Tidak memerlukan akun untuk Audit Cepat di browser.** Di komputer, paket Python menyediakan CLI lokal, installer Skill, serta server MCP read-only. Website statis **tidak** menjalankan AI sendiri atau mengakses proyek GitHub tanpa izin.
 
-## Quick start (Windows, macOS, Linux; Python 3.9+)
+## Mulai tanpa instalasi
 
-Download the repository ZIP and extract it, or clone this repo. In its root directory:
+Buka **[JRHagents Pages](https://jidy23.github.io/JRHagents/#coba)**, pilih beberapa file kode atau folder, lalu lihat pola masalah dan unduh laporan JSON. Semuanya berlangsung di browser. Dukungan: JS/TS/Python/HTML/CSS/JSON dan berkas teks. Ini pemeriksaan awal berbasis pola, bukan pemindai keamanan menyeluruh.
 
-```bash
-python -m pip install .
-jrhagents doctor
-jrhagents install --client codex --project /path/to/project
+## Pasang Skill ke AI coding (Windows, macOS, Linux)
+
+Buka Terminal **di folder proyek yang ingin dipakai**. Pastikan Python **3.9+** sudah terpasang. Salin berurutan:
+
+### Windows PowerShell
+
+```powershell
+py -m venv .jrh-venv
+.\.jrh-venv\Scripts\python.exe -m pip install "https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip"
+.\.jrh-venv\Scripts\python.exe -m jrhagents setup --client codex --project .
+.\.jrh-venv\Scripts\python.exe -m jrhagents --version
 ```
 
-On Windows, try `py -m pip install .`. For `jrhagents: command not found`, use `python -m jrhagents` instead. Open your AI coding session in the target project and say:
-
-> JRHagents, audit this repo, prioritize one problem, and show proof of verification.
-
-### Works as a skill
-
-`jrhagents install --client <client> --project PATH` supports `codex`, `claude`, `gemini`, `cursor`, `copilot`, `opencode`, and `windsurf`. `--client all` installs all seven **project** variants. `--dry-run` previews; `--upgrade` backs up an existing installation before replacing it. Paths are the supported client conventions, but native client detection has not been tested for every version.
-
-### Works as an MCP server
+### macOS / Linux
 
 ```bash
-jrhagents mcp-config --client claude --project /path/to/project
+python3 -m venv .jrh-venv
+./.jrh-venv/bin/python -m pip install "https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip"
+./.jrh-venv/bin/python -m jrhagents setup --client codex --project .
+./.jrh-venv/bin/python -m jrhagents --version
 ```
 
-Copy the resulting JSON into your MCP client's settings; it launches the actual `jrhagents-mcp` stdio server. Five **read-only** MCP tools: `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, `jrh_status`. No remote API, personal secrets, or autonomous edits. [MCP instructions](docs/MCP.md).
+Ganti `codex` dengan `claude`, `gemini`, `cursor`, `copilot`, `opencode`, atau `windsurf`. Mulai ulang klien AI. Perintah ini menggunakan **arsip source GitHub**, bukan nama paket di PyPI. Jika proyek memiliki folder `.jrh-venv`, jangan commit folder tersebut.
 
-### Works as an Agent Plugin
+Untuk menghubungkan MCP ke Cursor (contoh):
 
-The root contains `plugin.json` using **Agent Plugins 1.0**, `skills/jrhagents/SKILL.md`, and `mcp.json`. It is intended for clients that accept the Agent Plugins format. **It is not a ChatGPT Plugin** and it is not automatically installed in any account. The MCP part requires a Python environment with JRHagents installed.
+```bash
+./.jrh-venv/bin/python -m jrhagents setup --mode mcp --client cursor --project .
+```
 
-## Honest functionality map
+Di Windows, gunakan `.\.jrh-venv\Scripts\python.exe` sebagai pengganti `./.jrh-venv/bin/python`. MCP otomatis mendukung **Claude Code, Cursor, Gemini CLI, GitHub Copilot, dan VS Code**. Pemasangan MCP menggabungkan konfigurasi tanpa menghapus koneksi lain, membuat cadangan jika ada perubahan, dan menolak menimpa entri `jrhagents` yang berbeda.
 
-| Real today | Guidance, or requires external tool |
-| --- | --- |
-| Local doctor, audit, plan, route, status | Coding and UI changes (host AI tools required) |
-| Test/build execution only with opt-in CLI flags | Hosted RAG/Onyx, REA, Scrapling and proprietary APIs |
-| HTML+JSON audit reports | AI model routing, remote deployments and paid services |
-| Seven local skill installers and MCP stdio | Native mobile applications or ChatGPT plugin installation |
+## Yang benar-benar bisa digunakan
 
-## Quality and safety
+| Komponen | Status | Batasan |
+|---|---|---|
+| Audit Cepat website | Berfungsi di browser | Pemeriksaan pola statis; tidak membaca ZIP |
+| CLI: doctor, audit, plan, report, verify | Berfungsi lokal | Test/build hanya dengan flag eksplisit |
+| Skill untuk 7 AI coding | Installer lokal | Aplikasi AI masing-masing harus mendukung Skills |
+| MCP stdio server | 5 alat read-only | Tidak memodifikasi kode atau mendeploy |
+| MCP setup otomatis | 5 klien | Perlu aplikasi kompatibel dan restart |
+| Agent Plugin | Paket struktur Claude Code | Perlu impor melalui fitur plugin sesuai versi klien |
+| Akses AI cloud / BYOK | Belum termasuk | Tidak ada klaim AI mandiri |
+| Integrasi 10 repo inspirasi | Referensi | Tidak disalin atau dipasang otomatis |
 
-- Python unit tests and MCP handshake/JSON-RPC smoke tests run in CI on Windows, macOS and Linux with Python 3.9 and 3.13.
-- JavaScript tests validate interactive guide commands; the site makes no network calls to install software.
-- No auto-overwrite; `--upgrade` retains a backup. The MCP server cannot execute project scripts or write files.
-- All seven installer targets are automated-tests coverage, not a guarantee that every proprietary client version discovers skills.
+## Pengembangan & tes
 
-See [Contributing](CONTRIBUTING.md), [Security](SECURITY.md), [Attribution](THIRD_PARTY.md), and [MIT License](LICENSE).
+```bash
+python -m pip install -e .
+python -m unittest discover -s tests -v
+node --test tests/*.test.cjs
+node --check docs/assets/app.js
+# Optional: browser smoke (requires Playwright + Chromium)
+python tests/browser_smoke.py
+```
 
-## Docs deployment
+Tidak diperlukan API key untuk menjalankan tes. Pelaporan error yang tidak dapat diverifikasi harus dinyatakan sebagai *belum diuji*.
 
-Source code and public website are separate. GitHub Pages must be enabled at **Settings → Pages → GitHub Actions**. The Pages workflow now reports an actionable instruction and skips deployment when unavailable, instead of failing at `configure-pages`.
+## Struktur penting
+
+- `docs/index.html` dan `docs/assets/` — Pages, audit browser, pemasangan interaktif.
+- `jrhagents/` — CLI Python, analisis lokal, installer, konfigurasi MCP.
+- `skills/jrhagents/` dan `SKILL.md` — format Skill standar.
+- `.claude-plugin/` — manifest plugin Claude Code.
+- `tests/` dan `.github/workflows/` — tes dan otomatisasi CI.
+
+[33 perbaikan konkret](docs/33-IMPROVEMENTS.md) · [Platform dan batasan](docs/PLATFORMS.md) · [Keamanan](SECURITY.md) · [Lisensi MIT](LICENSE).
