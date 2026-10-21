@@ -22,7 +22,7 @@ class ElementInspector(HTMLParser):
 
 class SiteTests(unittest.TestCase):
     def test_references_exist(self):
-        for asset in re.findall(r'(?:href|src)="(assets/[^"#?]+)(?:\\?v=\\d+)?"',HTML):
+        for asset in re.findall(r'(?:href|src)="(assets/[^"#?]+)(?:\?v=\d+)?"',HTML):
             self.assertTrue((DOCS/asset).is_file(),asset)
     def test_ids_unique(self):
         inspect=ElementInspector();inspect.feed(HTML)
