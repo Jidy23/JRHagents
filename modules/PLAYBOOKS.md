@@ -1,16 +1,31 @@
-# Focused playbooks
+# Modular Playbooks
 
 ## Audit
-Read project goals, repo layout and dependencies. Use `doctor` and `audit`. Prioritize confirmed findings. Do not equate missing indicators with full security assurance.
+- Baca struktur proyek dan hasil `audit`; jangan menyimpulkan dari nama file saja.
+- Kategorikan temuan: blocker, keamanan, regresi, kegunaan, enhancement.
+- Catat jalur berkas dan hasil uji reproduksi; audit lokal bukan pengganti SAST/DAST.
 
 ## Build
-Define observable acceptance criteria, inspect current code, implement the smallest reasonable change, run tests if authorized, and report passed/failed/not run.
+- Perjelas acceptance criteria; pilih perubahan minimal.
+- Cek dependensi, perubahan Git, izin akses, serta kompatibilitas.
+- Implementasi → test → verifikasi; jangan mengklaim API/mock benar-benar live tanpa bukti.
 
-## Polish
-Inventory layouts and breakpoints; preserve behavior; check semantic HTML, contrast, focus, reduced motion and responsiveness. Do not claim visual verification without a browser.
+## UI Polish
+- Periksa navigasi, warna, kontras, responsive typography, spacing, motion dan fokus keyboard.
+- Hormati reduced motion, semantic markup dan kebutuhan perangkat kecil.
+- Gunakan screenshot/browser test bila tools tersedia. Tanpanya tandai NOT_RUN.
 
 ## Research
-Ground results in dated primary sources where possible and distinguish source-backed facts from conjectures.
+- Tentukan rentang tanggal dan sumber utama.
+- Bedakan bukti, opini, dan inferensi; semua klaim yang bergantung web harus disitasi.
+- Jangan mengarang tren atau jumlah pengguna.
+
+## Integrations & BYOK
+- Gunakan API key hanya dari penyimpanan rahasia yang aman; jangan baca atau tampilkan nilainya.
+- Adaptor harus menyatakan tipe autentikasi, izin, batas biaya, batas waktu, cara rollback dan sumber bukti.
+- MCP/penghubung harus diperiksa dari tools nyata sebelum digunakan, tidak dikarang.
 
 ## Release
-Check tests, code review, secrets, rollback and deploy permissions; require explicit approval before any public release.
+- Status Git, tes, build, masalah keamanan, rollback dan izin deploy harus jelas.
+- Selalu minta persetujuan pengguna untuk rilis produksi.
+- Status otomatis bukan jaminan kesiapan produksi; tampilkan QA manual yang belum diuji.

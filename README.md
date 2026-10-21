@@ -1,84 +1,60 @@
 # JRHagents
 
-**One skill. A clearer way to work with AI coding tools.**
+**Satu skill. Satu perintah. Hasil yang bisa diperiksa.**
 
-JRHagents V16 is a free, local-first toolkit that helps you inspect a project, plan changes, install portable skill instructions, and verify results—without pretending an AI agent or cloud service is running behind the scenes.
+JRHagents adalah tool open-source yang membantu AI coding **mengaudit proyek, merencanakan fitur, merapikan UI/UX, dan memverifikasi hasil**. Gratis, lokal, dan tidak meminta API key.
 
-[**Interactive getting-started guide**](https://jidy23.github.io/JRHagents/) *(available after GitHub Pages activation)* · [Full installation guide](docs/INSTALL.md) · [Contributing](CONTRIBUTING.md)
+**[Panduan visual interaktif](https://jidy23.github.io/JRHagents/)** *(aktif setelah GitHub Pages berhasil dideploy)* · [Instalasi](docs/INSTALL.md) · [26 kemampuan](modules/CAPABILITIES.md) · [Berkontribusi](CONTRIBUTING.md)
 
-## Quick start (Python 3.9+; no extra dependencies for CLI)
+## Mulai dalam 3 langkah
+
+**1. Download** — klik **Code → Download ZIP** atau [unduh paket resmi](https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip), lalu ekstrak.
+
+**2. Install** — buka terminal **di folder JRHagents hasil ekstraksi**. Pilih **satu** klien AI yang kamu gunakan:
+
+| AI coding | Salin perintah ini |
+| --- | --- |
+| **Codex** | `python scripts/jrhagents.py install --client codex --scope user` |
+| **Claude Code** | `python scripts/jrhagents.py install --client claude --scope user` |
+| **Gemini CLI** | `python scripts/jrhagents.py install --client gemini --scope user` |
+
+Persyaratan: Python 3.9+. Di Windows, bila `python` tidak ada, ganti dengan `py`. Installer tidak menimpa skill yang sudah terpasang. Jika ingin memasang khusus untuk proyek, lihat [panduan instalasi](docs/INSTALL.md).
+
+**3. Pakai** — buka ulang AI coding, kemudian tulis:
+
+> **JRHagents, audit proyek ini, pilih masalah paling penting, perbaiki yang aman, dan tampilkan bukti pengujian.**
+
+Tidak perlu menghafal slash command. Bila skill belum terdeteksi, minta AI membaca `SKILL.md` di lokasi instalasinya.
+
+## Ingin memeriksa proyek tanpa AI coding?
 
 ```bash
-python scripts/jrhagents.py doctor
-python scripts/jrhagents.py start --project /path/to/project --task "cek dan rapikan UI"
-python scripts/jrhagents.py install --client codex --project /path/to/project
+python scripts/jrhagents.py start --project /path/to/your-project --task "audit proyek ini"
 ```
 
-Windows: try `py` instead of `python`. To use with Claude Code, select `claude`; with Gemini CLI, select `gemini`. Installed folders are never overwritten.
+Hasilnya adalah **audit statis, rencana tindakan, dan laporan HTML + JSON** di folder `.jrhagents/` pada proyek tujuan. CLI tidak otomatis mengubah kode aplikasi atau menjalankan test/build milik proyek; opsi eksekusi harus disetujui secara eksplisit.
 
-### Want zero terminals?
+## Apa yang tersedia?
 
-Download the source ZIP from GitHub, extract it, and ask your supported AI coding client to read `SKILL.md`. This uses instructions rather than CLI installation; actual support varies by client.
+| Sudah berjalan | Belum disediakan otomatis |
+| --- | --- |
+| CLI lokal: doctor, audit, route, plan, start, verify, report | AI agent mandiri yang mengedit kode tanpa AI coding host |
+| Installer Codex, Claude Code, Gemini CLI | Koneksi MCP / BYOK / API eksternal |
+| Laporan offline HTML + JSON | Hosting SaaS atau deploy produksi |
+| Dokumentasi interaktif, pencarian, generator perintah | 26 engine eksternal yang terpasang |
 
-## 3 concrete upgrades over V13
+**Penting:** 26 kemampuan adalah **peta keterampilan dan alur kerja**; sepuluh proyek GitHub terkait adalah referensi desain, bukan dependensi yang dibundel atau integrasi siap pakai. Efektivitasnya bergantung pada tool dan izin nyata di AI coding yang kamu gunakan.
 
-| Level | New capability | Real outcome |
-| --- | --- | --- |
-| V14 · Navigate | Responsive interactive documentation, feature search, command generator, theme and quick-copy controls | The public can learn how to use the skill without reading a wall of text |
-| V15 · Onboard | 3-step setup wizard with per-client installation commands and clear troubleshooting | Less friction for new users; nothing installed by the website |
-| V16 · Community | Automated Python/JS tests, contribution guidance, security policy and issue templates | Easier maintenance and safer public contributions |
+## Jalankan tes
 
-## What's real (and what isn't)
-
-**Runs locally:** read-only project doctor, bounded heuristic audit, intent routing, project plan, static HTML+JSON report, opt-in project tests/build and 3 supported installer targets.
-
-**AI-client instructions:** UX critique, coding, diagramming, research and release-check principles in `SKILL.md` and modules.
-
-**Not included:** live BYOK providers, MCP servers, autonomous coding agents, automatic cloud deployment or the full third-party projects that inspired the 26-capability map. The interface is documentation, **not** a remote AI chat product.
-
-## CLI
-
-```text
-python scripts/jrhagents.py help
-python scripts/jrhagents.py doctor --project .
-python scripts/jrhagents.py start --project . --task "audit dan rapikan UI"
-python scripts/jrhagents.py route "buat diagram arsitektur"
-python scripts/jrhagents.py plan "bikin fitur login" --project . --save
-python scripts/jrhagents.py audit --project . --json
-python scripts/jrhagents.py verify --project . --save
-python scripts/jrhagents.py report --project .
-python scripts/jrhagents.py install --client claude --project .
+```bash
+python -m unittest discover -s tests -v
+node --test tests/site.test.cjs
+python -m http.server 8000 -d docs
 ```
 
-`verify --run-tests` or `verify --run-build` executes project-defined code **only when explicitly requested**. Do not run on untrusted projects.
+Buka `http://localhost:8000` untuk melihat website dokumentasi. Node diperlukan untuk tes JavaScript saja, bukan untuk CLI utama. Pipeline GitHub Actions tercantum pada `.github/workflows/`.
 
-## Project structure
+MIT License · [Keamanan](SECURITY.md) · [Kontribusi](CONTRIBUTING.md) · [Atribusi pihak ketiga](THIRD_PARTY.md)
 
-```text
-SKILL.md                 entry instructions
-jrhagents/               Python CLI, routing, auditing, reports and installer
-modules/                 26 capability map and safety playbooks
-docs/index.html          interactive local/static docs website
-docs/assets/             no-dependency CSS and JavaScript
-tests/                   offline Python and Node tests
-.github/workflows/       CI for contributions
-```
-
-## For maintainers
-
-1. Run `python -m unittest discover -s tests -v`.
-2. Run `node --test tests/site.test.cjs` and `node --check docs/assets/app.js`.
-3. Preview `docs/index.html` locally (or run `python -m http.server 8000 -d docs`).
-4. Follow [contributing](CONTRIBUTING.md) and [security](SECURITY.md) before publishing.
-
-## Public release status
-
-The public repository is live. GitHub Pages activation and successful deployment are separate steps.
-
-MIT licensed; third-party repository references in `modules/CAPABILITIES.md` are conceptual inspirations, not copied dependencies. See [attribution](THIRD_PARTY.md).
-
-## Maintainers
-
-This repository is hosted at [Jidy23/JRHagents](https://github.com/Jidy23/JRHagents). Propose changes through pull requests, run local tests, and review diffs. `tools/publish.py` bootstraps a NEW repository and must not be used to update this existing one.
-
-To publish the website, enable **Settings → Pages → Build and deployment → GitHub Actions**, then check the Pages workflow.
+**Status:** GitHub repo tersedia. Situs GitHub Pages memiliki status publikasi terpisah; jangan menganggapnya aktif sebelum workflow deploy berhasil.

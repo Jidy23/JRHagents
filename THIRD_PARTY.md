@@ -1,6 +1,5 @@
-# Third-party inspirations
+# Third-party references
 
-JRHagents does **not** vendor, modify, or claim installation of external repositories.
-The 10 upstream-inspired capabilities are concept references. You are responsible for reviewing the original licenses and integration requirements before copying or installing third-party code.
+The 26 capability names draw inspiration from tools and community skills such as REA, Ponytail, Hallmark, Humanizer, Onyx, Impeccable, UI/UX Pro Max, Last 30 Days, Scrapling and Diagram Design.
 
-Inspired by REA, Ponytail, Hallmark, Humanizer, Onyx, Impeccable, UI/UX Pro Max, Last 30 Days, Scrapling and Diagram Design. The name JRHagents does not imply endorsement from their maintainers.
+These upstream projects are **not installed, bundled, endorsed or embedded** in this repository. Each has its own upstream maintainers and license terms. Before importing any upstream code, inspect its current license, dependencies, attribution and security boundaries.

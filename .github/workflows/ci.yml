@@ -16,13 +16,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Unit tests
+      - name: Test local toolkit
         run: python -m unittest discover -s tests -v
-      - name: CLI help
-        run: python scripts/jrhagents.py help
-  website:
+  docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate static docs exist
-        run: test -f docs/index.html && test -f SKILL.md
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax
+        run: |
+          node --check docs/assets/app.js
+          node --check docs/assets/site-model.js
+      - name: Test browser-independent site model
+        run: node --test tests/site.test.cjs

@@ -1,11 +1,19 @@
-# Project context
+# Project Context — JRHagents
 
-## Goal
+## Target
+Tulis satu hasil utama yang diinginkan.
 
-## Constraints
+## Tech stack
+Isi setelah audit menemukan stack sebenarnya; jangan mengarang.
 
-## Definition of done
+## Batasan
+Jangan hapus data pengguna, jangan bocorkan kredensial, utamakan performa dan aksesibilitas.
 
-## Decisions
+## Definition of Done
+- [ ] Fitur utama bekerja tanpa placeholder
+- [ ] Tes relevan benar-benar dijalankan dan hasilnya dicatat
+- [ ] Tampilan dan interaksi diperiksa pada breakpoint target
+- [ ] Tidak ada kebocoran rahasia atau perubahan di luar lingkup
 
-## Next action
+## Decision Log
+Keputusan harus ditambahkan setelah diverifikasi.
