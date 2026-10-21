@@ -16,3 +16,12 @@
 - Simplified website to an installation guide; removed mock AI controls, MCP/plugin/service promises.
 - Added no-dependency validation tests and a strictly opt-in, read-only project scanner.
 - Kept MIT licensing and preserved earlier versions in Git history.
+
+## V24 — Mobile-first, no-shell onboarding
+
+- Rebuild Pages as a compact four-tab interface with mobile bottom navigation; one content pane visible at a time.
+- Chat-first setup path: ChatGPT/Claude/Gemini users copy the **full canonical universal prompt**, with no terminal or API request.
+- Retain `npx skills add ...` **only** when the user deliberately chooses AI coding / Terminal.
+- Add 26 searchable capability practices, nine useful prompt templates, copy/download actions, and actionable troubleshooting.
+- Refine responsive spacing, keyboard tab behavior, color theme, reduced-motion support, and lightweight CSS 3D visuals.
+- Add static site integrity checks and Node.js unit tests for platform routing; keep one canonical native SKILL.md.

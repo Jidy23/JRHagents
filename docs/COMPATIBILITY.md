@@ -1,15 +1,13 @@
-# Kompatibilitas: jujur, tidak mengarang dukungan
+# Kompatibilitas JRHagents
 
-| Kategori | Contoh | Metode | Catatan |
-|---|---|---|---|
-| Native Agent Skills | Codex, Claude Code, Gemini CLI, Cursor, Copilot dan agen lain yang mendukung standar ini | `npx skills add Jidy23/JRHagents --skill jrhagents` atau instalasi bawaan | Versi, path, izin dan aktivasi berbeda; pengujian aktual dilakukan oleh pengguna di host |
-| Instruksi manual | ChatGPT web, Claude web, chatbot umum | Salin `UNIVERSAL_PROMPT.md` | Tidak otomatis menjadi tool/skill runtime |
-| Agent buatan sendiri | Aplikasi LLM kustom | Load `SKILL.md` dan referensi sebagai context secara kondisional | Developer harus mengimplementasikan loader, permissions, tools dan audit |
+| Tempat menggunakan AI | Cara yang sesuai | Terminal dibutuhkan? | Status |
+| --- | --- | --- | --- |
+| ChatGPT web/app | Tempel instruksi universal ke chat/instruksi khusus yang disediakan | Tidak | Fallback instruksi manual |
+| Claude web/app | Tempel instruksi universal ke chat/instruksi khusus yang disediakan | Tidak | Fallback instruksi manual |
+| Gemini web/app | Tempel instruksi universal ke chat/instruksi khusus yang disediakan | Tidak | Fallback instruksi manual |
+| Chatbot lain | Tempel instruksi universal jika fitur instruksi/chat tersedia | Tidak | Best effort |
+| Codex, Claude Code, Cursor, Gemini CLI, Copilot dan AI coding yang mendukung Agent Skills | `npx skills add Jidy23/JRHagents --skill jrhagents` pada Terminal komputer | Ya | Bergantung versi dan dukungan host |
 
-**Tidak didukung secara universal:** pemasangan otomatis lewat GitHub pada semua aplikasi AI, plugin ChatGPT melalui repo ini, server MCP global, penyimpanan memori lintas aplikasi, atau kemampuan AI baru. Skill tidak memodifikasi aturan keamanan platform induk.
+**Tidak ada klaim bahwa semua platform memiliki instalasi native.** JRHagents tidak menyediakan API, endpoint, model AI, akses tool, atau server MCP publik. Jika AI hanya punya fitur `create_skill` untuk menambahkan API, itu bukan metode yang cocok untuk Skill instruksional ini.
 
-Referensi standar:
-- https://agentskills.io/specification
-- https://github.com/vercel-labs/skills/blob/main/docs/commands.md
-- https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/add-skills
-- https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/creating-skills.md
+Standar rujukan: https://agentskills.io/specification. Installer: https://github.com/vercel-labs/skills.

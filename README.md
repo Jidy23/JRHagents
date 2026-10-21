@@ -7,17 +7,27 @@ JRHagents is an open-source **Agent Skill**, not an AI model, SaaS dashboard, AP
 > [!IMPORTANT]
 > Installing the skill **does not** give an AI browser access, shell access, extra models, subscriptions, or permission to read your files. JRHagents never claims a tool ran unless there is evidence.
 
-## Install from GitHub (native Agent Skills)
+## Mulai dari aplikasi AI yang kamu gunakan
 
-Requirements: an Agent Skills-compatible AI coding client, Node.js and an internet connection.
+**[Buka panduan interaktif JRHagents](https://jidy23.github.io/JRHagents/#mulai)** — pilih ChatGPT, Claude, Gemini, atau AI coding. Panduan otomatis menunjukkan cara yang relevan tanpa memaksakan Terminal.
+
+### A. ChatGPT / Claude web / Gemini web — tanpa Terminal dan tanpa API
+
+1. Di website, pilih **Chatbot biasa** dan nama aplikasinya.
+2. Klik **Salin instruksi lengkap** (berasal dari [`UNIVERSAL_PROMPT.md`](UNIVERSAL_PROMPT.md)).
+3. Tempel ke chat atau fitur instruksi khusus aplikasi yang tersedia. Kirim tugas dengan bahasa biasa.
+
+**Tidak perlu `npx`, ZIP, Python, endpoint, Base URL, atau API key JRHagents.** Jika aplikasi menampilkan formulir `create_skill` yang meminta URL API, itu adalah integrasi API, bukan jalur memasang instruksi JRHagents. Gunakan pesan/instruksi manual. Ini bukan pemasangan native dan tidak menambah tool yang belum dimiliki aplikasi.
+
+### B. AI coding yang mendukung Agent Skills — jika punya Terminal komputer
+
+Jalankan pada **Terminal komputer** (bukan diketik di chat). Membutuhkan Node.js dan internet:
 
 ```bash
 npx skills add Jidy23/JRHagents --skill jrhagents
 ```
 
-The installer will ask where to install. For use across supported projects/agents, choose the appropriate global location. You may see a prompt to approve installation. [Supported flags and sources](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
-
-**No terminal / chat-only AI?** Open [UNIVERSAL_PROMPT.md](UNIVERSAL_PROMPT.md), copy its content into your AI's instructions or conversation. This is a **prompt fallback**, not an automatically loaded native skill. Some apps let you upload `SKILL.md` as knowledge/instructions; follow each app's current instructions.
+Installer dapat meminta pilihan aplikasi dan izin. Native install bergantung versi/dukungan host; ini **bukan** cara menggunakan JRHagents dalam chatbot tanpa shell. Lihat [petunjuk instalasi](docs/INSTALL.md).
 
 ## Use it in plain language
 
@@ -83,4 +93,4 @@ MIT. See [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md), and [SECURITY.m
 
 ## Interactive web guide
 
-The [public documentation website](https://jidy23.github.io/JRHagents/) offers a beginner-friendly installation path, a local-only task-instruction builder, a searchable 26-capability index, and accessibility-aware CSS visuals. The website does **not** execute AI tasks or install software from your browser. See [V23 release notes](docs/V23-RELEASE.md).
+The [public documentation website](https://jidy23.github.io/JRHagents/) offers a beginner-friendly installation path, a local-only task-instruction builder, a searchable 26-capability index, and accessibility-aware CSS visuals. The website does **not** execute AI tasks or install software from your browser. See [V24 release notes](docs/V24-RELEASE.md).

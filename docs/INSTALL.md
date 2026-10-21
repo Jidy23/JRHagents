@@ -1,45 +1,45 @@
-# Pasang JRHagents, tanpa bingung
+# Cara memakai JRHagents — pilih aplikasi AI dulu
 
-## Jalur A — AI coding yang mendukung Agent Skills
+**JRHagents adalah satu Agent Skill berisi instruksi kerja, bukan API.** Tidak membutuhkan alamat server publik, endpoint, ataupun API key JRHagents.
 
-Persiapan: kamu sudah punya AI coding yang kompatibel, **Node.js**, dan internet. Buka terminal dan jalankan:
+Buka [panduan interaktif](https://jidy23.github.io/JRHagents/#mulai), pilih tempat kamu memakai AI, dan ikuti instruksi yang cocok.
 
-```bash
+## A. ChatGPT, Claude web, Gemini web atau chatbot tanpa Terminal
+
+1. Pilih **Chatbot biasa** pada website.
+2. Tekan **Salin instruksi lengkap**. Ini adalah isi instruksi universal dari [`UNIVERSAL_PROMPT.md`](../UNIVERSAL_PROMPT.md), bukan contoh singkat.
+3. Tempel ke percakapan atau fitur custom instructions yang benar-benar disediakan aplikasimu, lalu kirim tugas yang ingin dikerjakan.
+
+**Tidak perlu API, Python, Node.js, ZIP atau `npx`.** Jika sebuah aplikasi menunjukkan `create_skill` yang meminta **Base URL API, endpoint, API key**, itu adalah fitur pembuatan *alat/API integration*, bukan pemasangan instruksi JRHagents. Jangan mengisi URL palsu; gunakan metode pesan atau instruksi manual.
+
+Chatbot tidak mendapatkan akses GitHub, browser, file, atau terminal baru dari instruksi saja. Jika platform memiliki fitur skill native tersendiri, gunakan dokumentasinya untuk instalasi yang sesuai.
+
+## B. Codex, Claude Code, Cursor, Gemini CLI dan AI coding lain yang mendukung Agent Skills
+
+Jika kamu **punya Terminal komputer**, Node.js dan koneksi internet, jalankan:
+
+```sh
 npx skills add Jidy23/JRHagents --skill jrhagents
 ```
 
-Ikuti petunjuk memilih aplikasi AI dan cakupan pemasangan. Untuk melihat pilihan dahulu tanpa memasang:
+Installer akan memandu pilihan aplikasi yang didukung. Setelah terpasang, buka AI coding dan beri tugas biasa, misalnya: `JRHagents, audit kode ini. Laporkan bagian yang benar-benar diperiksa.`
 
-```bash
-npx skills add Jidy23/JRHagents --list
-```
+**Jangan tempel perintah `npx` ke aplikasi yang tidak punya Terminal.** Jika tidak punya shell, kembali ke cara A. Tidak semua versi aplikasi AI coding mendukung native Agent Skills.
 
-Untuk periksa pembaruan skill: `npx skills check`. Untuk memasang global: `npx skills add Jidy23/JRHagents --skill jrhagents -g`.
+## Contoh instruksi
 
-**Tidak perlu Python, server MCP, API key JRHagents, atau unduh ZIP manual untuk Skill.** Instalasi menyalin instruksi dan referensi. AI coding tetap memerlukan akun/model dan izin kerja sendiri.
+- `JRHagents, perbaiki UI mobile website saya, jaga fungsi yang sudah bekerja, lalu laporkan tes yang benar-benar dijalankan.`
+- `JRHagents, teliti data ini dan jelaskan keterbatasan analisisnya.`
+- `JRHagents, bantu membuat proposal usaha sederhana dan pilih satu langkah validasi.`
 
-## Jalur B — Gemini CLI tanpa skills CLI
+Instruksi di atas diproses oleh **AI yang kamu gunakan**, bukan oleh GitHub Pages. Skill open source gratis (MIT); platform AI dapat memiliki biaya dan batasannya sendiri.
 
-Jika versi Gemini CLI-mu mendukung instalasi skill dari repo:
+## Jika terjadi masalah
 
-```bash
-gemini skills install https://github.com/Jidy23/JRHagents
-```
+- **“App ini gak punya shell”** → pilih Chatbot biasa; jangan jalankan `npx`.
+- **“create_skill butuh API URL”** → gunakan instruksi manual, bukan pembuatan API skill.
+- **“npx not found”** → Node.js belum tersedia pada Terminal komputer. [Panduan Node.js](https://nodejs.org/en/download).
+- **Skill tidak ditemukan AI coding** → periksa versi/dukungan native Skill dan lokasi pemasangan.
+- **Salin otomatis gagal** → tekan “Lihat instruksi penuh”, pilih teks, lalu salin manual.
 
-Lalu lihat daftar skills dengan `/skills`. Perilaku bisa berubah per versi. Jangan memasang dua salinan `jrhagents` di lokasi yang saling menimpa.
-
-## Jalur C — AI chat biasa (ChatGPT web, Claude web, atau layanan lain)
-
-Buka [UNIVERSAL_PROMPT.md](../UNIVERSAL_PROMPT.md). Salin isi instruksi ke fitur custom instructions/prompt (jika tersedia) atau kirim ke percakapan sebelum tugas. **Ini bukan instalasi native** dan tidak menambahkan kemampuan tool. Pada produk yang mendukung unggah Skill, ikuti petunjuk resmi produk untuk mengunggah folder/arsip yang sesuai.
-
-## Verifikasi yang jujur
-
-1. Tanyakan: `JRHagents, buat tiga langkah audit proyek ini. Sebutkan tool apa yang benar-benar tersedia.`
-2. Jika skill terdeteksi, AI harus menyebut akses aktual, bukan mengklaim sudah membuka file yang belum diberikan.
-3. Berikan satu berkas contoh dan minta review. Jika host dapat mengakses file, minta bukti baris; jika chat-only, tempel bagian terkait.
-
-Jika `npx` tidak ditemukan, pasang Node.js dari https://nodejs.org/ lalu buka terminal baru. Jika skill tidak muncul, periksa versi aplikasi AI dan lokasi install yang ditawarkan CLI. Jangan gunakan perintah yang dimaksudkan untuk platform lain tanpa mengecek dukungannya.
-
-## Akses dan biaya
-
-Kode Skill open-source MIT. Layanan AI tempat Skill dipakai dapat memiliki biaya, model, limit, dan kebijakan sendiri. Tidak ada backend JRHagents cloud yang dihubungkan oleh langkah di atas.
+[Status kompatibilitas](COMPATIBILITY.md) · [Sumber GitHub](https://github.com/Jidy23/JRHagents) · [Laporkan kendala](https://github.com/Jidy23/JRHagents/issues)
