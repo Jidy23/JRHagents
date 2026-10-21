@@ -4,6 +4,7 @@
 'use strict';
 const SOURCE='Jidy23/JRHagents';
 const REPO='https://github.com/'+SOURCE;
+const SKILL_URL=REPO+'/tree/main/skills/jrhagents';
 const clientInfo={
   codex:{name:'Codex',agent:'codex',ready:'Buka Codex, lalu minta: JRHagents, audit proyek ini dan tunjukkan buktinya.'},
   claude:{name:'Claude Code',agent:'claude-code',ready:'Buka Claude Code dan minta: JRHagents, audit proyek ini dan tunjukkan buktinya.'},
@@ -25,7 +26,7 @@ function get(os='windows',client='codex',mode='skill',path='.',scope='user'){
  const info=clientInfo[client];
  if(mode==='skill'){
    if(!info.agent)return {supported:false,mode,steps:[],help:'VS Code saja bukan klien Skill. Pilih GitHub Copilot atau MCP.',link:REPO};
-   const command='npx skills add '+SOURCE+' --skill jrhagents -a '+info.agent+(scope==='user'?' -g':'');
+   const command='npx skills add '+SKILL_URL+' -a '+info.agent+(scope==='user'?' -g':'');
    return {supported:true,mode,method:'github-skill',needs:'Node.js dan akses internet',steps:[
      step('Pasang langsung dari GitHub','Buka Terminal. Installer akan mengambil JRHagents dari GitHub dan menanyakan izin bila diperlukan.',command),
      step('Mulai pakai di '+info.name,'Buka aplikasi AI-mu. Ini instruksi bahasa biasa, bukan perintah terminal.','JRHagents, audit proyek ini dan tunjukkan buktinya.','Aplikasi AI')
@@ -50,5 +51,5 @@ function get(os='windows',client='codex',mode='skill',path='.',scope='user'){
    step('Pastikan paket terpasang','Restart aplikasi AI dan cek daftar tool MCP.',python+' -m jrhagents --version')
  ],help:'Lima tool MCP hanya membaca proyek lokal. Tidak bisa mengedit kode atau menjalankan AI sendiri. Gunakan hanya pada proyek yang kamu percayai.',link:REPO+'/blob/main/docs/MCP.md',troubleshooting:'Jika Python tidak terdeteksi, pasang Python dari python.org. Jika konfigurasi sudah ada dan berbeda, setup berhenti tanpa menimpanya.'};
 }
-return {get,clientInfo,mcpClients,SOURCE,REPO,pathQuote};
+return {get,clientInfo,mcpClients,SOURCE,REPO,SKILL_URL,pathQuote};
 });

@@ -32,3 +32,5 @@ For up-to-date CI, see [GitHub Actions](https://github.com/Jidy23/JRHagents/acti
 - UI checks: direct GitHub Skill installation commands for seven clients, personal/project scope, Claude plugin marketplace flow, optional MCP local configuration, prompt selector, browser audit & JSON download, theme and mobile navigation.
 - **Not verified:** actual `npx skills add` in a user's AI coding app (this isolated test runtime has no access to GitHub); Claude marketplace installation inside Claude Code; cloud MCP (not provided).
 - Local checks are not substitutes for GitHub Actions results on the published commit.
+
+- Installer sources use the exact `skills/jrhagents` directory so dependent `references/` files are included; root `SKILL.md` is not treated as the deployable package.

@@ -7,7 +7,7 @@
 **Syarat:** AI coding yang mendukung Agent Skills, Node.js/npm (untuk `npx`) dan internet. Masuk ke Terminal / PowerShell, lalu jalankan:
 
 ```bash
-npx skills add Jidy23/JRHagents --skill jrhagents
+npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents
 ```
 
 Installer akan menemukan skill dalam repositori GitHub dan menanyakan aplikasi AI serta cakupan pemasangan. Periksa nama sumber sebelum mengizinkan pemasangan.
@@ -15,7 +15,7 @@ Installer akan menemukan skill dalam repositori GitHub dan menanyakan aplikasi A
 **Kalau sudah tahu aplikasi:** pemasangan untuk semua proyek milik pengguna, contoh Codex:
 
 ```bash
-npx skills add Jidy23/JRHagents --skill jrhagents -a codex -g
+npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents -a codex -g
 ```
 
 Ganti `codex` dengan salah satu pengenal resmi berikut bila kamu menggunakan aplikasi tersebut: `claude-code`, `gemini-cli`, `cursor`, `github-copilot`, `opencode`, `windsurf`. Untuk memasang hanya di folder proyek saat ini, hilangkan `-g` dan jalankan perintah dari folder proyek. Pengenal lain dan mekanisme dukungan dapat berubah mengikuti versi installer; lihat [daftar klien resmi](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).

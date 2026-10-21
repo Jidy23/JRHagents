@@ -26,7 +26,7 @@ with sync_playwright() as p:
         assert dl.value.suggested_filename=='jrhagents-audit.json'
         # Skill: direct GitHub, personal scope, no Python path form.
         page.locator('#client').select_option('cursor')
-        assert 'npx skills add Jidy23/JRHagents --skill jrhagents -a cursor -g' in page.locator('#installSteps').inner_text()
+        assert 'npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents -a cursor -g' in page.locator('#installSteps').inner_text()
         assert not page.locator('#osGroup').is_visible()
         page.locator('#installScope').select_option('project')
         assert ' -g' not in page.locator('#installSteps').inner_text()

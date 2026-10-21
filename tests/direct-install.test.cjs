@@ -9,7 +9,7 @@ test('seven AI coding clients get direct GitHub installs, no Python or ZIP',()=>
  for(const client of ['codex','claude','gemini','cursor','copilot','opencode','windsurf']){
   const r=installer.get('windows',client,'skill','.','user');
   assert.equal(r.supported,true,client);
-  assert.match(r.steps[0].command,/^npx skills add Jidy23\/JRHagents --skill jrhagents -a [\w-]+ -g$/);
+  assert.match(r.steps[0].command,/^npx skills add https:\/\/github\.com\/Jidy23\/JRHagents\/tree\/main\/skills\/jrhagents -a [\w-]+ -g$/);
   assert.doesNotMatch(r.steps[0].command,/\.zip|pip |venv/);
  }
 });
@@ -46,6 +46,6 @@ test('website loads direct installer and dynamic task picker, defaults to skill'
  assert.match(page,/id="exampleTask"/);
  assert.match(app,/globalThis\.JRHDirectInstall/);
  assert.match(app,/installScope/);
- assert.match(page,/npx skills add Jidy23\/JRHagents/);
+ assert.match(page,/npx skills add https:\/\/github\.com\/Jidy23\/JRHagents\/tree\/main\/skills\/jrhagents/);
  assert.doesNotMatch(page,/pip install jrhagents\b/);
 });

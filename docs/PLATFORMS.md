@@ -4,7 +4,7 @@ JRHagents adalah satu *repositori sumber* dengan tiga **format distribusi yang b
 
 ## Skill (jalur utama)
 
-Jalankan `npx skills add Jidy23/JRHagents --skill jrhagents`, pilih target AI coding, dan izinkan pemasangan. Klien yang memiliki pengenal installer resmi: `codex`, `claude-code`, `gemini-cli`, `cursor`, `github-copilot`, `opencode`, `windsurf`. Daftar dapat bertambah/berubah mengikuti versi [skills CLI](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).
+Jalankan `npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents`, pilih target AI coding, dan izinkan pemasangan. Klien yang memiliki pengenal installer resmi: `codex`, `claude-code`, `gemini-cli`, `cursor`, `github-copilot`, `opencode`, `windsurf`. Daftar dapat bertambah/berubah mengikuti versi [skills CLI](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).
 
 Skill tidak membutuhkan Python; pengguna hanya perlu Node.js untuk menjalankan installer. Setelah skill dipasang, kemampuan yang benar-benar bisa dijalankan tetap mengikuti tool dan izin masing-masing AI coding.
 

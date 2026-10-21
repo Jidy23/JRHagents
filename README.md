@@ -9,13 +9,13 @@
 Punya Node.js dan AI coding yang mendukung Agent Skills? Jalankan:
 
 ```bash
-npx skills add Jidy23/JRHagents --skill jrhagents
+npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents
 ```
 
 Installer akan meminta pilihan AI coding dan lokasi pemasangan. Untuk instalasi global ke Codex, misalnya:
 
 ```bash
-npx skills add Jidy23/JRHagents --skill jrhagents -a codex -g
+npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents -a codex -g
 ```
 
 Setelah itu, dalam AI coding tulis:
@@ -29,7 +29,7 @@ Setelah itu, dalam AI coding tulis:
 | Ingin apa? | Cara | Prasyarat |
 | --- | --- | --- |
 | Audit beberapa file tanpa instalasi | [Audit Cepat](https://jidy23.github.io/JRHagents/#coba) | Browser modern |
-| Skill untuk AI coding lain | `npx skills add Jidy23/JRHagents --skill jrhagents` | Node.js + klien Skills |
+| Skill untuk AI coding lain | `npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents` | Node.js + klien Skills |
 | Plugin Claude Code | `/plugin marketplace add Jidy23/JRHagents` lalu `/plugin install jrhagents@jrhagents` | Claude Code kompatibel |
 | 5 alat MCP baca proyek | [Panduan MCP lokal](docs/INSTALL.md#kalau-butuh-5-tool-lokal-mcp-opsional) | Python 3.9+ + klien MCP |
 

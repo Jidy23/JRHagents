@@ -22,7 +22,7 @@
 - Added browser smoke and static site checks; reviewed desktop/tablet/mobile layouts.
 
 ## V20 — Direct GitHub Install & Beginner-First Onboarding
-- Skill default now installs directly using `npx skills add Jidy23/JRHagents --skill jrhagents` with verified agent identifiers; no Python or manual ZIP.
+- Skill default now installs directly using the direct GitHub path `npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents` (avoids root-SKILL shadowing) with verified agent identifiers; no Python or manual ZIP.
 - Claude Code plugin can be installed through the GitHub marketplace command flow rather than manual plugin ZIP.
 - MCP remains a clearly separate, optional local Python setup; unsupported clients do not show fake commands.
 - GitHub Pages guides nontechnical users to choose their AI coding app, installation method, and per-user or per-project scope.
