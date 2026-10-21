@@ -50,7 +50,7 @@ No slash commands to memorize; the host recognizes intent if it loads the skill.
 | ChatGPT, Claude web, general chatbots without compatible skill discovery | Copy [universal instructions](UNIVERSAL_PROMPT.md) | Portable instructions; actual tools depend on that service |
 | Your custom agent app | Read `skills/jrhagents/SKILL.md` + requested references | Adapter integration owned by your app |
 
-[Full installation & troubleshooting](docs/INSTALL.md) · [Platform compatibility](docs/COMPATIBILITY.md) · [Simple web guide](https://jidy23.github.io/JRHagents/)
+[Full installation & troubleshooting](docs/INSTALL.md) · [Platform compatibility](docs/COMPATIBILITY.md) · [Interactive web guide](https://jidy23.github.io/JRHagents/)
 
 ## Folder structure
 
@@ -80,3 +80,7 @@ The scanner is an **optional bounded heuristic**, not a security certification. 
 ## License and contribution
 
 MIT. See [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md), and [SECURITY.md](SECURITY.md). Prior dashboard/MCP/plugin experiments remain accessible in Git history; **this repository's primary product is one skill**.
+
+## Interactive web guide
+
+The [public documentation website](https://jidy23.github.io/JRHagents/) offers a beginner-friendly installation path, a local-only task-instruction builder, a searchable 26-capability index, and accessibility-aware CSS visuals. The website does **not** execute AI tasks or install software from your browser. See [V23 release notes](docs/V23-RELEASE.md).

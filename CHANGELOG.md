@@ -1,3 +1,11 @@
+## V23 — Premium Pages & Easy Onboarding (2026-10-22)
+
+- Rebuilt GitHub Pages with a zero-dependency responsive UI and lightweight CSS 3D illustration.
+- Added installer guidance for AI coding or chat-only use, clipboard actions, prompt-builder and 26-capability search.
+- Added accessible mobile navigation, theme toggle, FAQ and reduced-motion support.
+- Added static-site regression tests and Node.js syntax gate in GitHub Actions.
+- Kept **one canonical Agent Skill** unchanged; the website is documentation, not an AI execution service.
+
 # Changelog
 
 ## V22 — Universal Skill (2026-10-22)
