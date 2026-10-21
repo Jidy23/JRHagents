@@ -1,11 +1,12 @@
-## What changed?
+## What practical problem does this solve?
 
-## Why is this useful?
+## Changes
 
-## Verification
-- [ ] Python tests run
-- [ ] JS tests run
-- [ ] Keyboard and mobile checked (if UI changed)
-- [ ] No secrets or private data committed
+## Proof
+- [ ] `python -m unittest discover -s tests -v` passes
+- [ ] One canonical `skills/jrhagents/SKILL.md` retained
+- [ ] New references are linked from the skill
+- [ ] No new fake platform/API/tool claims
+- [ ] No private information or secrets added
 
-## Limitations / untested cases
+## Limits / not tested

@@ -1,65 +1,82 @@
 # JRHagents
 
-**AI coding lebih terarah, tanpa instalasi ribet.** Satu sumber open-source untuk Skill, alat MCP lokal, dan Plugin Claude Code. Website berbahasa Indonesia membantu pemula memilih jalur yang cocok.
+**One skill. Many AI platforms. Clearer work, verifiable results.**
 
-[**Buka panduan visual**](https://jidy23.github.io/JRHagents/#install) · [Coba Audit Cepat tanpa instalasi](https://jidy23.github.io/JRHagents/#coba) · [Dokumentasi lengkap](docs/INSTALL.md) · [Laporkan masalah](https://github.com/Jidy23/JRHagents/issues)
+JRHagents is an open-source **Agent Skill**, not an AI model, SaaS dashboard, API gateway, MCP host, or universal plugin. It gives compatible AI assistants a reusable workflow for **thinking, research, writing, data, software, design, and quality checks**. Its instructions work with whatever capabilities the host already provides.
 
-## Paling mudah — pasang Skill langsung dari GitHub
+> [!IMPORTANT]
+> Installing the skill **does not** give an AI browser access, shell access, extra models, subscriptions, or permission to read your files. JRHagents never claims a tool ran unless there is evidence.
 
-Punya Node.js dan AI coding yang mendukung Agent Skills? Jalankan:
+## Install from GitHub (native Agent Skills)
 
-```bash
-npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents
-```
-
-Installer akan meminta pilihan AI coding dan lokasi pemasangan. Untuk instalasi global ke Codex, misalnya:
+Requirements: an Agent Skills-compatible AI coding client, Node.js and an internet connection.
 
 ```bash
-npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents -a codex -g
+npx skills add Jidy23/JRHagents --skill jrhagents
 ```
 
-Setelah itu, dalam AI coding tulis:
+The installer will ask where to install. For use across supported projects/agents, choose the appropriate global location. You may see a prompt to approve installation. [Supported flags and sources](https://github.com/vercel-labs/skills/blob/main/docs/commands.md).
 
-> JRHagents, audit proyek ini, jelaskan tiga masalah terpenting, dan tunjukkan buktinya. Jangan mengubah file sebelum saya menyetujui.
+**No terminal / chat-only AI?** Open [UNIVERSAL_PROMPT.md](UNIVERSAL_PROMPT.md), copy its content into your AI's instructions or conversation. This is a **prompt fallback**, not an automatically loaded native skill. Some apps let you upload `SKILL.md` as knowledge/instructions; follow each app's current instructions.
 
-**Apa yang dipasang?** Instruksi Skill, *bukan* model AI baru, penyedia API, atau aplikasi yang memerlukan akun tambahan. Skill menggunakan kemampuan nyata yang disediakan AI coding milik pengguna. Instalasi memerlukan internet dan runtime Node.js untuk `npx`.
+## Use it in plain language
 
-## Pilihan lain, hanya jika dibutuhkan
+```
+JRHagents, bedah ide usaha ini dan pilih prioritas pertama.
+JRHagents, rapikan UI website ini tanpa mengubah fiturnya.
+JRHagents, audit repo dan laporkan temuan beserta buktinya.
+JRHagents, susun outline skripsi dan bedakan data dari asumsi.
+JRHagents, buat rencana untuk fitur login, lalu uji jika tool tersedia.
+```
 
-| Ingin apa? | Cara | Prasyarat |
+No slash commands to memorize; the host recognizes intent if it loads the skill. You can also explicitly ask it to read/activate **jrhagents**.
+
+## What it actually does
+
+1. Understand your goal, audience, and constraints.
+2. Determine what this AI *really* can do (chat-only, files, tools, code, web).
+3. Load only the applicable reference workflow, avoiding irrelevant instructions.
+4. Produce the requested answer or work using available and authorized tools.
+5. Check outcomes, make uncertainty visible, and finish with **one next action**.
+
+**26 capabilities** are coordinated workflows and quality practices—not 26 separate third-party products. See [the capability map](skills/jrhagents/references/CAPABILITIES.md). The original 10 open-source concepts are acknowledged as **inspiration**, not bundled dependencies. No API key is needed to read the skill.
+
+## Platform pathways
+
+| Your AI | Recommended way | What you get |
 | --- | --- | --- |
-| Audit beberapa file tanpa instalasi | [Audit Cepat](https://jidy23.github.io/JRHagents/#coba) | Browser modern |
-| Skill untuk AI coding lain | `npx skills add https://github.com/Jidy23/JRHagents/tree/main/skills/jrhagents` | Node.js + klien Skills |
-| Plugin Claude Code | `/plugin marketplace add Jidy23/JRHagents` lalu `/plugin install jrhagents@jrhagents` | Claude Code kompatibel |
-| 5 alat MCP baca proyek | [Panduan MCP lokal](docs/INSTALL.md#kalau-butuh-5-tool-lokal-mcp-opsional) | Python 3.9+ + klien MCP |
+| Claude Code, Codex, Gemini CLI, Cursor, Copilot and other compatible agent runtimes | `npx skills add Jidy23/JRHagents --skill jrhagents` | Native skill **where supported by that client and version** |
+| Gemini CLI (alternative) | `gemini skills install https://github.com/Jidy23/JRHagents` | Native Gemini CLI installation if supported by your version |
+| ChatGPT, Claude web, general chatbots without compatible skill discovery | Copy [universal instructions](UNIVERSAL_PROMPT.md) | Portable instructions; actual tools depend on that service |
+| Your custom agent app | Read `skills/jrhagents/SKILL.md` + requested references | Adapter integration owned by your app |
 
-Plugin dan MCP tidak perlu dipasang jika kamu hanya ingin Skill. ZIP di halaman Releases atau unduhan lama hanyalah opsi cadangan.
+[Full installation & troubleshooting](docs/INSTALL.md) · [Platform compatibility](docs/COMPATIBILITY.md) · [Simple web guide](https://jidy23.github.io/JRHagents/)
 
-## Contoh interaktif yang bekerja
+## Folder structure
 
-Buka [Contoh pekerjaan](https://jidy23.github.io/JRHagents/#contoh). Pilih **Audit**, **Rapikan UI**, **Buat fitur**, **Riset**, atau **Cek rilis**. Tulis kebutuhanmu, klik **Buat rencana nyata**, lalu lihat checklist, salin instruksi, atau unduh Markdown. Untuk pilihan Audit tersedia tombol yang menjalankan pemeriksaan contoh sungguhan di browser.
-
-Alat ini membuat **rencana lokal berbasis aturan**, tidak mengirim data atau menjalankan model AI cloud. Pekerjaan seperti mengubah kode, riset web, atau deploy tetap harus dijalankan pada AI coding atau tool yang mempunyai akses dan izin.
-
-## Yang memang berfungsi
-
-- **Audit Cepat browser:** memeriksa berkas kode secara lokal, menunjukkan indikasi masalah dan nomor baris, menyimpan hasil sebagai JSON. Tidak memproses data di server.
-- **CLI Python:** `doctor`, `audit`, `plan`, `report`, `verify`. Dapat dipasang dari GitHub secara otomatis untuk pengguna yang membutuhkan tool lokal.
-- **Skill:** alur kerja audit, riset, desain, rekayasa kode, dan verifikasi yang digunakan oleh AI coding yang kompatibel.
-- **MCP stdio:** lima alat baca proyek (`jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, `jrh_status`).
-- **Claude Plugin:** manifest marketplace dan paket instruksi, perlu aktivasi dan verifikasi dalam Claude Code.
-
-**Yang belum ada:** server MCP HTTPS publik, model AI mandiri, otomatisasi cloud lintas akun, dan integrasi hidup ke sepuluh repositori sumber inspirasi. Angka “26 kemampuan” memuat fitur lokal, panduan skill, dan prinsip desain; tidak semuanya API eksekusi.
-
-## Pengembangan
-
-```bash
-python -m pip install -e .
-python -m unittest discover -s tests -v
-node --test tests/*.test.cjs
-node --check docs/assets/app.js
-# Opsional (Chromium + Playwright):
-python tests/browser_smoke.py
+```text
+skills/jrhagents/
+  SKILL.md                 # single canonical Agent Skill
+  references/              # concise specialist playbooks, read on demand
+  assets/                  # report/plan templates
+  scripts/project_scan.py  # optional, read-only scan for shell-enabled hosts
+UNIVERSAL_PROMPT.md        # chat-only fallback
+README.md                  # user-facing onboarding
+docs/                      # documentation, NOT an AI web app
+tests/                     # portable offline quality checks
 ```
 
-Repo ini memiliki MIT License. Lihat [kontribusi](CONTRIBUTING.md), [keamanan](SECURITY.md), dan [sumber ide](THIRD_PARTY.md). Jangan menjalankan tool pada repositori tidak tepercaya tanpa membaca kode serta izin yang diperlukan.
+**Portability limit:** "for any AI platform" means *best-effort portable guidance*, not every platform has native installation. JRHagents cannot create integrations the host does not support. It will give a manual fallback instead of pretending a plugin exists.
+
+## Verify locally (optional, for maintainers)
+
+```bash
+python -m unittest discover -s tests -v
+python skills/jrhagents/scripts/project_scan.py --path .
+```
+
+The scanner is an **optional bounded heuristic**, not a security certification. It runs read-only. Tests have no third-party dependencies.
+
+## License and contribution
+
+MIT. See [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md), and [SECURITY.md](SECURITY.md). Prior dashboard/MCP/plugin experiments remain accessible in Git history; **this repository's primary product is one skill**.

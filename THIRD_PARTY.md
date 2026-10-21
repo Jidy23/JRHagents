@@ -1,5 +1,5 @@
-# Third-party references
+# Third-party attribution
 
-The 26 capability names draw inspiration from tools and community skills such as REA, Ponytail, Hallmark, Humanizer, Onyx, Impeccable, UI/UX Pro Max, Last 30 Days, Scrapling and Diagram Design.
+The 10 inspiration labels (REA, Ponytail, Hallmark, Humanizer, Onyx, Impeccable, UI/UX Pro Max, Last 30 Days, Scrapling, Diagram Design) refer to ideas discussed during JRHagents design. The V22 skill **does not include or install code** from those repositories. Their names are used only as descriptive references; the authors do not endorse JRHagents.
 
-These upstream projects are **not installed, bundled, endorsed or embedded** in this repository. Each has its own upstream maintainers and license terms. Before importing any upstream code, inspect its current license, dependencies, attribution and security boundaries.
+JRHagents's distribution follows the Agent Skills open format and optionally uses the independent `skills` CLI. Neither is bundled or operated by JRHagents.

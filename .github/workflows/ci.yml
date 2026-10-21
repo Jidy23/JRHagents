@@ -1,49 +1,25 @@
-name: Quality checks
+name: Validate universal skill
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  python:
+  validate:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: ['3.9', '3.13']
+        python-version: ['3.9','3.13']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install package from repository
-        run: python -m pip install .
-      - name: Test local toolkit and MCP
+      - name: Validate skills and test read-only scanner
         run: python -m unittest discover -s tests -v
-      - name: Verify console command
-        run: jrhagents --version
-      - name: Verify guided installer without writes
-        run: |
-          python -m jrhagents setup --client codex --project . --dry-run
-          python -m jrhagents setup --mode mcp --client cursor --project . --dry-run
-      - name: Verify MCP console command
-        run: jrhagents-mcp --help
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: JavaScript syntax
-        run: |
-          node --check docs/assets/app.js
-          node --check docs/assets/site-model.js
-          node --check docs/assets/direct-install.js
-          node --check docs/assets/site-model-v19.js
-          node --check docs/assets/browser-audit.js
-          node --check docs/assets/task-workflows.js
-      - name: Test browser and installer models
-        run: node --test tests/*.cjs
+      - name: Verify no runtime dependencies
+        run: python skills/jrhagents/scripts/project_scan.py --path . --max-files 30

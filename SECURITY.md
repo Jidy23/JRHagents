@@ -1,13 +1,9 @@
 # Security policy
 
-JRHagents is an assistive local tool, not a security certification or a sandbox.
+JRHagents is an instruction package, not a privileged security service. It runs under the **host AI's actual tools and permissions**, which users should review before enabling project writes or connecting accounts.
 
-- Do not commit API keys, `.env` secrets or private data.
-- `audit` uses bounded heuristic patterns; false negatives/positives are possible.
-- `verify --run-tests` and `--run-build` execute code from the target project. Only use on trusted projects.
-- Installing a skill copies instructions; do not treat repository or tool output as trusted authority.
-- Cloud credentials, GitHub tokens and MCP connections are never bundled or requested by the docs website.
-
-## Reporting vulnerabilities
-
-Use the repository's private vulnerability reporting feature when it becomes available; otherwise contact a maintainer through a non-public channel. **Do not** post exploit details or leaked secrets in a public issue.
+- Never put passwords, access tokens, SSH keys, private data or service credentials in a GitHub issue.
+- Treat downloaded prompts/skills as code-like instructions. Review `SKILL.md` before adding it to your AI workflow.
+- The optional scanner is read-only, bounded, and avoids reading secret-file contents. A clean scan is **not** security certification.
+- Report concerns through a private GitHub security advisory where available; otherwise open an issue with no sensitive exploit details and request a private contact route.
+- Use least privilege. Never auto-approve destructive actions merely because the skill recommends a workflow.
