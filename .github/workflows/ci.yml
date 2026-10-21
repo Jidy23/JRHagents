@@ -44,5 +44,6 @@ jobs:
           node --check docs/assets/direct-install.js
           node --check docs/assets/site-model-v19.js
           node --check docs/assets/browser-audit.js
+          node --check docs/assets/task-workflows.js
       - name: Test browser and installer models
         run: node --test tests/*.cjs

@@ -1,15 +1,56 @@
 /* JRHagents static app: no network, no mocked API, real on-device audit. */
 (function(){'use strict';
 const $=(q,parent=document)=>parent.querySelector(q);const $$=(q,parent=document)=>Array.from(parent.querySelectorAll(q));
-const model=globalThis.JRHModel, installs=globalThis.JRHDirectInstall, auditor=globalThis.JRHBrowserAudit;
-if(!model||!installs||!auditor)return;
+const model=globalThis.JRHModel, installs=globalThis.JRHDirectInstall, auditor=globalThis.JRHBrowserAudit, workflows=globalThis.JRHTaskWorkflows;
+if(!model||!installs||!auditor||!workflows)return;
 const state={os:'windows',mode:'skill',category:'All',expanded:false,result:null};
 const toast=$('#toast');let toastTimer;
 function notify(text){toast.textContent=text;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.hidden=true},3000);}
 async function copyText(value){try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(value);else{const node=document.createElement('textarea');node.value=value;node.style.position='fixed';node.style.opacity='0';document.body.appendChild(node);node.select();if(!document.execCommand('copy'))throw Error('copy');node.remove();}notify('Berhasil disalin.');return true;}catch(_){notify('Gagal menyalin otomatis. Pilih teks perintah lalu salin manual.');return false;}}
 $$('[data-copy]').forEach(btn=>btn.addEventListener('click',()=>copyText(btn.dataset.copy)));
-$('#copyPrompt').addEventListener('click',()=>copyText($('#promptText').textContent));
-$('#exampleTask').addEventListener('change',()=>{$('#promptText').textContent=model.tasks[$('#exampleTask').value]?.prompt||model.tasks.audit.prompt;});
+// Local task planner — not simulated AI execution.
+let generatedTask=null,activeTask='audit';const taskDrafts={};
+function changeTask(next){
+ if(!workflows.tasks[next])return;
+ taskDrafts[activeTask]=$('#taskDetails').value;activeTask=next;
+ $('#exampleTask').value=next;
+ $('#taskQuestion').textContent=workflows.tasks[next].question;
+ $('#taskDetails').value=taskDrafts[next]||'';
+ $('#taskDetails').placeholder=workflows.tasks[next].sample;
+ $('#taskWorkbench [data-task]').forEach(btn=>{const on=btn.dataset.task===next;btn.classList.toggle('active',on);btn.setAttribute('aria-pressed',String(on));});
+ $('#taskCharCount').textContent=$('#taskDetails').value.length+'/1200 karakter';
+ generatedTask=null;$('#taskOutput').hidden=true;$('#taskEmpty').hidden=false;
+ $('#taskFeedback').textContent='Klik Isi contoh atau tulis sendiri, lalu pilih Buat rencana nyata.';
+ $('#taskFeedback').classList.remove('error');
+}
+$('#taskWorkbench [data-task]').forEach(btn=>btn.addEventListener('click',()=>changeTask(btn.dataset.task)));
+$('#exampleTask').addEventListener('change',()=>changeTask($('#exampleTask').value));
+$('#taskDetails').addEventListener('input',()=>{taskDrafts[$('#exampleTask').value]=$('#taskDetails').value;$('#taskCharCount').textContent=$('#taskDetails').value.length+'/1200 karakter';});
+$('#taskFillExample').addEventListener('click',()=>{$('#taskDetails').value=workflows.tasks[$('#exampleTask').value].sample;$('#taskDetails').dispatchEvent(new Event('input'));$('#taskDetails').focus();});
+$('#taskGenerate').addEventListener('click',()=>{
+ try{
+ generatedTask=workflows.create($('#exampleTask').value,$('#taskDetails').value);
+ $('#taskFeedback').textContent='Rencana siap. Baca hasil, lalu salin atau unduh.';$('#taskFeedback').classList.remove('error');
+ $('#taskEmpty').hidden=true;$('#taskOutput').hidden=false;
+ $('#taskOutputTitle').textContent=generatedTask.name;$('#taskOutputGoal').textContent=generatedTask.detail;
+ const list=$('#taskOutputSteps');list.replaceChildren();generatedTask.steps.forEach(step=>{const li=document.createElement('li');li.textContent=step;list.append(li);});
+ $('#promptText').textContent=generatedTask.prompt;$('#taskOutputNote').textContent=generatedTask.note;
+ $('#runExampleAudit').hidden=generatedTask.task!=='audit';
+ $('#taskResult').scrollIntoView({behavior:'auto',block:'nearest'});
+ }catch(err){
+ generatedTask=null;$('#taskOutput').hidden=true;$('#taskEmpty').hidden=false;
+ $('#taskFeedback').textContent=err.message;$('#taskFeedback').classList.add('error');
+ }
+});
+$('#copyPrompt').addEventListener('click',()=>{if(generatedTask)copyText(generatedTask.prompt);});
+$('#downloadTaskPlan').addEventListener('click',()=>{
+ if(!generatedTask)return;
+ const blob=new Blob([generatedTask.markdown],{type:'text/markdown;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='jrhagents-rencana-'+generatedTask.task+'.md';document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Rencana Markdown disiapkan untuk diunduh.');
+});
+$('#runExampleAudit').addEventListener('click',()=>{$('#sampleAudit').click();$('#coba').scrollIntoView({behavior:'auto',block:'start'});});
+changeTask('audit');
 const nav=$('#mobileNav'),menu=$('#menuToggle');menu.addEventListener('click',()=>{const active=!nav.classList.contains('open');nav.classList.toggle('open',active);menu.setAttribute('aria-expanded',String(active));});$$('a',nav).forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
 const themeKey='jrhagents-theme';let theme='light';try{theme=localStorage.getItem(themeKey)||'light';}catch(_){}document.body.dataset.theme=theme==='dark'?'dark':'light';
 $('#themeToggle').addEventListener('click',()=>{const next=document.body.dataset.theme==='dark'?'light':'dark';document.body.dataset.theme=next;try{localStorage.setItem(themeKey,next);}catch(_){}});

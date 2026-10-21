@@ -1,3 +1,10 @@
+## V21 — Real interactive task examples
+- Replaced copy-only task picker with five working task planners.
+- Added input validation, five actionable checklist steps, copyable instructions, and downloadable Markdown.
+- Connected the Audit task to the existing real in-browser sample audit.
+- Added JavaScript regression tests, browser checks, and versioned site assets to reduce stale caching.
+- Plans are explicitly labeled NOT EXECUTED. No AI cloud or code modification is simulated.
+
 # JRHagents V19 — usable web tools & guided setup
 
 - Browser-only bounded static audit with real file selection and JSON report.

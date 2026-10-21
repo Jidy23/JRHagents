@@ -8,11 +8,12 @@
 <meta property="og:description" content="Alat audit yang sungguh berjalan di browser, panduan instalasi Skill dan MCP, dan fitur transparan.">
 <title>JRHagents — Pasang langsung dari GitHub · Skill, MCP, Plugin</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=21">
 <script src="assets/site-model.js" defer></script>
 <script src="assets/direct-install.js" defer></script>
 <script src="assets/browser-audit.js" defer></script>
-<script src="assets/app.js" defer></script>
+<script src="assets/task-workflows.js?v=21" defer></script>
+<script src="assets/app.js?v=21" defer></script>
 </head>
 <body data-theme="light">
 <a class="skip" href="#main">Lewati menu dan langsung ke isi</a>
@@ -77,7 +78,38 @@
 <article class="example-card"><div><span class="example-num">02</span><h3>Audit proyek</h3><p>Cari indikasi masalah dalam kode lokal.</p></div><div class="code"><code>jrhagents audit --project .</code><button type="button" class="copy" data-copy="jrhagents audit --project ." aria-label="Salin perintah">Salin</button></div></article>
 <article class="example-card"><div><span class="example-num">03</span><h3>Buat rencana kerja</h3><p>Ubah instruksi biasa menjadi langkah konkret.</p></div><div class="code"><code>jrhagents plan "rapikan tampilan"</code><button type="button" class="copy" data-copy='jrhagents plan "rapikan tampilan"' aria-label="Salin perintah">Salin</button></div></article>
 <article class="example-card"><div><span class="example-num">04</span><h3>Buat laporan</h3><p>Susun hasil pemeriksaan yang bisa dibuka.</p></div><div class="code"><code>jrhagents report --project .</code><button type="button" class="copy" data-copy="jrhagents report --project ." aria-label="Salin perintah">Salin</button></div></article></div>
-<div class="prompt-box"><div><span class="section-label">CONTOH BAHASA BIASA</span><label class="example-picker-label" for="exampleTask">Pilih pekerjaan</label><select id="exampleTask" class="example-task"><option value="audit">Audit proyek</option><option value="polish">Rapikan UI</option><option value="build">Buat fitur</option><option value="research">Riset</option><option value="release">Siap rilis</option></select><strong>Bingung harus ngetik apa ke AI coding?</strong><p id="promptText">JRHagents, audit proyek ini dan jelaskan tiga masalah yang paling penting, beserta bukti pemeriksaannya.</p></div><button id="copyPrompt" type="button" class="btn btn-blue small">Salin contoh →</button></div>
+<div class="task-workbench" id="taskWorkbench">
+<div class="task-heading"><div><span class="section-label">CONTOH INTERAKTIF · BEKERJA DI BROWSER</span><h3>Ubah idemu jadi langkah yang jelas.</h3><p>Pilih pekerjaan, ceritakan kebutuhanmu, lalu klik <strong>Buat rencana</strong>. Kamu akan mendapat checklist, instruksi untuk AI coding, dan berkas Markdown.</p></div><span class="task-local-tag">Tanpa login · Tanpa mengirim data</span></div>
+<div class="task-switches" role="group" aria-label="Pilih jenis pekerjaan">
+<button type="button" class="active" data-task="audit" aria-pressed="true">Audit proyek</button>
+<button type="button" data-task="polish" aria-pressed="false">Rapikan UI</button>
+<button type="button" data-task="build" aria-pressed="false">Buat fitur</button>
+<button type="button" data-task="research" aria-pressed="false">Riset</button>
+<button type="button" data-task="release" aria-pressed="false">Cek rilis</button></div>
+<div class="task-columns">
+<div class="task-compose">
+<label class="form-label" for="exampleTask">Jenis pekerjaan</label>
+<select id="exampleTask" class="example-task"><option value="audit">Audit proyek</option><option value="polish">Rapikan UI</option><option value="build">Buat fitur</option><option value="research">Riset</option><option value="release">Cek rilis</option></select>
+<label class="form-label" id="taskQuestion" for="taskDetails">Proyek atau masalah apa yang ingin diperiksa?</label>
+<textarea id="taskDetails" maxlength="1200" rows="5" placeholder="Ceritakan kebutuhanmu. Jangan memasukkan kata sandi atau API key."></textarea>
+<div class="task-input-foot"><span id="taskCharCount">0/1200 karakter</span><button type="button" class="text-button" id="taskFillExample">Isi contoh ↗</button></div>
+<p class="task-feedback" id="taskFeedback" role="status" aria-live="polite">Isi kebutuhanmu atau klik Isi contoh.</p>
+<button type="button" class="btn btn-blue task-submit" id="taskGenerate">Buat rencana nyata →</button>
+<p class="task-disclaimer">Bukan AI cloud di website. Rencana dibuat secara lokal dan dapat dibawa ke aplikasi AI coding.</p>
+</div>
+<div class="task-result" id="taskResult" aria-live="polite">
+<div class="task-result-empty" id="taskEmpty"><span class="task-empty-icon">◎</span><strong>Hasil akan muncul di sini.</strong><p>Isi kebutuhanmu dan lihat checklist yang dapat langsung digunakan.</p></div>
+<div id="taskOutput" hidden>
+<div class="task-result-heading"><span class="task-status">RENCANA TERSUSUN · BELUM DIEKSEKUSI</span><h4 id="taskOutputTitle"></h4><p id="taskOutputGoal"></p></div>
+<ol class="task-steps" id="taskOutputSteps"></ol>
+<div class="task-prompt-label">Instruksi untuk AI coding</div>
+<pre class="task-generated-prompt" id="promptText"></pre>
+<p class="task-output-note" id="taskOutputNote"></p>
+<div class="task-result-actions">
+<button id="copyPrompt" type="button" class="btn btn-blue small">Salin instruksi</button>
+<button id="downloadTaskPlan" type="button" class="btn btn-light small">Unduh .md ↓</button>
+<button id="runExampleAudit" type="button" class="btn btn-light small" hidden>Jalankan audit contoh ↗</button>
+</div></div></div></div></div>
 </div></section>
 <section class="section capability-section" id="fitur"><div class="wrap"><div class="section-heading"><div><span class="section-label">TRANSPARAN, BUKAN GIMMICK</span><h2>26 kemampuan, status apa adanya.</h2><p>Fungsi lokal bisa dijalankan. Panduan kerja membutuhkan AI coding. Referensi bukan berarti aplikasi pihak ketiga sudah terintegrasi.</p></div></div>
 <div class="feature-toolbar"><input id="featureSearch" type="search" placeholder="Cari kemampuan, misalnya desain atau keamanan..." aria-label="Cari kemampuan"><div id="featureFilters" class="filters" role="group" aria-label="Filter kemampuan"></div></div><div id="featureGrid" class="feature-grid"></div><div class="feature-end"><span id="featureCount" aria-live="polite"></span><button class="btn btn-light small" id="featureMore" type="button" aria-expanded="false">Lihat semuanya ↓</button></div>

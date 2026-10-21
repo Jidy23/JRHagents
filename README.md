@@ -35,6 +35,12 @@ Setelah itu, dalam AI coding tulis:
 
 Plugin dan MCP tidak perlu dipasang jika kamu hanya ingin Skill. ZIP di halaman Releases atau unduhan lama hanyalah opsi cadangan.
 
+## Contoh interaktif yang bekerja
+
+Buka [Contoh pekerjaan](https://jidy23.github.io/JRHagents/#contoh). Pilih **Audit**, **Rapikan UI**, **Buat fitur**, **Riset**, atau **Cek rilis**. Tulis kebutuhanmu, klik **Buat rencana nyata**, lalu lihat checklist, salin instruksi, atau unduh Markdown. Untuk pilihan Audit tersedia tombol yang menjalankan pemeriksaan contoh sungguhan di browser.
+
+Alat ini membuat **rencana lokal berbasis aturan**, tidak mengirim data atau menjalankan model AI cloud. Pekerjaan seperti mengubah kode, riset web, atau deploy tetap harus dijalankan pada AI coding atau tool yang mempunyai akses dan izin.
+
 ## Yang memang berfungsi
 
 - **Audit Cepat browser:** memeriksa berkas kode secara lokal, menunjukkan indikasi masalah dan nomor baris, menyimpan hasil sebagai JSON. Tidak memproses data di server.
