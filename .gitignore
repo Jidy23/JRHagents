@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+node_modules/
+.jrhagents/
+.env
+.env.*
+!.env.example
+.DS_Store
