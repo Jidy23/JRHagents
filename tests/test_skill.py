@@ -36,27 +36,27 @@ class SkillFormatTests(unittest.TestCase):
             self.assertIn(x,SRC)
     def test_privacy(self):
         for x in ('secret','authorization','untrusted'):
-            self.assertIn(x,(SRC+(REFS/'SAFETY.md').read_text()).lower())
+            self.assertIn(x,(SRC+(REFS/'SAFETY.md').read_text(encoding='utf-8')).lower())
     def test_all_nine_domains(self):
         for f in ['ENGINEERING','DESIGN','RESEARCH','WRITING','DATA','BUSINESS','LEARNING','AUTOMATION','QUALITY']:
             self.assertTrue((REFS/(f+'.md')).exists())
     def test_26_capabilities(self):
-        s=(REFS/'CAPABILITIES.md').read_text()
+        s=(REFS/'CAPABILITIES.md').read_text(encoding='utf-8')
         nums=re.findall(r'^\| (\d\d) \|',s,re.M)
         self.assertEqual(nums,[f'{i:02d}' for i in range(1,27)])
     def test_manual_prompt(self):
-        s=(ROOT/'UNIVERSAL_PROMPT.md').read_text()
+        s=(ROOT/'UNIVERSAL_PROMPT.md').read_text(encoding='utf-8')
         self.assertIn('manual fallback',s)
         self.assertIn('tool',s.lower())
     def test_docs_no_fake_cloud(self):
-        s=(ROOT/'README.md').read_text()
+        s=(ROOT/'README.md').read_text(encoding='utf-8')
         self.assertIn('not an AI model',s)
         self.assertIn('npx skills add Jidy23/JRHagents --skill jrhagents',s)
     def test_web_guide_is_explicitly_just_docs(self):
-        s=(ROOT/'docs/index.html').read_text()
+        s=(ROOT/'docs/index.html').read_text(encoding='utf-8')
         self.assertIn('Tidak ada model AI yang berjalan',s)
         self.assertNotIn('jrh run web.search',s)
-    def test_license_exists(self):self.assertIn('MIT License',(ROOT/'LICENSE').read_text())
+    def test_license_exists(self):self.assertIn('MIT License',(ROOT/'LICENSE').read_text(encoding='utf-8'))
 
 class ScannerTests(unittest.TestCase):
     def call(self,path,*args):
