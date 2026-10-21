@@ -37,7 +37,11 @@
   const clientData = {
     codex: {label:'Codex', folder:'.agents/skills/jrhagents', reload:'Mulai ulang sesi Codex agar skill ditemukan.'},
     claude: {label:'Claude Code',folder:'.claude/skills/jrhagents',reload:'Buka ulang sesi Claude Code pada proyek.'},
-    gemini: {label:'Gemini CLI',folder:'.gemini/skills/jrhagents',reload:'Jalankan /skills reload lalu /skills list jika didukung.'}
+    gemini: {label:'Gemini CLI',folder:'.gemini/skills/jrhagents',reload:'Jalankan /skills reload lalu /skills list jika didukung.'},
+    cursor: {label:'Cursor',folder:'.cursor/skills/jrhagents',reload:'Restart / reload agent skills di Cursor.'},
+    copilot: {label:'GitHub Copilot',folder:'.github/skills/jrhagents',reload:'Mulai ulang sesi Copilot agent mode.'},
+    opencode: {label:'OpenCode',folder:'.opencode/skills/jrhagents',reload:'Reload OpenCode agar skill terdeteksi.'},
+    windsurf: {label:'Windsurf',folder:'.windsurf/skills/jrhagents',reload:'Restart Windsurf dan cek ketersediaan skill.'}
   };
   const tasks = {
     audit: {label:'Audit proyek',prompt:'JRHagents, audit proyek ini, prioritaskan satu masalah penting, dan berikan bukti pemeriksaan.'},
@@ -68,11 +72,17 @@
     }
     return "'"+val.replace(/'/g,"'\\''")+"'";
   }
-  function installCommand(client, os, path, scope) {
+  function installCommand(client, os, path, scope, mode="skill") {
     if (!Object.prototype.hasOwnProperty.call(clientData,client)) throw new Error('Klien tidak valid.');
     if (!['windows','mac','linux'].includes(os)) throw new Error('Sistem operasi tidak valid.');
     const python = os === 'windows' ? 'py' : 'python3';
+    if (mode === 'plugin') return 'https://github.com/Jidy23/JRHagents';
     const target = scope === 'user' ? ' --scope user' : ' --scope project --project '+quoteShell(path,os);
+    if (mode === 'mcp') {
+      const targetClient=['claude','cursor','copilot'].includes(client) ? client : 'generic';
+      return python+' scripts/jrhagents.py mcp-config --client '+targetClient+' --project '+quoteShell(path,os);
+    }
+    if (mode !== 'skill') throw new Error('Format integrasi tidak valid.');
     return python+' scripts/jrhagents.py install --client '+client+target;
   }
   function escapeHtml(s) {return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}

@@ -62,7 +62,7 @@ def doctor(project="."):
             "git_repository": bool(git_root), "tools": tools,
             "markers": [x for x in ROOT_MARKERS if (root / x).is_file()],
             "project_context": (root / ".jrhagents" / "PROJECT.md").is_file(),
-            "live_mcp_verified": False, "live_provider_verified": False,
+            "bundled_mcp_stdio": True, "live_mcp_verified": False, "live_mcp_client_connected": False, "live_provider_verified": False,
             "notes": ["Pemeriksaan lokal saja; tidak memvalidasi kunci, akun, koneksi API, atau MCP.", "Tidak ada data rahasia yang dibaca dari variabel lingkungan."]}
 
 

@@ -4,17 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jrhagents"
-version = "16.0.0"
-description = "Local-first super skill for project audits, plans and verified engineering workflows"
+version = "17.0.0"
+description = "Portable local-first agent skill, MCP stdio tools and platform installer"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {file = "LICENSE"}
 authors = [{name = "JRHagents contributors"}]
-keywords = ["ai", "coding-agent", "skills", "codex", "claude-code", "gemini-cli", "audit"]
+keywords = ["agent-skills", "mcp", "claude", "codex", "gemini", "copilot"]
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License"]
 
 [project.scripts]
 jrhagents = "jrhagents.cli:main"
+jrhagents-mcp = "jrhagents.mcp:main"
 
 [tool.setuptools.packages.find]
 include = ["jrhagents*"]
+
+[tool.setuptools.package-data]
+jrhagents = ["skill/SKILL.md", "skill/references/*.md"]

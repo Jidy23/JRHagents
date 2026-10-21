@@ -39,3 +39,13 @@ test('tasks provide real copyable prompts',()=>{
  assert.ok(Object.keys(model.tasks).length>=5);
  assert.ok(Object.values(model.tasks).every(x=>x.prompt.startsWith('JRHagents,')));
 });
+
+test('MCP command builder uses real command and scoped paths',()=>{
+  const cmd=model.installCommand('claude','linux','/tmp/project','project','mcp');
+  assert.ok(cmd.includes('mcp-config --client claude'));
+  assert.ok(cmd.includes('/tmp/project'));
+  assert.ok(model.installCommand('gemini','windows','C:\\proj','project','mcp').includes('--client generic'));
+});
+test('plugin mode shows source location without pretending install happened',()=>{
+  assert.equal(model.installCommand('copilot','linux','.','project','plugin'),'https://github.com/Jidy23/JRHagents');
+});

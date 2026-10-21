@@ -1,2 +1,2 @@
-"""JRHagents — portable skill toolkit, local-first and offline-friendly."""
-__version__ = "16.0.0"
+"""JRHagents — local-first, offline-friendly, portable agent tooling."""
+__version__ = "17.0.0"

@@ -1,60 +1,59 @@
 # JRHagents
 
-**Satu skill. Satu perintah. Hasil yang bisa diperiksa.**
+**One local-first toolkit. Three honest integration formats: Skill · MCP · Plugin.**
 
-JRHagents adalah tool open-source yang membantu AI coding **mengaudit proyek, merencanakan fitur, merapikan UI/UX, dan memverifikasi hasil**. Gratis, lokal, dan tidak meminta API key.
+JRHagents V17 helps people inspect projects, plan fixes, and verify evidence. It works offline by default, costs nothing for local tools, and never pretends third-party AI integrations are connected.
 
-**[Panduan visual interaktif](https://jidy23.github.io/JRHagents/)** *(aktif setelah GitHub Pages berhasil dideploy)* · [Instalasi](docs/INSTALL.md) · [26 kemampuan](modules/CAPABILITIES.md) · [Berkontribusi](CONTRIBUTING.md)
+**[Interactive guide](https://jidy23.github.io/JRHagents/)** · [Installation](docs/INSTALL.md) · [MCP](docs/MCP.md) · [Compatibility](docs/PLATFORMS.md) · [Source and tests](tests/)
 
-## Mulai dalam 3 langkah
+## Quick start (Windows, macOS, Linux; Python 3.9+)
 
-**1. Download** — klik **Code → Download ZIP** atau [unduh paket resmi](https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip), lalu ekstrak.
-
-**2. Install** — buka terminal **di folder JRHagents hasil ekstraksi**. Pilih **satu** klien AI yang kamu gunakan:
-
-| AI coding | Salin perintah ini |
-| --- | --- |
-| **Codex** | `python scripts/jrhagents.py install --client codex --scope user` |
-| **Claude Code** | `python scripts/jrhagents.py install --client claude --scope user` |
-| **Gemini CLI** | `python scripts/jrhagents.py install --client gemini --scope user` |
-
-Persyaratan: Python 3.9+. Di Windows, bila `python` tidak ada, ganti dengan `py`. Installer tidak menimpa skill yang sudah terpasang. Jika ingin memasang khusus untuk proyek, lihat [panduan instalasi](docs/INSTALL.md).
-
-**3. Pakai** — buka ulang AI coding, kemudian tulis:
-
-> **JRHagents, audit proyek ini, pilih masalah paling penting, perbaiki yang aman, dan tampilkan bukti pengujian.**
-
-Tidak perlu menghafal slash command. Bila skill belum terdeteksi, minta AI membaca `SKILL.md` di lokasi instalasinya.
-
-## Ingin memeriksa proyek tanpa AI coding?
+Download the repository ZIP and extract it, or clone this repo. In its root directory:
 
 ```bash
-python scripts/jrhagents.py start --project /path/to/your-project --task "audit proyek ini"
+python -m pip install .
+jrhagents doctor
+jrhagents install --client codex --project /path/to/project
 ```
 
-Hasilnya adalah **audit statis, rencana tindakan, dan laporan HTML + JSON** di folder `.jrhagents/` pada proyek tujuan. CLI tidak otomatis mengubah kode aplikasi atau menjalankan test/build milik proyek; opsi eksekusi harus disetujui secara eksplisit.
+On Windows, try `py -m pip install .`. For `jrhagents: command not found`, use `python -m jrhagents` instead. Open your AI coding session in the target project and say:
 
-## Apa yang tersedia?
+> JRHagents, audit this repo, prioritize one problem, and show proof of verification.
 
-| Sudah berjalan | Belum disediakan otomatis |
-| --- | --- |
-| CLI lokal: doctor, audit, route, plan, start, verify, report | AI agent mandiri yang mengedit kode tanpa AI coding host |
-| Installer Codex, Claude Code, Gemini CLI | Koneksi MCP / BYOK / API eksternal |
-| Laporan offline HTML + JSON | Hosting SaaS atau deploy produksi |
-| Dokumentasi interaktif, pencarian, generator perintah | 26 engine eksternal yang terpasang |
+### Works as a skill
 
-**Penting:** 26 kemampuan adalah **peta keterampilan dan alur kerja**; sepuluh proyek GitHub terkait adalah referensi desain, bukan dependensi yang dibundel atau integrasi siap pakai. Efektivitasnya bergantung pada tool dan izin nyata di AI coding yang kamu gunakan.
+`jrhagents install --client <client> --project PATH` supports `codex`, `claude`, `gemini`, `cursor`, `copilot`, `opencode`, and `windsurf`. `--client all` installs all seven **project** variants. `--dry-run` previews; `--upgrade` backs up an existing installation before replacing it. Paths are the supported client conventions, but native client detection has not been tested for every version.
 
-## Jalankan tes
+### Works as an MCP server
 
 ```bash
-python -m unittest discover -s tests -v
-node --test tests/site.test.cjs
-python -m http.server 8000 -d docs
+jrhagents mcp-config --client claude --project /path/to/project
 ```
 
-Buka `http://localhost:8000` untuk melihat website dokumentasi. Node diperlukan untuk tes JavaScript saja, bukan untuk CLI utama. Pipeline GitHub Actions tercantum pada `.github/workflows/`.
+Copy the resulting JSON into your MCP client's settings; it launches the actual `jrhagents-mcp` stdio server. Five **read-only** MCP tools: `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, `jrh_status`. No remote API, personal secrets, or autonomous edits. [MCP instructions](docs/MCP.md).
 
-MIT License · [Keamanan](SECURITY.md) · [Kontribusi](CONTRIBUTING.md) · [Atribusi pihak ketiga](THIRD_PARTY.md)
+### Works as an Agent Plugin
 
-**Status:** GitHub repo tersedia. Situs GitHub Pages memiliki status publikasi terpisah; jangan menganggapnya aktif sebelum workflow deploy berhasil.
+The root contains `plugin.json` using **Agent Plugins 1.0**, `skills/jrhagents/SKILL.md`, and `mcp.json`. It is intended for clients that accept the Agent Plugins format. **It is not a ChatGPT Plugin** and it is not automatically installed in any account. The MCP part requires a Python environment with JRHagents installed.
+
+## Honest functionality map
+
+| Real today | Guidance, or requires external tool |
+| --- | --- |
+| Local doctor, audit, plan, route, status | Coding and UI changes (host AI tools required) |
+| Test/build execution only with opt-in CLI flags | Hosted RAG/Onyx, REA, Scrapling and proprietary APIs |
+| HTML+JSON audit reports | AI model routing, remote deployments and paid services |
+| Seven local skill installers and MCP stdio | Native mobile applications or ChatGPT plugin installation |
+
+## Quality and safety
+
+- Python unit tests and MCP handshake/JSON-RPC smoke tests run in CI on Windows, macOS and Linux with Python 3.9 and 3.13.
+- JavaScript tests validate interactive guide commands; the site makes no network calls to install software.
+- No auto-overwrite; `--upgrade` retains a backup. The MCP server cannot execute project scripts or write files.
+- All seven installer targets are automated-tests coverage, not a guarantee that every proprietary client version discovers skills.
+
+See [Contributing](CONTRIBUTING.md), [Security](SECURITY.md), [Attribution](THIRD_PARTY.md), and [MIT License](LICENSE).
+
+## Docs deployment
+
+Source code and public website are separate. GitHub Pages must be enabled at **Settings → Pages → GitHub Actions**. The Pages workflow now reports an actionable instruction and skips deployment when unavailable, instead of failing at `configure-pages`.

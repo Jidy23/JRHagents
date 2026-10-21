@@ -71,10 +71,10 @@
   $$('.step-link').forEach(btn=>btn.addEventListener('click',()=>setStep(Number(btn.dataset.step))));
   $$('.next-step').forEach(btn=>btn.addEventListener('click',()=>setStep(Number(btn.dataset.next))));
 
-  const client=$('#client'), os=$('#os'), projectPath=$('#projectPath');
+  const client=$('#client'), os=$('#os'), projectPath=$('#projectPath'), integrationMode=$('#integrationMode');
   function updateCommand() {
     try {
-      const command=model.installCommand(client.value,os.value,projectPath.value,'project');
+      const command=model.installCommand(client.value,os.value,projectPath.value,'project',integrationMode.value);
       $('#installCommand').textContent=command;
       $('#pathError').hidden=true;
       $('[data-copy-target="installCommand"]').disabled=false;
@@ -84,9 +84,11 @@
       $('#pathError').hidden=false;
       $('[data-copy-target="installCommand"]').disabled=true;
     }
-    $('#reloadHint').textContent=model.clientData[client.value].reload;
+    const mode=integrationMode.value;
+    $('#modeHint').textContent = mode==='mcp' ? 'Perintah menampilkan JSON konfigurasi MCP. Pasang paket Python dahulu, lalu gabungkan JSON ke settings klien.' : mode==='plugin' ? 'Ini tautan sumber plugin, bukan command instalasi. Impor di klien yang mendukung Agent Plugins 1.0.' : 'Salin dan jalankan perintah instalasi skill di terminal.';
+    $('#reloadHint').textContent=mode==='plugin' ? 'Plugin memerlukan klien kompatibel dan environment Python untuk MCP.' : mode==='mcp' ? 'Tempel JSON ke konfigurasi MCP aplikasi dan mulai ulang klien.' : model.clientData[client.value].reload;
   }
-  for(const item of [client,os,projectPath]) item.addEventListener(item.tagName==='INPUT'?'input':'change',updateCommand);
+  for(const item of [client,os,projectPath,integrationMode]) item.addEventListener(item.tagName==='INPUT'?'input':'change',updateCommand);
   updateCommand();
   $('#taskChoice').addEventListener('change',function(){
     $('#samplePrompt').textContent=model.tasks[this.value].prompt;

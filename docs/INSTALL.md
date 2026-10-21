@@ -1,32 +1,41 @@
-# Cara memasang JRHagents (Python 3.9+)
+# 3 steps to JRHagents — Windows, macOS, Linux
 
-1. Unduh [ZIP resmi](https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip), ekstrak, lalu masuk ke folder JRHagents lewat terminal.
-2. Jalankan **satu** perintah berikut untuk memasang skill secara personal sehingga dapat digunakan kembali di beberapa proyek:
+## Step 1 — Get the source and install Python package
 
-| Klien | Perintah |
-|---|---|
-| Codex | `python scripts/jrhagents.py install --client codex --scope user` |
-| Claude Code | `python scripts/jrhagents.py install --client claude --scope user` |
-| Gemini CLI | `python scripts/jrhagents.py install --client gemini --scope user` |
-
-3. Muat ulang klien AI dan ketik: **"JRHagents, audit proyek ini dan tunjukkan hasilnya."**
-
-Windows: coba `py` bila `python` tidak dikenal.
-
-### Instalasi untuk satu proyek saja
-
-Ganti `--scope user` dengan `--project "/lokasi/proyek"`; misalnya:
+Download and extract https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip, open a terminal in the extracted directory, and run:
 
 ```bash
-python scripts/jrhagents.py install --client codex --project "/lokasi/proyek"
+python -m pip install .
 ```
 
-Saat memasang ke proyek, skill ditambahkan di `.agents/skills/jrhagents` (Codex), `.claude/skills/jrhagents` (Claude) atau `.gemini/skills/jrhagents` (Gemini). Folder yang sudah ada tidak ditimpa. Klien AI perlu memiliki dukungan pembacaan skill; bila tidak terdeteksi, arahkan klien untuk membaca `SKILL.md`.
+On Windows use `py -m pip install .` when the `python` command is unavailable. Python 3.9+ is required. For isolated installs, a virtual environment or pipx is recommended.
 
-### Tanpa AI coding
+## Step 2 — Install a skill into your project
 
-Jalankan `python scripts/jrhagents.py start --project "/lokasi/proyek" --task "audit dan rapikan UI"` untuk menghasilkan audit, rencana dan laporan offline. Perintah tidak otomatis memperbaiki kode. Cek keterangan perintah dengan `python scripts/jrhagents.py help`.
+```bash
+jrhagents install --client codex --project /path/to/project
+```
 
-**Keamanan:** installer tidak menginstal repo pihak ketiga, tidak membaca API key, tidak menghubungkan MCP, dan tidak mengaktifkan skrip test/build proyek tanpa izin eksplisit.
+Replace `codex` with `claude`, `gemini`, `cursor`, `copilot`, `opencode` or `windsurf`. Run `jrhagents install --client all --project PATH` to create all seven skill locations. This is optional: use just the platform you need.
 
-[Panduan interaktif](index.html)
+If a skill already exists, installation will refuse to overwrite it. `--dry-run` previews, and `--upgrade` makes a timestamped backup and replaces it. `--scope user` installs for one account (not supported with `--client all`). Restart the client or reload skills as documented by its vendor.
+
+## Step 3 — Use a plain-language request
+
+> JRHagents, audit this project, prioritize real issues, and show verification evidence.
+
+## MCP separately (optional)
+
+```bash
+jrhagents mcp-config --client claude --project /path/to/project
+```
+
+See [MCP](MCP.md) for connecting an actual read-only MCP server. For portable plugin format see [Platforms](PLATFORMS.md).
+
+## When things fail
+
+- `jrhagents: command not found` → use `python -m jrhagents install ...` in the Python environment used for installation.
+- `No module named jrhagents` → ensure `python -m pip install .` succeeded in the same environment.
+- Existing skill → `--dry-run` and then `--upgrade` to preserve old files.
+- Untrusted project → never enable project-defined build/test commands before reviewing their content.
+- GitHub Pages not working → check repository Settings → Pages → Build and deployment → GitHub Actions. Docs website cannot force GitHub Pages to be enabled via source code.

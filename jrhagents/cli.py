@@ -6,10 +6,11 @@ import sys
 from . import __version__
 from .core import doctor, initialize, audit, create_plan, verify, status, start
 from .reporting import generate_report
-from .installer import install
+from .installer import install, CLIENT_DIRS
+from .mcp_config import generate as mcp_config
 from .routing import route_request
 
-QUICK = """JRHagents V16 — satu skill, bahasa biasa.
+QUICK = """JRHagents V17 — satu skill, bahasa biasa.
 
 Mulai cepat:
   python scripts/jrhagents.py start --task "audit dan rapikan UI"
@@ -24,14 +25,16 @@ Pasang ke klien AI (project saat ini):
   python scripts/jrhagents.py install --client codex
   python scripts/jrhagents.py install --client claude
   python scripts/jrhagents.py install --client gemini
+  python scripts/jrhagents.py install --client all --project .
+  python scripts/jrhagents.py mcp-config --client claude --project .
 
 Tulis ke AI: "JRHagents, audit proyek ini dan perbaiki masalah utama."
 Cakupan nyata: audit lokal, router, rencana, laporan, installer, uji opt-in.
-Tidak termasuk: eksekusi AI otonom, live MCP, akses cloud, atau API tanpa konfigurasi.
+MCP read-only tersedia jika paket Python dipasang; tidak ada AI otonom atau akses cloud otomatis.
 """
 
 def build_parser():
-    parser = argparse.ArgumentParser(prog="jrhagents", description="JRHagents V16: skill toolkit lokal, aman dan sederhana", epilog="Jalankan 'help' untuk contoh paling mudah")
+    parser = argparse.ArgumentParser(prog="jrhagents", description="JRHagents V17: skill toolkit lokal, aman dan sederhana", epilog="Jalankan 'help' untuk contoh paling mudah")
     parser.add_argument("--version", action="version", version=f"JRHagents {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("help", help="Petunjuk singkat dan contoh")
@@ -56,10 +59,16 @@ def build_parser():
     p.add_argument("request", nargs="+")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("install", help="Pasang skill ke proyek atau folder personal")
-    p.add_argument("--client", choices=("codex", "claude", "gemini"), required=True)
+    p.add_argument("--client", choices=tuple(CLIENT_DIRS) + ("all",), required=True)
     p.add_argument("--scope", choices=("project", "user"), default="project")
     p.add_argument("--project", default=".")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--upgrade", action="store_true", help="Back up and replace an existing skill installation")
+    p.add_argument("--dry-run", action="store_true", help="Show planned destination without writing")
+    p = sub.add_parser("mcp-config", help="Print MCP JSON for your client (no settings are modified)")
+    p.add_argument("--client", choices=("generic","claude","cursor","vscode","copilot"), default="generic")
+    p.add_argument("--project", default=".")
+    sub.add_parser("mcp",help="Run JSON-RPC MCP stdio server on this terminal")
     return parser
 
 
@@ -78,7 +87,11 @@ def run(argv=None):
         elif args.command == "verify": result = verify(args.project, args.run_tests, args.run_build, args.timeout, args.save)
         elif args.command == "report": result = generate_report(args.project)
         elif args.command == "status": result = status(args.project)
-        elif args.command == "install": result = install(args.client, args.scope, args.project)
+        elif args.command == "install": result = install(args.client, args.scope, args.project, args.upgrade, args.dry_run)
+        elif args.command == "mcp-config": result = mcp_config(args.client,args.project)
+        elif args.command == "mcp":
+            from .mcp import main as mcp_main
+            return mcp_main([])
         else:
             return 2
         if getattr(args, "json", False):

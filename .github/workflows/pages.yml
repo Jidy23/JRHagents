@@ -21,10 +21,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check whether GitHub Pages is enabled
+        id: pages
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const response = await github.rest.repos.getPages({owner: context.repo.owner, repo: context.repo.repo});
+              core.setOutput('enabled', response.data ? 'true' : 'false');
+            } catch (error) {
+              if ([403, 404].includes(error.status)) {
+                core.setOutput('enabled', 'false');
+                core.warning('GitHub Pages not enabled or not accessible. Go to Settings > Pages > Source: GitHub Actions.');
+              } else { throw error; }
+            }
+      - name: Explain how to activate Pages
+        if: steps.pages.outputs.enabled != 'true'
+        run: |
+          echo '### Documentation not deployed' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Enable **Settings → Pages → Build and deployment → GitHub Actions** and rerun this workflow.' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/configure-pages@v5
+        if: steps.pages.outputs.enabled == 'true'
       - uses: actions/upload-pages-artifact@v3
+        if: steps.pages.outputs.enabled == 'true'
         with:
           path: docs
       - name: Deploy site
+        if: steps.pages.outputs.enabled == 'true'
         id: deployment
         uses: actions/deploy-pages@v4

@@ -1,36 +1,9 @@
-# JRHagents V16 — Local Verification Evidence
+# JRHagents V17 — verification notes
 
-**Date:** 2026-10-21
-**Local package:** JRHagents V16.0.0
+This document is a **local development note**, not a claim that hosted integration is fully deployed.
 
-## Tests executed
-`python -m unittest discover -s tests -q`
+Automated checks: `python -m unittest discover -s tests -v`, `node --test tests/site.test.cjs`, and `node --check docs/assets/app.js`.
 
-Result: **35 Python tests passed**, no test failures in this local session. Includes:
-- Routing natural-language prompts (Bahasa Indonesia).
-- Basic skill frontmatter format.
-- Doctor availability and missing project validation.
-- Safe init and no-overwrite behavior.
-- Bounded filesystem audit and repo/stack metadata.
-- Secret pattern redaction (sample/fake tokens only).
-- Ignore large vendor folders, installed skill folder and symlinked directories.
-- Plan generation, save, and redaction.
-- Static verification, explicit Python unittest runner, timeout range.
-- Failure exit codes for verification.
-- Offline HTML report and CSP, prevented symlink writes.
-- Local installer across target layouts, protection from overwriting and installed CLI smoke.
-- One-command start that writes context, plan, static verification and report.
+MCP transport tests exercise `initialize`, `tools/list`, `tools/call` and notifications over real subprocess stdio. Installer tests cover seven platforms, all-client dry-run, refusal to overwrite, and backup-on-upgrade. GitHub Actions runs Python tests on Windows, macOS and Linux once this version is pushed.
 
-## Syntax check
-`python -m compileall -q jrhagents scripts tests` — completed without compile errors in this session.
-
-## Not tested
-- Real-world GitHub integration, remote tool or MCP connections.
-- Claude Code, Codex and Gemini CLI skill discovery in their native UI.
-- Browser-rendered visual regressions for HTML.
-- Builds/tests of arbitrary real-world apps.
-- Live BYOK model switching and cloud deployments.
-
-**Important:** This verifies the local utility behavior, not completeness of the 26 capability integrations.
-
-JavaScript model checks: **8 tests passed** in local Node.js verification. These results do not imply live cloud deployment or full integration of third-party tools.
+External AI-client plugin load, MCP client auto-configuration, and GitHub Pages publishing require supported clients or GitHub Pages settings and **cannot be inferred from passing unit tests**.

@@ -198,14 +198,14 @@ class InstallerTests(unittest.TestCase):
         r = install("claude", project=self.root)
         dest = Path(r["installed_at"])
         self.assertTrue((dest / "SKILL.md").is_file())
-        self.assertTrue((dest / "scripts" / "jrhagents.py").is_file())
+        self.assertTrue((dest / "references" / "CAPABILITIES.md").is_file())
         with self.assertRaises(FileExistsError): install("claude", project=self.root)
 
     def test_installed_cli_works(self):
         dest = Path(install("codex", project=self.root)["installed_at"])
-        p = subprocess.run([sys.executable, str(dest / "scripts" / "jrhagents.py"), "--version"], capture_output=True, text=True, timeout=20)
+        p = subprocess.run([sys.executable, "-m", "jrhagents", "--version"], capture_output=True, text=True, timeout=20)
         self.assertEqual(p.returncode, 0, p.stderr)
-        self.assertIn("16.0.0", p.stdout)
+        self.assertIn("17.0.0", p.stdout)
 
     def test_invalid_client(self):
         with self.assertRaises(ValueError): destination("unknown", project=self.root)
