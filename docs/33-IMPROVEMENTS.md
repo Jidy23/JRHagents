@@ -42,3 +42,9 @@ Ini **33 perubahan desain, UX, dan kualitas distribusi**, bukan klaim 33 AI baru
 33. Tes otomatis Python dan JavaScript serta smoke browser interaktif.
 
 Catatan: bagian frontend adalah audit heuristik. Tidak menyatakan kebocoran pasti, tidak mengeksekusi kode, dan tidak otomatis memperbaiki proyek. Keberhasilan install di setiap komputer tetap tergantung Python dan dukungan aplikasi AI yang dipilih.
+
+## Kemudahan tambahan
+
+- Paket Skill ZIP dapat diunduh langsung tanpa Python.
+- Paket sumber Claude Code Plugin dapat diunduh terpisah.
+- Python wheel dapat diunduh untuk pemasangan tanpa perlu GitHub pada saat instalasi (tetap perlu Python).

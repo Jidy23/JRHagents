@@ -2,7 +2,9 @@
 
 **Kalau cuma ingin mencoba, tidak perlu pasang apa pun.** Buka [Audit Cepat di website](https://jidy23.github.io/JRHagents/#coba), pilih berkas, dan lihat hasil. Data tidak dikirim ke server.
 
-Kalau ingin Skill atau MCP bekerja di aplikasi AI coding, ikuti ini:
+Kalau hanya butuh Skill, unduh [Skill ZIP](https://jidy23.github.io/JRHagents/downloads/JRHagents-Skill.zip) dan impor manual ke aplikasi AI coding yang mendukung Skill. Tidak perlu Python untuk **membaca instruksi Skill**, tetapi beberapa klien butuh penempatan folder sesuai petunjuk mereka.
+
+Untuk MCP atau instalasi otomatis Skill melalui CLI, ikuti ini:
 
 ## 1. Siapkan Python
 

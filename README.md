@@ -10,6 +10,12 @@ JRHagents adalah toolkit gratis dan open source untuk pemula, pengembang solo, d
 
 Buka **[JRHagents Pages](https://jidy23.github.io/JRHagents/#coba)**, pilih beberapa file kode atau folder, lalu lihat pola masalah dan unduh laporan JSON. Semuanya berlangsung di browser. Dukungan: JS/TS/Python/HTML/CSS/JSON dan berkas teks. Ini pemeriksaan awal berbasis pola, bukan pemindai keamanan menyeluruh.
 
+## Download satu klik (opsional)
+
+- [Skill ZIP](https://jidy23.github.io/JRHagents/downloads/JRHagents-Skill.zip) — berkas `SKILL.md` + referensi untuk impor manual ke AI coding kompatibel, **tanpa Python**. Aplikasi AI harus mendukung penggunaan skill dari berkas.
+- [Claude Code Plugin ZIP](https://jidy23.github.io/JRHagents/downloads/JRHagents-Claude-Plugin.zip) — sumber plugin berformat Claude Code, bukan installer otomatis semua platform.
+- [Wheel Python offline](https://jidy23.github.io/JRHagents/downloads/jrhagents-19.0.0-py3-none-any.whl) — jalankan `python -m pip install /lokasi/file.whl` dalam virtual environment bila Python tersedia. MCP membutuhkan paket Python ini.
+
 ## Pasang Skill ke AI coding (Windows, macOS, Linux)
 
 Buka Terminal **di folder proyek yang ingin dipakai**. Pastikan Python **3.9+** sudah terpasang. Salin berurutan:
