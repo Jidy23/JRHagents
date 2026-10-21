@@ -20,3 +20,11 @@
 - Added functional search, mode-specific installer, OS selector, real examples, capability filters, FAQs, responsive menu, and theme persistence.
 - Kept claims grounded: no fictional `jrh run` commands, no simulated integrations portrayed as real.
 - Added browser smoke and static site checks; reviewed desktop/tablet/mobile layouts.
+
+## V20 — Direct GitHub Install & Beginner-First Onboarding
+- Skill default now installs directly using `npx skills add Jidy23/JRHagents --skill jrhagents` with verified agent identifiers; no Python or manual ZIP.
+- Claude Code plugin can be installed through the GitHub marketplace command flow rather than manual plugin ZIP.
+- MCP remains a clearly separate, optional local Python setup; unsupported clients do not show fake commands.
+- GitHub Pages guides nontechnical users to choose their AI coding app, installation method, and per-user or per-project scope.
+- Added a task example selector, prerequisite help links, 6 new installer regression tests, and browser interaction checks.
+- Updated README/install/platform documentation. No claim of a hosted remote MCP server.

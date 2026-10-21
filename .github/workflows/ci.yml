@@ -41,6 +41,7 @@ jobs:
         run: |
           node --check docs/assets/app.js
           node --check docs/assets/site-model.js
+          node --check docs/assets/direct-install.js
           node --check docs/assets/site-model-v19.js
           node --check docs/assets/browser-audit.js
       - name: Test browser and installer models

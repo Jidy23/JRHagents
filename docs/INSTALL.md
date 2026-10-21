@@ -1,30 +1,67 @@
-# Cara pasang JRHagents — bahasa sederhana
+# Pasang JRHagents langsung dari GitHub
 
-**Kalau cuma ingin mencoba, tidak perlu pasang apa pun.** Buka [Audit Cepat di website](https://jidy23.github.io/JRHagents/#coba), pilih berkas, dan lihat hasil. Data tidak dikirim ke server.
+**Mulai dari Skill.** Tidak perlu mengunduh ZIP, membuat akun JRHagents, menyiapkan Python, atau memasang server MCP untuk mendapatkan instruksi kerja JRHagents di AI coding.
 
-Kalau hanya butuh Skill, unduh [Skill ZIP](https://jidy23.github.io/JRHagents/downloads/JRHagents-Skill.zip) dan impor manual ke aplikasi AI coding yang mendukung Skill. Tidak perlu Python untuk **membaca instruksi Skill**, tetapi beberapa klien butuh penempatan folder sesuai petunjuk mereka.
+## Jalur paling mudah: Skill
 
-Untuk MCP atau instalasi otomatis Skill melalui CLI, ikuti ini:
+**Syarat:** AI coding yang mendukung Agent Skills, Node.js/npm (untuk `npx`) dan internet. Masuk ke Terminal / PowerShell, lalu jalankan:
 
-## 1. Siapkan Python
+```bash
+npx skills add Jidy23/JRHagents --skill jrhagents
+```
 
-Unduh Python 3.9 atau lebih baru dari https://www.python.org/downloads/. Buka terminal di folder **proyek kamu sendiri**, bukan folder JRHagents.
+Installer akan menemukan skill dalam repositori GitHub dan menanyakan aplikasi AI serta cakupan pemasangan. Periksa nama sumber sebelum mengizinkan pemasangan.
 
-- Windows: PowerShell → `py --version`
-- macOS / Linux: Terminal → `python3 --version`
+**Kalau sudah tahu aplikasi:** pemasangan untuk semua proyek milik pengguna, contoh Codex:
 
-Jika Python belum dikenali, install Python dan buka terminal baru. Jangan menyalin perintah instalasi yang belum kamu baca dari sumber tidak resmi.
+```bash
+npx skills add Jidy23/JRHagents --skill jrhagents -a codex -g
+```
 
-## 2. Pasang toolkit dari GitHub
+Ganti `codex` dengan salah satu pengenal resmi berikut bila kamu menggunakan aplikasi tersebut: `claude-code`, `gemini-cli`, `cursor`, `github-copilot`, `opencode`, `windsurf`. Untuk memasang hanya di folder proyek saat ini, hilangkan `-g` dan jalankan perintah dari folder proyek. Pengenal lain dan mekanisme dukungan dapat berubah mengikuti versi installer; lihat [daftar klien resmi](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).
 
-Perintah berikut membuat lingkungan khusus dalam proyek sehingga tidak mengganggu Python lain. **Jalankan satu baris setiap kali.**
+Setelah instalasi, buka atau mulai ulang sesi AI coding lalu tulis:
+
+> JRHagents, audit proyek ini dan tunjukkan buktinya. Jangan mengubah kode sebelum saya menyetujui.
+
+Skill memberikan instruksi kepada AI coding yang *sudah kamu gunakan*. Skill tidak membawa model AI, API berbayar, hak akses GitHub, atau kemampuan browser sendiri. Pekerjaan yang bisa dijalankan bergantung pada alat, izin, dan model dalam aplikasi AI tersebut.
+
+### Jika `npx` tidak ditemukan
+
+Pasang [Node.js LTS](https://nodejs.org/en/download), buka Terminal baru, lalu cek `node --version`. Setelah itu ulangi perintah instalasi Skill di atas. Windows/macOS/Linux menggunakan sintaks `npx` yang sama.
+
+### Update Skill
+
+```bash
+npx skills check
+npx skills update jrhagents
+```
+
+Baca dokumentasi [Skills CLI](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) untuk perintah versi yang kamu pakai.
+
+## Untuk Claude Code: Plugin langsung dari GitHub
+
+**Tidak memerlukan ZIP manual.** Di dalam antarmuka perintah Claude Code (bukan shell biasa) ketik dua perintah:
+
+```text
+/plugin marketplace add Jidy23/JRHagents
+/plugin install jrhagents@jrhagents
+```
+
+Paket repositori menyediakan `.claude-plugin/marketplace.json` dan `.claude-plugin/plugin.json`. Instalasi tetap membutuhkan Claude Code yang mendukung marketplace, koneksi internet, dan izin pengguna. Setelah dipasang, periksa plugin yang aktif dalam aplikasi. Plugin ini berisi instruksi dan alur kerja, bukan server cloud AI mandiri.
+
+## Kalau butuh 5 tool lokal: MCP (opsional)
+
+MCP JRHagents saat ini berupa **server lokal berbasis Python**, bukan URL publik. Fitur sebenarnya: `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, `jrh_status`. Kelimanya bersifat **read-only**: tidak membangun aplikasi, menghapus file, atau mendeploy cloud.
+
+Syarat: Python 3.9+, akses GitHub, aplikasi AI yang mendukung MCP. Buka Terminal dalam folder proyek.
 
 ### Windows PowerShell
 
 ```powershell
 py -m venv .jrh-venv
 .\.jrh-venv\Scripts\python.exe -m pip install "https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip"
-.\.jrh-venv\Scripts\python.exe -m jrhagents --version
+.\.jrh-venv\Scripts\python.exe -m jrhagents setup --mode mcp --client cursor --project .
 ```
 
 ### macOS / Linux
@@ -32,58 +69,33 @@ py -m venv .jrh-venv
 ```bash
 python3 -m venv .jrh-venv
 ./.jrh-venv/bin/python -m pip install "https://github.com/Jidy23/JRHagents/archive/refs/heads/main.zip"
-./.jrh-venv/bin/python -m jrhagents --version
-```
-
-Pemasangan membutuhkan internet dan akses GitHub. Jika unduhan gagal, cek koneksi atau unduh ZIP dari halaman repo, ekstrak, lalu jalankan `python -m pip install /lokasi/folder-hasil-ekstrak` menggunakan Python dari `.jrh-venv`.
-
-## 3. Pilih mode
-
-### Skill — paling mudah
-
-Pilih **satu** aplikasi yang benar-benar kamu gunakan: `codex`, `claude`, `gemini`, `cursor`, `copilot`, `opencode`, atau `windsurf`.
-
-```bash
-# Contoh dengan Python di venv yang telah dibuat:
-./.jrh-venv/bin/python -m jrhagents setup --mode skill --client cursor --project .
-```
-
-Windows: ganti awal perintah dengan `.\.jrh-venv\Scripts\python.exe`.
-
-Restart aplikasi AI. Skill memberi instruksi; AI coding tetap perlu model, izin, dan tool yang tersedia pada aplikasinya.
-
-### MCP — 5 alat pemeriksaan lokal
-
-```bash
 ./.jrh-venv/bin/python -m jrhagents setup --mode mcp --client cursor --project .
 ```
 
-Pilihan yang bisa dikonfigurasi otomatis: `claude`, `cursor`, `gemini`, `copilot`, `vscode`. Konfigurasi lama dipertahankan; jika terjadi konflik, program berhenti dan menjelaskan langkah manual. MCP server berisi `jrh_doctor`, `jrh_audit`, `jrh_route`, `jrh_plan`, dan `jrh_status`. Tidak bisa mengirim email, memasang plugin lain, atau mengedit kode.
+Ganti `cursor` dengan klien MCP yang didukung otomatis: `claude`, `gemini`, `copilot`, atau `vscode`. Setelah setup, restart AI coding dan periksa daftar tool MCP. Jika konfigurasi lain sudah ada, installer berusaha menjaga isinya dan menolak konflik; ia tidak menghubungkan MCP tanpa persetujuan aplikasi AI.
 
-Untuk melihat perubahan tanpa menulis: tambahkan `--dry-run`. Setelah install, restart aplikasi AI dan periksa daftar server MCP.
+Untuk melihat rencana perubahan tanpa menulis konfigurasi, tambahkan `--dry-run` pada perintah `setup`.
 
-### Plugin — hanya untuk klien yang kompatibel
+### Jika MCP tidak berhasil
 
-Manifest Claude Code tersedia di `.claude-plugin/plugin.json` dalam repositori. Plugin berbeda dari paket Python dan Skill. Gunakan fitur plugin resmi Claude Code. Jika klien AI-mu tidak mendukung format plugin itu, gunakan mode Skill atau MCP.
+- **`No module named jrhagents`**: gunakan Python dari lingkungan `.jrh-venv`, bukan Python lain.
+- **`py/python3 not found`**: instal Python versi 3.9+ dari [python.org](https://www.python.org/downloads/).
+- **`No module named venv`**: pada Linux, pasang paket `python3-venv` sesuai distro.
+- **`Existing configuration differs`**: cek MCP entry lama secara manual. Installer tidak akan menimpa konfigurasi yang berbeda.
+- **`Server not visible`**: periksa restart, file konfigurasi, dan izin tool pada aplikasi AI.
 
-## Contoh fungsi nyata
+## Tanpa instalasi sama sekali
 
-```bash
-./.jrh-venv/bin/python -m jrhagents doctor --project .
-./.jrh-venv/bin/python -m jrhagents audit --project .
-./.jrh-venv/bin/python -m jrhagents plan "rapikan navigasi website" --project .
-./.jrh-venv/bin/python -m jrhagents report --project .
-```
+Buka [Audit Cepat](https://jidy23.github.io/JRHagents/#coba), pilih beberapa berkas kode atau folder, dan unduh laporan indikasi masalah. Audit dilakukan di browser tanpa upload berkas atau API. Ini bukan pemeriksaan menyeluruh.
 
-## Jika error
+## Kompatibilitas yang jujur
 
-- **`No module named jrhagents`** → gunakan Python dari `.jrh-venv`, bukan Python lain.
-- **`No module named venv`** (sebagian distro Linux) → pasang modul `python3-venv` dari pengelola paket sistem.
-- **`Access denied`** → pilih folder proyek milikmu sendiri; jangan menjalankan sebagai administrator tanpa alasan.
-- **`No internet / SSL error`** → periksa koneksi dan akses domain GitHub; hindari mematikan verifikasi SSL.
-- **`Existing skill`** → gunakan `--dry-run`; bila ingin upgrade, `--upgrade` membuat backup skill.
-- **`Existing jrhagents MCP entry differs`** → buka pengaturan MCP dan periksa secara manual. Program sengaja tidak menimpa pengaturan tersebut.
-- **Tidak muncul di AI coding** → restart aplikasinya, periksa versi dan lokasi Skill/MCP yang didukung; setiap vendor bisa mengubah lokasi standar.
-- **macOS gagal venv / externally managed** → gunakan Python dari instalasi resmi / Homebrew dan lingkungan virtual. Jangan paksa global pip.
+| Cara | Dari GitHub tanpa unduh ZIP manual | Memerlukan alat lain | Status |
+| --- | --- | --- | --- |
+| Skill | Ya (`npx skills add`) | Node.js dan AI coding yang mendukung Skills | Siap dicoba |
+| Claude Code Plugin | Ya (`/plugin marketplace add`) | Claude Code yang mendukung plugin | Manifest tersedia, verifikasi pada klien diperlukan |
+| MCP lokal | Ya (pip mengunduh arsip GitHub otomatis) | Python, terminal, dan MCP host | Server lokal tersedia |
+| MCP cloud URL | Belum | Hosting, autentikasi, dan server HTTPS | Belum tersedia |
+| Audit browser | Tidak perlu pasang | Browser modern | Berfungsi secara lokal |
 
-[Open issue](https://github.com/Jidy23/JRHagents/issues/new/choose) jika masih gagal; sertakan sistem operasi, versi Python, perintah, dan pesan error, **tanpa API key**.
+Sumber utama: [GitHub JRHagents](https://github.com/Jidy23/JRHagents). Untuk melaporkan kegagalan, gunakan [GitHub Issues](https://github.com/Jidy23/JRHagents/issues/new/choose) dan jangan kirim API key.

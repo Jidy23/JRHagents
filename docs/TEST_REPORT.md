@@ -22,3 +22,13 @@ Results below describe **local tests** in the working environment and the intend
 For up-to-date CI, see [GitHub Actions](https://github.com/Jidy23/JRHagents/actions).
 
 - Paket Skill ZIP, Claude Plugin ZIP dan Python wheel diperiksa isinya melalui tes archive.
+
+
+## V20 · Direct GitHub onboarding (local checks)
+
+- `python -m unittest discover -s tests -q`: 61 passing tests (local Python 3.13).
+- `node --test tests/*.test.cjs`: 22 passing tests.
+- `python tests/browser_smoke.py`: desktop 1440, tablet 768, mobile 390, small 320 px passed.
+- UI checks: direct GitHub Skill installation commands for seven clients, personal/project scope, Claude plugin marketplace flow, optional MCP local configuration, prompt selector, browser audit & JSON download, theme and mobile navigation.
+- **Not verified:** actual `npx skills add` in a user's AI coding app (this isolated test runtime has no access to GitHub); Claude marketplace installation inside Claude Code; cloud MCP (not provided).
+- Local checks are not substitutes for GitHub Actions results on the published commit.

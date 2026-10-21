@@ -17,3 +17,14 @@ body[data-theme=dark] .dropzone{background:#172b45;color:#ebf5ff;border-color:#5
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
 
 .quick-download{display:flex;gap:13px;align-items:center;flex-wrap:wrap;margin-top:15px;font-size:11px;color:#a9c7e9}.quick-download a{color:#b5e2ff;text-decoration:underline;text-underline-offset:3px;font-weight:750}.downloads{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--bg);padding:13px;border:1px solid var(--line);border-radius:10px;margin:15px 0;font-size:11px}.downloads strong{width:100%;font-size:12px}.downloads a{border:1px solid var(--line);border-radius:7px;background:var(--paper);padding:8px 9px;font-weight:700;color:var(--blue)}.downloads small{font-size:10px;color:var(--muted);line-height:1.6}@media(max-width:365px){.quick-download{display:block}.quick-download span{display:block;margin-top:5px}}
+/* V20 · beginner-first direct GitHub installation */
+.easy-way{display:flex;align-items:flex-start;gap:14px;padding:19px 22px;margin-bottom:23px;border:1px solid #bcdfcb;border-radius:13px;background:linear-gradient(120deg,#f0faf5,#eff7ff);color:#173d37}
+.easy-symbol{flex:0 0 31px;width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#12865f;color:#fff;font-weight:800}
+.easy-way strong{font-size:14px;display:block;margin:1px 0 4px}.easy-way p{font-size:12px;color:#41655d;margin:0;line-height:1.55}
+.install-checks{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:15px;margin:15px 0 20px}.install-checks strong{font-size:12px}.install-checks p{font-size:11px;color:var(--muted);margin:6px 0 0;line-height:1.65}.install-checks a{font-weight:750;color:var(--blue)}
+.run-location{display:inline-flex;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:10px;padding:5px 8px;margin:0 0 8px 43px;font-weight:650}
+.quick-download code{color:#e2f2ff;font-size:11px;overflow-wrap:anywhere}.quick-download strong{color:#b7d8ff}.quick-download a{font-weight:750}
+.example-picker-label{display:inline-block;font-size:11px;color:#4c6382;margin-right:8px}.example-task{font:inherit;font-size:12px;background:white;color:#1c3659;border:1px solid #b8d0eb;border-radius:8px;padding:7px 10px;max-width:100%;margin-bottom:10px}
+body[data-theme=dark] .easy-way{background:linear-gradient(110deg,#14382f,#162d46);border-color:#3e7364;color:#d5f8eb}
+body[data-theme=dark] .easy-way p{color:#a6d0c2}
+@media(max-width:650px){.easy-way{padding:16px}.run-location{margin-left:0}.quick-download code{display:block;max-width:100%}}

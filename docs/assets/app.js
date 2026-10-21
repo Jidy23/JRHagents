@@ -1,7 +1,7 @@
 /* JRHagents static app: no network, no mocked API, real on-device audit. */
 (function(){'use strict';
 const $=(q,parent=document)=>parent.querySelector(q);const $$=(q,parent=document)=>Array.from(parent.querySelectorAll(q));
-const model=globalThis.JRHModel, installs=globalThis.JRHInstall, auditor=globalThis.JRHBrowserAudit;
+const model=globalThis.JRHModel, installs=globalThis.JRHDirectInstall, auditor=globalThis.JRHBrowserAudit;
 if(!model||!installs||!auditor)return;
 const state={os:'windows',mode:'skill',category:'All',expanded:false,result:null};
 const toast=$('#toast');let toastTimer;
@@ -9,6 +9,7 @@ function notify(text){toast.textContent=text;toast.hidden=false;clearTimeout(toa
 async function copyText(value){try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(value);else{const node=document.createElement('textarea');node.value=value;node.style.position='fixed';node.style.opacity='0';document.body.appendChild(node);node.select();if(!document.execCommand('copy'))throw Error('copy');node.remove();}notify('Berhasil disalin.');return true;}catch(_){notify('Gagal menyalin otomatis. Pilih teks perintah lalu salin manual.');return false;}}
 $$('[data-copy]').forEach(btn=>btn.addEventListener('click',()=>copyText(btn.dataset.copy)));
 $('#copyPrompt').addEventListener('click',()=>copyText($('#promptText').textContent));
+$('#exampleTask').addEventListener('change',()=>{$('#promptText').textContent=model.tasks[$('#exampleTask').value]?.prompt||model.tasks.audit.prompt;});
 const nav=$('#mobileNav'),menu=$('#menuToggle');menu.addEventListener('click',()=>{const active=!nav.classList.contains('open');nav.classList.toggle('open',active);menu.setAttribute('aria-expanded',String(active));});$$('a',nav).forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
 const themeKey='jrhagents-theme';let theme='light';try{theme=localStorage.getItem(themeKey)||'light';}catch(_){}document.body.dataset.theme=theme==='dark'?'dark':'light';
 $('#themeToggle').addEventListener('click',()=>{const next=document.body.dataset.theme==='dark'?'light':'dark';document.body.dataset.theme=next;try{localStorage.setItem(themeKey,next);}catch(_){}});
@@ -16,15 +17,35 @@ function setMode(mode){if(!['skill','mcp','plugin'].includes(mode))return;state.
 function setOS(os){if(!['windows','mac','linux'].includes(os))return;state.os=os;$$('[data-os]').forEach(b=>{const on=b.dataset.os===os;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on));});renderInstall();}
 $$('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));$$('[data-os]').forEach(b=>b.addEventListener('click',()=>setOS(b.dataset.os)));
 $$('[data-choose]').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.choose);$('#install').scrollIntoView({behavior:'smooth',block:'start'});}));
-$('#client').addEventListener('change',renderInstall);$('#projectPath').addEventListener('input',renderInstall);
-function renderInstall(){const steps=$('#installSteps'),note=$('#installSupport');steps.replaceChildren();const client=$('#client').value;let data;
-try{data=installs.get(state.os,client,state.mode,$('#projectPath').value);}catch(err){note.textContent=err.message;note.className='support-note error';return;}
-note.textContent=data.supported?'Siap: '+(state.mode==='skill'?'Skill akan dipasang ke folder aplikasi.':'MCP akan digabungkan ke konfigurasi aplikasi.')+' '+data.help:'Belum didukung otomatis: '+data.help;note.className='support-note '+(data.supported?'good':'caution');
-$('#wizardTitle').textContent=data.supported?'Ikuti '+data.steps.length+' langkah ini':'Panduan '+state.mode+' untuk '+(installs.clients[client]||client);
-$('#wizardSubtitle').textContent=data.supported?'Buka Terminal terlebih dahulu, lalu salin perintah satu per satu.':'Jangan menjalankan perintah dari sumber yang belum diverifikasi.';
-if(!data.supported){const p=document.createElement('p');p.className='not-supported';p.textContent=data.help;const a=document.createElement('a');a.href=data.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Baca pilihan yang tersedia ↗';steps.append(p,a);return;}
-data.steps.forEach((step,i)=>{const block=document.createElement('section');block.className='step-item';const info=document.createElement('div');info.className='step-label';const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');const desc=document.createElement('div');const strong=document.createElement('strong');strong.textContent=step.title;const small=document.createElement('p');small.textContent=step.description;desc.append(strong,small);info.append(n,desc);
-const code=document.createElement('div');code.className='code';const text=document.createElement('code');text.textContent=step.command;const copy=document.createElement('button');copy.type='button';copy.className='copy';copy.textContent='Salin';copy.setAttribute('aria-label','Salin langkah '+(i+1));copy.addEventListener('click',()=>copyText(step.command));code.append(text,copy);block.append(info,code);steps.appendChild(block);});}
+$('#client').addEventListener('change',renderInstall);$('#projectPath').addEventListener('input',renderInstall);$('#installScope').addEventListener('change',renderInstall);
+function renderInstall(){
+const steps=$('#installSteps'),note=$('#installSupport'),client=$('#client').value;
+const advanced=state.mode==='mcp';
+$('#osGroup').hidden=!advanced;$('#projectGroup').hidden=!advanced;$('#scopeGroup').hidden=state.mode!=='skill';
+steps.replaceChildren();let data;
+try{data=installs.get(state.os,client,state.mode,$('#projectPath').value,$('#installScope').value);}catch(err){note.textContent=err.message;note.className='support-note error';$('#wizardTitle').textContent='Periksa pilihanmu';return;}
+const label=installs.clientInfo?.[client]?.name||client;
+const kind={skill:'Skill',mcp:'MCP',plugin:'Plugin'}[state.mode];
+note.textContent=data.supported?'Cocok untuk '+label+': '+data.help:'Belum tersedia untuk '+label+': '+data.help;
+note.className='support-note '+(data.supported?'good':'caution');
+$('#wizardTitle').textContent=data.supported?kind+' · '+data.steps.length+' langkah':'Belum didukung: '+kind+' di '+label;
+$('#wizardSubtitle').textContent=data.supported?'Salin perintah, jalankan sesuai tempat yang disebutkan.':'Jangan menggunakan instruksi dari aplikasi lain.';
+const prereq={skill:'Skill membutuhkan Node.js agar perintah npx berfungsi.',mcp:'MCP lokal membutuhkan Python 3.9+.',plugin:'Plugin Claude Code membutuhkan versi aplikasi yang mendukung marketplace.'};
+$('#installPrereq').textContent=prereq[state.mode];
+const link=$('#installHelpLink');link.href=state.mode==='skill'?'https://nodejs.org/en/download':state.mode==='mcp'?'https://www.python.org/downloads/':'https://code.claude.com/docs/en/plugins';
+if(!data.supported){const p=document.createElement('p');p.className='not-supported';p.textContent=data.help;const a=document.createElement('a');a.href=data.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Lihat cara yang didukung ↗';steps.append(p,a);return;}
+data.steps.forEach((item,i)=>{
+const block=document.createElement('section');block.className='step-item';
+const info=document.createElement('div');info.className='step-label';
+const n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');
+const desc=document.createElement('div');const strong=document.createElement('strong');strong.textContent=item.title;
+const small=document.createElement('p');small.textContent=item.description;desc.append(strong,small);info.append(n,desc);
+const where=document.createElement('span');where.className='run-location';where.textContent='Ketik di: '+(item.where||'Terminal');
+const code=document.createElement('div');code.className='code';const txt=document.createElement('code');txt.textContent=item.command;
+const copy=document.createElement('button');copy.type='button';copy.className='copy';copy.textContent='Salin';copy.setAttribute('aria-label','Salin langkah '+(i+1));copy.addEventListener('click',()=>copyText(item.command));
+code.append(txt,copy);block.append(info,where,code);steps.appendChild(block);
+});
+}
 renderInstall();
 const drop=$('#dropzone'),file=$('#fileInput'),folder=$('#folderInput');$('#chooseFiles').addEventListener('click',()=>file.click());$('#chooseFolder').addEventListener('click',()=>folder.click());
 file.addEventListener('change',()=>runAudit(file.files));folder.addEventListener('change',()=>runAudit(folder.files));
