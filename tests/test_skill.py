@@ -40,10 +40,10 @@ class SkillFormatTests(unittest.TestCase):
     def test_all_nine_domains(self):
         for f in ['ENGINEERING','DESIGN','RESEARCH','WRITING','DATA','BUSINESS','LEARNING','AUTOMATION','QUALITY']:
             self.assertTrue((REFS/(f+'.md')).exists())
-    def test_26_capabilities(self):
+    def test_66_capabilities(self):
         s=(REFS/'CAPABILITIES.md').read_text(encoding='utf-8')
         nums=re.findall(r'^\| (\d\d) \|',s,re.M)
-        self.assertEqual(nums,[f'{i:02d}' for i in range(1,27)])
+        self.assertEqual(nums,[f'{i:02d}' for i in range(1,67)])
     def test_manual_prompt(self):
         s=(ROOT/'UNIVERSAL_PROMPT.md').read_text(encoding='utf-8')
         self.assertIn('manual fallback',s)

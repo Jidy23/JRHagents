@@ -1,13 +1,11 @@
-# Kompatibilitas JRHagents
+# Kompatibilitas yang dapat dipertanggungjawabkan
 
-| Tempat menggunakan AI | Cara yang sesuai | Terminal dibutuhkan? | Status |
-| --- | --- | --- | --- |
-| ChatGPT web/app | Tempel instruksi universal ke chat/instruksi khusus yang disediakan | Tidak | Fallback instruksi manual |
-| Claude web/app | Tempel instruksi universal ke chat/instruksi khusus yang disediakan | Tidak | Fallback instruksi manual |
-| Gemini web/app | Tempel instruksi universal ke chat/instruksi khusus yang disediakan | Tidak | Fallback instruksi manual |
-| Chatbot lain | Tempel instruksi universal jika fitur instruksi/chat tersedia | Tidak | Best effort |
-| Codex, Claude Code, Cursor, Gemini CLI, Copilot dan AI coding yang mendukung Agent Skills | `npx skills add Jidy23/JRHagents --skill jrhagents` pada Terminal komputer | Ya | Bergantung versi dan dukungan host |
+| Jenis AI | Contoh | Cara memakai | Batasan |
+|---|---|---|---|
+| Chatbot tanpa shell | ChatGPT web, Claude web, Gemini web, chatbot lain | Salin instruksi lengkap dari website dan tempel ke chat/custom instructions | Bukan instalasi Skill native; tidak mendapat API, memori atau akses tool baru |
+| Agent Skills native | Codex, Claude Code, Gemini CLI, Cursor, Copilot (versi kompatibel) | `npx skills add Jidy23/JRHagents --skill jrhagents` dari terminal komputer | Node.js dan dukungan runtime diperlukan; perilaku berbeda antar versi |
+| Agent buatan sendiri | Loader Agent Skills kustom | Baca `skills/jrhagents/SKILL.md` dan referensi yang diperlukan | Developer harus membangun loader, integrasi, izin, penyimpanan dan eksekusi sendiri |
 
-**Tidak ada klaim bahwa semua platform memiliki instalasi native.** JRHagents tidak menyediakan API, endpoint, model AI, akses tool, atau server MCP publik. Jika AI hanya punya fitur `create_skill` untuk menambahkan API, itu bukan metode yang cocok untuk Skill instruksional ini.
+Tidak ada satu metode instalasi yang berlaku untuk **setiap** layanan AI di dunia. Skill bekerja sebatas kemampuan dan izin nyata dari layanan yang membacanya. Jika suatu UI meminta Base URL, endpoint dan API key, itu bukan prasyarat JRHagents untuk penggunaan manual.
 
-Standar rujukan: https://agentskills.io/specification. Installer: https://github.com/vercel-labs/skills.
+Referensi: https://agentskills.io/specification · https://github.com/vercel-labs/skills

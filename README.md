@@ -1,6 +1,6 @@
 # JRHagents
 
-**One skill. Many AI platforms. Clearer work, verifiable results.**
+**One skill. 66 useful workflows. Any language. Verifiable results.**
 
 JRHagents is an open-source **Agent Skill**, not an AI model, SaaS dashboard, API gateway, MCP host, or universal plugin. It gives compatible AI assistants a reusable workflow for **thinking, research, writing, data, software, design, and quality checks**. Its instructions work with whatever capabilities the host already provides.
 
@@ -49,7 +49,7 @@ No slash commands to memorize; the host recognizes intent if it loads the skill.
 4. Produce the requested answer or work using available and authorized tools.
 5. Check outcomes, make uncertainty visible, and finish with **one next action**.
 
-**26 capabilities** are coordinated workflows and quality practices—not 26 separate third-party products. See [the capability map](skills/jrhagents/references/CAPABILITIES.md). The original 10 open-source concepts are acknowledged as **inspiration**, not bundled dependencies. No API key is needed to read the skill.
+**66 capabilities** are coordinated workflows and quality practices—not 66 separate third-party products. See [the capability map](skills/jrhagents/references/CAPABILITIES.md). The original 10 open-source concepts are acknowledged as **inspiration**, not bundled dependencies. No API key is needed to read the skill.
 
 ## Platform pathways
 
@@ -93,4 +93,10 @@ MIT. See [LICENSE](LICENSE), [CONTRIBUTING.md](CONTRIBUTING.md), and [SECURITY.m
 
 ## Interactive web guide
 
-The [public documentation website](https://jidy23.github.io/JRHagents/) offers a beginner-friendly installation path, a local-only task-instruction builder, a searchable 26-capability index, and accessibility-aware CSS visuals. The website does **not** execute AI tasks or install software from your browser. See [V24 release notes](docs/V24-RELEASE.md).
+The [public documentation website](https://jidy23.github.io/JRHagents/) offers a beginner-friendly installation path, a local-only task-instruction builder, a searchable 66-workflow grid, and accessibility-aware CSS visuals. The website does **not** execute AI tasks or install software from your browser. See [V33 release notes](docs/V33-RELEASE.md).
+
+## 66 practical workflows / 66 kemampuan
+
+There are **66 scoped workflow instructions across 11 life and work categories**: productivity, learning, career, personal finance, wellbeing, communication, research, business, engineering, design and digital safety. The Skill does not grant a host new permissions or provide medical advice, market quotes, or external integrations. See [the numbered list](skills/jrhagents/references/CAPABILITIES.md) and [interactive directory](https://jidy23.github.io/JRHagents/).
+
+For ChatGPT/Claude/Gemini web users without a terminal, the website provides **copy-ready full instructions**, not `npx` commands. Blurred preview content is only a visual effect; it is not a security measure.

@@ -1,97 +1,73 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#09172f">
-<meta name="description" content="JRHagents: satu Universal AI Skill. Pilih aplikasi AI, salin instruksi siap tempel tanpa terminal, atau pasang langsung di AI coding yang mendukung Skills.">
-<meta property="og:title" content="JRHagents — Satu skill. Langsung bisa dipakai.">
-<meta property="og:description" content="Mulai tanpa terminal, tanpa API, tanpa ribet. Skill universal open source untuk tugas nyata.">
-<title>JRHagents — Satu skill. Langsung pakai.</title>
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/style.css?v=24">
-<script defer src="assets/prompt-data.js?v=24"></script>
-<script defer src="assets/guide.js?v=24"></script>
-<script defer src="assets/app.js?v=24"></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#081831"><meta name="description" content="JRHagents: satu Skill dengan 66 alur kerja, tanpa API atau terminal untuk chatbot. Panduan ringkas untuk ChatGPT, Claude, Gemini, dan AI coding.">
+<meta name="robots" content="index,follow"><meta property="og:title" content="JRHagents — One skill. 66 useful workflows.">
+<title>JRHagents — Satu skill, 66 kemampuan praktis</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="assets/style.css?v=33">
+<script defer src="assets/catalog.js?v=33"></script>
+<script defer src="assets/universal.js?v=33"></script>
+<script defer src="assets/app.js?v=33"></script>
 </head>
 <body data-theme="light">
-<a href="#workspace" class="skip-link">Lewati ke panduan</a>
-<svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.8 14.8 9.2 21.2 12l-6.4 2.8L12 21.2l-2.8-6.4L2.8 12l6.4-2.8L12 2.8Z"/></symbol>
-  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
-  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="7" width="12" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h2"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
-  <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="2.5" y="3" width="19" height="18" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></symbol>
-  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-8.4 8L5 22l1.4-5.1a8 8 0 1 1 13.6-5.4Z"/></symbol>
-  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
-  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5c-2.7-2-5.7-2-9-1v15c3.3-1 6.3-1 9 1 2.7-2 5.7-2 9-1V4c-3.3-1-6.3-1-9 1Zm0 0v15"/></symbol>
-  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></symbol>
-  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></symbol>
-  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
-  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.7 2.7 0 0 1 5.3.7c0 2-2.8 2.1-2.8 4.4M12 17.5h.01"/></symbol>
-</svg>
-<header class="site-header" id="top">
-  <div class="wrap header-content">
-    <a class="brand" href="#mulai" aria-label="JRHagents — beranda"><span class="brand-mark"><svg><use href="#i-spark"/></svg></span><span>JRH<span class="brand-tone">agents</span></span></a>
-    <nav class="top-links" aria-label="Navigasi"><a href="#mulai" data-nav-tab="mulai">Mulai</a><a href="#contoh" data-nav-tab="contoh">Contoh</a><a href="#kemampuan" data-nav-tab="kemampuan">Kemampuan</a><a href="#bantuan" data-nav-tab="bantuan">Bantuan</a></nav>
-    <div class="header-actions"><a class="github-link" href="https://github.com/Jidy23/JRHagents" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><button class="icon-btn" id="themeToggle" type="button" aria-label="Ganti tema" title="Ganti tema"><svg><use href="#i-moon"/></svg></button><button class="icon-btn hamburger" id="mobileMenu" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="menuDrawer"><span></span><span></span><span></span></button></div>
+<a class="skip-link" href="#workspace">Langsung ke aplikasi</a>
+<header class="topbar"><div class="shell header-row">
+  <a class="brand" href="#mulai" aria-label="JRHagents, beranda"><span class="brand-icon" aria-hidden="true">✳</span><span>JRH<span class="brand-soft">agents</span></span></a>
+  <nav class="desktop-nav" aria-label="Menu utama">
+    <button type="button" data-tab="mulai" class="active"><span data-i18n="tabStart">Mulai</span></button>
+    <button type="button" data-tab="kemampuan"><span data-i18n="tabCatalog">Kemampuan</span></button>
+    <button type="button" data-tab="panduan"><span data-i18n="tabGuide">Panduan</span></button>
+    <button type="button" data-tab="bantuan"><span data-i18n="tabHelp">Bantuan</span></button>
+  </nav>
+  <div class="header-actions"><button id="langToggle" type="button" class="icon-control lang-button" aria-label="Switch language">EN</button><button id="themeToggle" type="button" class="icon-control" aria-label="Ganti tema" title="Tema terang atau gelap"><span aria-hidden="true">◑</span></button><a class="github" href="https://github.com/Jidy23/JRHagents" target="_blank" rel="noopener noreferrer" aria-label="Buka GitHub JRHagents"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7A11.3 11.3 0 0 0 8.42 22.7c.57.1.78-.25.78-.55v-2.09c-3.19.69-3.86-1.35-3.86-1.35-.51-1.32-1.27-1.67-1.27-1.67-1.05-.72.08-.71.08-.71 1.16.08 1.76 1.19 1.76 1.19 1.04 1.76 2.72 1.25 3.38.96.1-.75.41-1.25.74-1.54-2.56-.29-5.25-1.29-5.25-5.76 0-1.27.45-2.31 1.19-3.14-.13-.29-.52-1.48.12-3.08 0 0 .97-.31 3.18 1.2A11.1 11.1 0 0 1 12 6.3c.97 0 1.94.13 2.85.4 2.21-1.5 3.18-1.2 3.18-1.2.64 1.6.25 2.79.12 3.08.74.83 1.19 1.87 1.19 3.14 0 4.48-2.7 5.46-5.28 5.75.42.36.79 1.1.79 2.21v2.97c0 .3.2.66.78.54A11.3 11.3 0 0 0 12 .7Z"/></svg><span>GitHub</span></a></div>
+</div></header>
+<main id="workspace" class="shell main-wrap">
+  <div class="headline-zone"><div class="headline-copy"><div class="eyebrow"><span class="live-dot"></span><span data-i18n="eyebrow">OPEN SOURCE · UNIVERSAL AGENT SKILL</span></div><h1><span data-i18n="heroFirst">Satu skill.</span> <em data-i18n="heroSecond">66 cara bekerja lebih cerdas.</em></h1><p data-i18n="heroCopy">Pilih AI yang kamu gunakan, ambil instruksi yang cocok, lalu mulai. Tanpa API atau terminal untuk chatbot biasa.</p><div class="hero-tags"><span data-i18n="tagFree">Gratis · MIT</span><span data-i18n="tagPortable">Bisa di banyak AI</span><span data-i18n="tagHonest">Tanpa fitur palsu</span></div></div>
+    <div class="hero-visual" aria-hidden="true"><div class="holo-outer"><div class="holo-card holo-back"><span>66</span><small>WORKFLOWS</small></div><div class="holo-card holo-front"><span class="holo-symbol">✳</span><b>JRH</b><span class="holo-check">✓</span></div></div></div>
   </div>
-  <nav id="menuDrawer" class="menu-drawer" aria-label="Menu tambahan" hidden><a href="#mulai" data-nav-tab="mulai">Mulai pakai</a><a href="#contoh" data-nav-tab="contoh">Coba contoh</a><a href="#kemampuan" data-nav-tab="kemampuan">26 kemampuan</a><a href="#bantuan" data-nav-tab="bantuan">Bantuan</a><a href="https://github.com/Jidy23/JRHagents" target="_blank" rel="noopener noreferrer">Lihat GitHub ↗</a></nav>
-</header>
-<main>
-  <section class="hero" aria-labelledby="heroTitle"><div class="wrap hero-layout">
-    <div class="hero-copy"><span class="hero-label"><span class="live-indicator"></span> Open source · Universal Skill</span>
-      <h1 id="heroTitle">AI lebih pintar.<br><em>Caranya lebih simpel.</em></h1>
-      <p>Satu panduan untuk membuat AI bekerja lebih rapi. <strong>Tanpa API, tanpa terminal untuk chatbot biasa.</strong></p>
-      <div class="hero-buttons"><button type="button" id="heroStart" class="btn btn-primary">Mulai sekarang <svg><use href="#i-arrow"/></svg></button><button type="button" id="heroExample" class="btn btn-ghost">Lihat contoh <svg><use href="#i-arrow"/></svg></button></div>
-      <div class="hero-trust"><span><svg><use href="#i-check"/></svg> Gratis (MIT)</span><span><svg><use href="#i-check"/></svg> Bahasa Indonesia</span><span><svg><use href="#i-check"/></svg> 1 Skill</span></div>
-    </div>
-    <div class="visual-wrap"><div class="hero-glow"></div><div class="visual-scene" id="visualScene" aria-hidden="true">
-      <div class="depth-card back-depth"><span class="tiny-chip">INPUT</span><strong>Ide kamu</strong><div class="sketch-lines"><i></i><i></i></div></div>
-      <div class="depth-card front-depth"><div class="depth-brand"><span class="mini-spark">✦</span> JRHagents <span class="depth-type">SKILL</span></div><strong>Mulai dari tujuan.<br>Berakhir di hasil.</strong><div class="depth-step"><span>01</span> Pahami tugas <b>✓</b></div><div class="depth-step"><span>02</span> Kerjakan <b>✓</b></div><div class="depth-step"><span>03</span> Periksa hasil <b>✓</b></div></div>
-      <div class="depth-card float-depth"><span class="check-ring">✓</span><span><b>Lebih terarah</b><small>Tanpa langkah palsu</small></span></div>
-      <span class="orbit orbit-one"></span><span class="orbit orbit-two"></span>
-    </div></div>
-  </div></section>
-  <div class="signal-bar"><div class="wrap signal-inner"><div><strong>01</strong><span> Pilih aplikasi</span></div><span class="signal-arrow">→</span><div><strong>02</strong><span> Salin & pasang</span></div><span class="signal-arrow">→</span><div><strong>03</strong><span> Langsung pakai</span></div></div></div>
-  <section class="work-area wrap" id="workspace" aria-labelledby="workspaceTitle"><div class="workspace-heading"><div><span class="eyebrow">PANDUAN PRAKTIS</span><h2 id="workspaceTitle">Semuanya di satu tempat.</h2><p>Pilih satu bagian. Tidak perlu scroll halaman panjang.</p></div><span class="version-tag">JRHagents · Agent Skill</span></div>
-    <nav class="workspace-tabs" role="tablist" aria-label="Menu JRHagents">
-      <button id="tab-mulai" class="workspace-tab" role="tab" aria-selected="true" aria-controls="panel-mulai" data-tab="mulai"><svg><use href="#i-spark"/></svg><span>Mulai</span></button>
-      <button id="tab-contoh" class="workspace-tab" role="tab" aria-selected="false" aria-controls="panel-contoh" tabindex="-1" data-tab="contoh"><svg><use href="#i-chat"/></svg><span>Contoh</span></button>
-      <button id="tab-kemampuan" class="workspace-tab" role="tab" aria-selected="false" aria-controls="panel-kemampuan" tabindex="-1" data-tab="kemampuan"><svg><use href="#i-grid"/></svg><span>Kemampuan</span></button>
-      <button id="tab-bantuan" class="workspace-tab" role="tab" aria-selected="false" aria-controls="panel-bantuan" tabindex="-1" data-tab="bantuan"><svg><use href="#i-help"/></svg><span>Bantuan</span></button>
-    </nav>
-    <section id="panel-mulai" class="workspace-panel" role="tabpanel" aria-labelledby="tab-mulai">
-      <div class="pane-heading"><div><span class="eyebrow">LANGKAH 1 DARI 2</span><h3>Kamu pakai AI di mana?</h3><p>Pilih yang biasa kamu gunakan. Cara pasangnya langsung disesuaikan.</p></div><div class="smart-badge">Tidak perlu istilah teknis</div></div>
-      <div class="path-switch" role="group" aria-label="Jenis aplikasi AI"><button type="button" class="path-button" data-mode="chat" aria-pressed="true"><svg><use href="#i-chat"/></svg><span><strong>Chatbot biasa</strong><small>ChatGPT, Claude, Gemini</small></span></button><button type="button" class="path-button" data-mode="coding" aria-pressed="false"><svg><use href="#i-terminal"/></svg><span><strong>AI Coding</strong><small>Codex, Claude Code, Cursor</small></span></button></div>
-      <div class="client-label" id="clientLabel">Pilih aplikasi</div><div id="clientChoices" class="client-choices" role="group" aria-labelledby="clientLabel"></div>
-      <div class="setup-grid"><div class="setup-explanation"><div class="setup-kicker"><span class="tiny-step">02</span><span id="setupKicker">CARA PAKAI</span></div><h3 id="setupTitle">Salin, tempel, selesai.</h3><p id="setupDescription">Tidak perlu terminal atau API untuk memakai instruksi universal.</p><button id="toggleSteps" class="text-action toggle-steps" type="button" aria-expanded="false">Lihat panduan 3 langkah ↓</button><div id="setupSteps" class="steps-mini"></div><div id="setupNotice" class="setup-notice"></div></div>
-      <div class="setup-output"><div class="output-head"><div><span class="output-dot"></span><span id="outputType">INSTRUKSI SIAP TEMPEL</span></div><span id="outputApp">ChatGPT</span></div><div class="output-body"><strong id="outputTitle">Instruksi untuk AI-mu</strong><p id="outputSubtitle">Salin instruksi lengkap, lalu kirim ke chatbot.</p><pre id="outputText" tabindex="0"></pre><div class="output-actions"><button id="primaryCopy" type="button" class="btn btn-primary btn-full"><svg><use href="#i-copy"/></svg><span id="primaryCopyLabel">Salin instruksi lengkap</span></button><button id="secondaryAction" type="button" class="btn btn-secondary"><svg><use href="#i-download"/></svg><span id="secondaryLabel">Unduh .md</span></button></div><button id="expandOutput" type="button" class="text-action" aria-expanded="false">Lihat instruksi penuh ↓</button></div></div></div>
+  <div class="page-area">
+    <section class="screen active" id="screen-mulai" data-screen="mulai" data-mobile-stage="choose" aria-labelledby="startTitle">
+      <div class="page-head"><div><span class="section-kicker" data-i18n="startStep">LANGKAH 01 / MULAI</span><h2 id="startTitle" data-i18n="startTitle">Pakai JRHagents di AI favoritmu.</h2><p data-i18n="startSub">Pilih aplikasi. Kami tampilkan cara paling mudah dan sesuai kemampuan aplikasinya.</p></div><div class="inline-progress" aria-label="Proses tiga langkah"><span class="selected">1</span><i></i><span>2</span><i></i><span>3</span></div></div>
+      <div class="start-layout">
+        <div class="main-panel card" id="choicePanel">
+          <div class="panel-title"><span class="num">01</span><strong data-i18n="chooseWay">Bagaimana kamu memakai AI?</strong></div>
+          <div class="type-grid" role="group" aria-label="Pilih jenis aplikasi AI"><button type="button" id="typeChat" data-type="chat" class="type-card selected" aria-pressed="true"><span class="type-icon">☏</span><b data-i18n="chatMode">Chatbot biasa</b><small data-i18n="chatModeDesc">ChatGPT, Claude, Gemini web · tanpa terminal</small><span class="type-check">✓</span></button><button type="button" id="typeCoding" data-type="coding" class="type-card" aria-pressed="false"><span class="type-icon">⌘</span><b data-i18n="codingMode">AI coding</b><small data-i18n="codingModeDesc">Codex, Claude Code, Cursor · perlu terminal</small><span class="type-check">✓</span></button></div>
+          <div class="panel-title second"><span class="num">02</span><strong data-i18n="chooseApp">Pilih aplikasi AI</strong></div>
+          <div id="appsGrid" class="apps-grid" role="group" aria-label="Daftar aplikasi AI"></div>
+          <div class="setup-footer" id="installNote" aria-live="polite"></div><button class="btn btn-primary mobile-next" type="button" id="nextSetup"><span data-i18n="nextSetup">Lihat instruksi saya</span> →</button>
+        </div>
+        <div class="result-panel card" id="promptBlock">
+          <button id="backToChoice" class="mobile-back" type="button"><span aria-hidden="true">←</span> <span data-i18n="backChoose">Ganti aplikasi AI</span></button>
+          <div class="panel-title"><span class="num">03</span><strong data-i18n="readyTitle">Instruksi siap digunakan</strong><span class="tiny-chip" data-i18n="readyChip">TINGGAL SALIN</span></div>
+          <p id="resultDescription" class="result-intro"></p>
+          <div class="masked-wrap"><div class="masked-head"><span id="maskLabel" data-i18n="maskLabel">PRATINJAU DISAMARKAN</span><span class="mask-dot"></span></div><div id="maskedPreview" class="masked-preview" aria-label="Pratinjau instruksi disamarkan" aria-hidden="true"><div id="previewContent" class="masked-text"></div></div><div class="masked-overlay"><span>✦</span><strong data-i18n="maskMessage">Instruksi lengkap siap disalin</strong><small data-i18n="maskExplanation">Pratinjau diburamkan demi tampilan rapi, bukan dienkripsi.</small></div></div>
+          <div class="prompt-actions"><button id="copyMain" type="button" class="btn btn-primary"><span data-i18n="copyComplete">Salin instruksi lengkap</span><span>↗</span></button><button id="showPrompt" type="button" class="btn btn-neutral"><span data-i18n="peek">Lihat</span></button><button id="downloadPrompt" type="button" class="btn btn-icon" aria-label="Unduh instruksi Markdown" title="Unduh .md">↓</button></div>
+          <div id="copyFallback" class="copy-fallback" hidden><label for="fallbackText" data-i18n="fallbackLabel">Salin manual teks lengkap di bawah ini:</label><textarea id="fallbackText" rows="5" readonly></textarea><button id="selectFallback" class="text-link" type="button" data-i18n="selectAll">Pilih seluruh teks</button></div>
+          <div class="next-steps" id="nextSteps" aria-live="polite"></div><button id="copyTask" type="button" class="btn btn-neutral copy-task" hidden><span data-i18n="copyTask">Salin contoh tugas sesudah instalasi</span> ↗</button>
+        </div>
+      </div>
+      <div class="quick-switch"><div><span class="mini-label" data-i18n="tryFlow">MAU CONTOH PEKERJAAN?</span><strong data-i18n="tryFlowTitle">Pilih kemampuan, dapat instruksinya.</strong></div><button type="button" class="btn btn-neutral" data-go="kemampuan"><span data-i18n="browse66">Jelajahi 66 kemampuan</span> →</button></div>
     </section>
-    <section id="panel-contoh" class="workspace-panel" role="tabpanel" aria-labelledby="tab-contoh" hidden>
-      <div class="pane-heading"><div><span class="eyebrow">COBA LANGSUNG</span><h3>Tulis tugas, dapat instruksi.</h3><p>Hasilnya bisa langsung kamu salin ke AI yang sudah kamu gunakan.</p></div><span class="smart-badge">Tidak menjalankan AI di website</span></div>
-      <div class="example-layout"><div class="example-left"><label class="field-label" for="taskType">Mau mengerjakan apa?</label><select id="taskType" class="select-control"><option value="audit">Audit proyek</option><option value="design">Rapikan desain UI</option><option value="build">Buat fitur aplikasi</option><option value="research">Riset</option><option value="writing">Tulis dokumen</option><option value="data">Analisis data</option><option value="business">Ide bisnis</option><option value="learning">Belajar sesuatu</option><option value="release">Cek sebelum rilis</option></select><label class="field-label" for="taskContext">Ceritakan tugasnya (opsional)</label><textarea id="taskContext" rows="3" maxlength="400" placeholder="Contoh: website portfolio, tampilan HP masih berantakan..."></textarea><div class="mini-note">Tidak ada data yang dikirim ke server. Teks ini hanya dipakai untuk menyusun instruksi.</div><button id="generatePrompt" type="button" class="btn btn-primary btn-full">Susun instruksi <svg><use href="#i-arrow"/></svg></button></div>
-      <div class="example-right"><div class="output-head"><span>HASIL INSTRUKSI</span><span>SIAP DISALIN</span></div><p class="result-label" id="taskTitle">Audit proyek</p><pre id="generatedText" tabindex="0"></pre><div class="output-actions"><button type="button" id="copyGenerated" class="btn btn-primary"><svg><use href="#i-copy"/></svg> Salin</button><button type="button" id="downloadGenerated" class="btn btn-secondary"><svg><use href="#i-download"/></svg> Unduh .md</button></div></div></div>
-      <div class="transparent-line"><svg><use href="#i-check"/></svg> Instruksi ini dijalankan di AI pilihanmu, bukan dieksekusi diam-diam oleh website.</div>
+    <section class="screen" id="screen-kemampuan" data-screen="kemampuan" aria-labelledby="catalogTitle" hidden>
+      <div class="page-head"><div><span class="section-kicker" data-i18n="catalogKicker">11 BIDANG · 66 ALUR KERJA</span><h2 id="catalogTitle" data-i18n="catalogTitle">Cari kemampuan yang kamu butuhkan.</h2><p data-i18n="catalogSub">Setiap kartu memiliki tujuan dan hasil yang jelas. Ini panduan kerja, bukan 66 API tambahan.</p></div><span class="count-flag" id="catalogCount">66 / 66</span></div>
+      <div class="catalog-controls card"><label class="searchbox" for="capSearch"><span>⌕</span><input id="capSearch" type="search" autocomplete="off" data-i18n-placeholder="searchPlaceholder" placeholder="Cari: CV, belajar, investasi, UI, keamanan..."></label><label class="visually-hidden" for="categorySelect">Kategori</label><select id="categorySelect"></select></div>
+      <div class="catalog-layout"><div><div id="catalogGrid" class="cap-grid" aria-live="polite"></div><div class="grid-more"><button id="showMore" type="button" class="btn btn-neutral" data-i18n="more">Tampilkan lebih banyak</button><span id="showingCount"></span></div></div><aside class="cap-detail card" id="capDetail"><span class="detail-label" data-i18n="detailKicker">DETAIL KEMAMPUAN</span><h3 id="detailTitle"></h3><p id="detailDescription"></p><div class="detail-output"><strong data-i18n="expectedResult">Hasil yang diharapkan</strong><p id="detailResult"></p></div><button id="useCapability" class="btn btn-primary" type="button"><span data-i18n="useThis">Gunakan kemampuan ini</span> →</button><small data-i18n="capDisclaimer">Dijalankan oleh AI pilihanmu sesuai akses yang benar-benar tersedia.</small></aside></div>
     </section>
-    <section id="panel-kemampuan" class="workspace-panel" role="tabpanel" aria-labelledby="tab-kemampuan" hidden>
-      <div class="pane-heading"><div><span class="eyebrow">SATU SKILL · 26 CARA KERJA</span><h3>Kemampuan sesuai kebutuhan.</h3><p>Ini pedoman kerja AI—bukan 26 aplikasi atau API yang otomatis aktif.</p></div><span class="smart-badge">Sumber terbuka</span></div>
-      <div class="feature-tools"><label class="searchbox" for="featureSearch"><svg><use href="#i-search"/></svg><input id="featureSearch" type="search" autocomplete="off" placeholder="Cari: desain, riset, keamanan..." aria-label="Cari kemampuan"></label><div id="featureFilters" class="feature-filters" role="group" aria-label="Kategori kemampuan"></div></div><div id="capabilityList" class="capability-list"></div><div class="features-footer"><span id="featureCount" aria-live="polite"></span><button id="showFeatures" type="button" class="btn btn-secondary">Lihat semua <svg><use href="#i-arrow"/></svg></button></div>
+    <section class="screen" id="screen-panduan" data-screen="panduan" aria-labelledby="guideTitle" hidden>
+      <div class="page-head"><div><span class="section-kicker" data-i18n="guideKicker">PANDUAN PEMULA · 4 LANGKAH</span><h2 id="guideTitle" data-i18n="guideTitle">Dari buka website sampai bisa pakai.</h2><p data-i18n="guideSub">Tidak perlu memahami istilah teknis. Ikuti langkah sesuai aplikasi yang sudah kamu gunakan.</p></div></div>
+      <div class="guide-grid" id="guideGrid"></div>
+      <div class="guide-lower"><div class="card"><h3 data-i18n="whatIsSkill">Apa itu Skill?</h3><p data-i18n="whatIsSkillDesc">Skill adalah panduan kerja untuk AI. JRHagents tidak menambah model, fitur berbayar, atau akses ke aplikasi lain.</p></div><div class="card"><h3 data-i18n="whatIfNoShell">Kalau AI saya tidak punya terminal?</h3><p data-i18n="whatIfNoShellDesc">Pilih Chatbot biasa. Salin instruksi lengkap, lalu tempel di chat. Tidak perlu API key atau URL endpoint.</p></div><div class="card"><h3 data-i18n="afterInstall">Setelah memasang, bagaimana?</h3><p data-i18n="afterInstallDesc">Ketik tugas dengan bahasa biasa. Jika AI tidak punya akses proyek, berikan file atau informasi yang diperlukan.</p></div></div>
+      <div class="guide-start"><button type="button" data-go="mulai" class="btn btn-primary"><span data-i18n="goStart">Mulai panduan saya</span> →</button><a href="https://github.com/Jidy23/JRHagents/blob/main/docs/INSTALL.md" target="_blank" rel="noopener noreferrer" class="text-link" data-i18n="fullDocs">Baca dokumentasi lengkap ↗</a></div>
     </section>
-    <section id="panel-bantuan" class="workspace-panel" role="tabpanel" aria-labelledby="tab-bantuan" hidden>
-      <div class="pane-heading"><div><span class="eyebrow">BANTUAN TANPA RIBET</span><h3>Kalau bingung, jawabannya di sini.</h3><p>Ringkas, langsung ke solusi, tanpa harus membuka sepuluh halaman.</p></div></div>
-      <div class="help-layout"><div class="help-spotlight"><span class="help-eyebrow">PESAN YANG SERING MUNCUL</span><h4>“App ini tidak punya shell. Mana API-nya?”</h4><p><strong>Kamu tidak perlu API.</strong> Jika aplikasimu hanya punya fitur <code>create_skill</code> berbasis API, jangan pilih itu. Gunakan instruksi universal sebagai pesan/chat atau custom instructions yang didukung aplikasi tersebut.</p><button class="btn btn-primary" id="helpUseChat" type="button">Pakai tanpa terminal <svg><use href="#i-arrow"/></svg></button></div><div class="faq-accordion">
-      <details><summary>Kenapa perintah npx tidak bisa dijalankan?</summary><p><code>npx</code> adalah perintah Terminal di komputer. Kalau AI chat tidak punya Terminal, gunakan pilihan “Chatbot biasa” dan salin instruksinya. Tidak perlu instal Node.js atau API.</p></details>
-      <details><summary>Apa ini menambahkan model atau alat AI baru?</summary><p>Tidak. JRHagents berisi panduan kerja. Model, akses internet, membaca file, serta tool mengikuti layanan AI yang dipakai. Tidak ada model AI yang berjalan di halaman ini.</p></details>
-      <details><summary>Apakah semua aplikasi AI bisa memasangnya otomatis?</summary><p>Tidak. AI coding yang mendukung Agent Skills dapat menggunakan installer GitHub. AI chat biasa menggunakan instruksi manual. Fitur native setiap platform bisa berbeda.</p></details>
-      <details><summary>Apakah saya harus memasang semua 26 kemampuan?</summary><p>Tidak. Hanya satu skill. AI memakai bidang referensi yang relevan ketika runtime mendukungnya.</p></details>
-      <details><summary>Bagaimana kalau menyalin tidak berhasil?</summary><p>Tekan “Lihat instruksi penuh”, pilih teks, lalu gunakan perintah salin biasa. Beberapa browser membatasi clipboard.</p></details>
-      </div></div><div class="help-links"><a href="https://github.com/Jidy23/JRHagents/blob/main/docs/INSTALL.md" target="_blank" rel="noopener noreferrer">Panduan detail ↗</a><a href="https://github.com/Jidy23/JRHagents/issues/new/choose" target="_blank" rel="noopener noreferrer">Laporkan masalah ↗</a><a href="https://github.com/Jidy23/JRHagents/blob/main/docs/COMPATIBILITY.md" target="_blank" rel="noopener noreferrer">Daftar kompatibilitas ↗</a></div>
+    <section class="screen" id="screen-bantuan" data-screen="bantuan" aria-labelledby="helpTitle" hidden>
+      <div class="page-head"><div><span class="section-kicker" data-i18n="helpKicker">SOLUSI YANG BISA DIPRAKTIKKAN</span><h2 id="helpTitle" data-i18n="helpTitle">Kalau bingung, mulai dari sini.</h2><p data-i18n="helpSub">Jawaban singkat untuk masalah instalasi, API, akses file, dan platform.</p></div></div>
+      <div class="help-layout"><div class="faq-list" id="faqList"></div><aside class="card help-aside"><div class="aside-icon">?</div><h3 data-i18n="needHelp">Masih ada kendala?</h3><p data-i18n="needHelpDesc">Laporkan masalah dengan langkah yang bisa diulang. Jangan kirim API key, password, atau data pribadi.</p><a href="https://github.com/Jidy23/JRHagents/issues/new/choose" target="_blank" rel="noopener noreferrer" class="btn btn-primary"><span data-i18n="reportIssue">Laporkan di GitHub</span> ↗</a><a href="https://github.com/Jidy23/JRHagents/blob/main/docs/COMPATIBILITY.md" target="_blank" rel="noopener noreferrer" class="text-link" data-i18n="compatibility">Baca kompatibilitas ↗</a></aside></div>
     </section>
-  </section>
-  <footer class="wrap footer"><div class="footer-brand"><span class="brand-mark tiny"><svg><use href="#i-spark"/></svg></span><div><strong>JRHagents</strong><small>Open source · MIT · 1 Universal Skill</small></div></div><span>Dirancang sederhana. Hasil tetap bisa diperiksa.</span><a href="https://github.com/Jidy23/JRHagents" target="_blank" rel="noopener noreferrer">Lihat kode ↗</a></footer>
+  </div>
 </main>
-<nav class="bottom-nav" aria-label="Navigasi cepat seluler"><button type="button" data-tab="mulai" aria-label="Mulai"><svg><use href="#i-spark"/></svg><span>Mulai</span></button><button type="button" data-tab="contoh" aria-label="Contoh"><svg><use href="#i-chat"/></svg><span>Contoh</span></button><button type="button" data-tab="kemampuan" aria-label="Kemampuan"><svg><use href="#i-grid"/></svg><span>Fitur</span></button><button type="button" data-tab="bantuan" aria-label="Bantuan"><svg><use href="#i-help"/></svg><span>Bantuan</span></button></nav>
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-</body>
-</html>
+<nav class="mobile-bottom" aria-label="Navigasi seluler"><button type="button" data-tab="mulai" class="active"><span class="mobile-glyph">⌂</span><small data-i18n="tabStart">Mulai</small></button><button type="button" data-tab="kemampuan"><span class="mobile-glyph">▦</span><small data-i18n="tabCatalog">Kemampuan</small></button><button type="button" data-tab="panduan"><span class="mobile-glyph">◫</span><small data-i18n="tabGuide">Panduan</small></button><button type="button" data-tab="bantuan"><span class="mobile-glyph">?</span><small data-i18n="tabHelp">Bantuan</small></button></nav>
+<footer class="footer"><div class="shell footer-row"><span>© JRHagents · MIT · <span class="visually-hidden">Tidak ada model AI yang berjalan di halaman ini. </span><span data-i18n="footerText">Satu Skill, bukan aplikasi AI baru.</span></span><a href="https://github.com/Jidy23/JRHagents" target="_blank" rel="noopener noreferrer">Source ↗</a></div></footer>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body></html>

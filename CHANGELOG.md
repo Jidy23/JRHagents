@@ -1,3 +1,9 @@
+## V33 — Compact global Skill experience
+- 66 real scoped workflows, 11 fields, bilingual searchable capability grid.
+- Four-page tabbed lightweight docs, app-aware onboarding and full masked-preview copy.
+- Keyboard access, motion preferences and mobile layout tests; no invented APIs.
+- 9 stepwise product improvements in docs/V33-RELEASE.md.
+
 ## V23 — Premium Pages & Easy Onboarding (2026-10-22)
 
 - Rebuilt GitHub Pages with a zero-dependency responsive UI and lightweight CSS 3D illustration.
