@@ -1,0 +1,42 @@
+/* JRHagents V34 support component. Deliberately scoped, no external libraries. */
+.support-card { margin-top: clamp(18px, 3vw, 28px); border: 1px solid var(--border, #e2eaf5); border-radius: 20px; padding: clamp(17px, 2.5vw, 25px); background: var(--card, #fff); color: var(--ink, #13213c); box-shadow: 0 12px 36px rgb(11 28 65 / .04); }
+.support-card-top { display: flex; align-items: center; gap: 9px; }
+.support-icon { display: grid; place-items: center; background: #e7efff; color: #205ce1; width: 30px; height: 30px; border-radius: 10px; font-size: 21px; }
+.support-kicker { font-size: 10px; font-weight: 800; letter-spacing: .11em; color: var(--blue, #225eea); }
+.support-card-body { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: 22px; }
+.support-card-copy h3 { font-size: clamp(19px, 2.2vw, 24px); letter-spacing: -.035em; line-height: 1.2; margin: 10px 0 6px; }
+.support-card-copy p { margin: 0; color: var(--muted, #6a7b94); font-size: 13px; max-width: 48ch; }
+.support-card-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.support-option { display: flex; align-items: flex-start; gap: 10px; min-width: 0; width: 100%; padding: 14px; text-align: left; background: var(--soft, #f2f6fc); color: var(--ink, #13213c); border: 1px solid var(--border, #e2eaf5); border-radius: 13px; text-decoration: none; cursor: pointer; font: inherit; transition: border-color .2s, transform .2s, box-shadow .2s; }
+.support-option:hover { border-color: #80a4ff; transform: translateY(-2px); box-shadow: 0 7px 14px rgb(28 72 153 / .07); }
+.support-option-symbol { flex: none; display: grid; place-items: center; height: 30px; width: 30px; background: var(--card, #fff); border-radius: 10px; font-weight: 800; color: var(--blue, #225eea); }
+.support-option strong { display: block; font-size: 13px; line-height: 1.25; }
+.support-option small { display: block; color: var(--muted, #6a7b94); line-height: 1.4; margin-top: 4px; font-size: 11px; }
+.support-arrow { margin-left: auto; font-weight: 700; color: var(--blue, #225eea); }
+.support-footer-link { border: 0; background: transparent; color: inherit; font: inherit; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.support-footer-link:hover { color: #74a5ff; }
+.support-dialog { border: 1px solid #dce5f1; border-radius: 22px; padding: 0; width: min(760px, calc(100vw - 22px)); max-height: min(92dvh, 860px); background: var(--card, #fff); color: var(--ink, #13213c); box-shadow: 0 30px 95px rgba(5, 19, 42, .35); overscroll-behavior: contain; }
+.support-dialog::backdrop { background: rgb(7 18 39 / .73); backdrop-filter: blur(6px); }
+.support-dialog-inner { padding: clamp(18px, 3vw, 28px); }
+.support-dialog-head { display: flex; justify-content: space-between; align-items: center; }
+.support-close { display: grid; place-items: center; width: 38px; height: 38px; color: var(--ink, #13213c); background: var(--soft, #f2f6fc); border: 1px solid var(--border, #e2eaf5); border-radius: 12px; font-size: 26px; line-height: 1; cursor: pointer; }
+.support-dialog h2 { font-size: clamp(22px, 3vw, 29px); letter-spacing: -.035em; line-height: 1.15; margin: 10px 0 6px; }
+.support-dialog p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted, #6a7b94); }
+.support-payment-grid { display: grid; grid-template-columns: minmax(0, 305px) minmax(0, 1fr); gap: 24px; margin-top: 18px; align-items: start; }
+.support-qr-container { border-radius: 17px; padding: 14px; background: #fff; border: 1px solid #dbe5ef; text-align: center; }
+.support-qr-container img { display: block; width: 100%; height: auto; max-height: 320px; margin: auto; image-rendering: pixelated; }
+.support-qr-caption { display: block; margin-top: 7px; font-size: 11px; font-weight: 700; color: #42546e; }
+.support-payment-details small { color: var(--muted, #6a7b94); display: block; font-size: 11px; }
+.support-merchant { font-size: 17px; letter-spacing: -.025em; display: block; margin: 3px 0 8px; overflow-wrap: anywhere; }
+.support-dialog p.support-receiver-warning { padding: 9px 10px; background: var(--soft, #f2f6fc); border: 1px solid var(--border, #e2eaf5); border-radius: 10px; font-size: 12px; }
+.support-instructions { margin: 12px 0; padding-left: 22px; color: var(--ink, #13213c); font-size: 12px; }
+.support-instructions li { margin-bottom: 5px; }
+.support-save { display: inline-flex; margin-top: 9px; padding: 11px 15px; border-radius: 10px; border: 1px solid #1c57dc; background: #245fe6; color: #fff; font-weight: 700; font-size: 13px; text-decoration: none; }
+.support-save:hover { background: #144dcf; }
+.support-dialog-bottom { display: flex; justify-content: space-between; align-items: start; gap: 14px; border-top: 1px solid var(--border, #e2eaf5); padding-top: 13px; margin-top: 15px; }
+.support-dialog-bottom p { font-size: 11px; max-width: 55ch; }
+.support-dialog-bottom a { flex: none; color: var(--blue, #225eea); font-size: 12px; text-decoration: underline; }
+.support-card a:focus-visible, .support-card button:focus-visible, .support-dialog a:focus-visible, .support-dialog button:focus-visible, .support-footer-link:focus-visible { outline: 3px solid #4c86ff; outline-offset: 3px; }
+@media (max-width: 760px) { .support-card-body { grid-template-columns: 1fr; gap: 14px; } .support-card-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); } .support-payment-grid { grid-template-columns: 1fr; gap: 14px; } .support-qr-container { width: min(100%, 285px); margin: auto; } .support-qr-container img { max-height: 250px; } .support-dialog-bottom { flex-direction: column; gap: 8px; } }
+@media (max-width: 400px) { .support-card-actions { grid-template-columns: 1fr; } .support-card { padding: 15px; } .support-dialog { max-height: 90dvh; width: calc(100vw - 16px); } .support-dialog-inner { padding: 16px; } .support-dialog h2 { font-size: 22px; } .support-qr-container { width: min(100%, 260px); } }
+@media (prefers-reduced-motion: reduce) { .support-option { transition: none; } .support-dialog::backdrop { backdrop-filter: none; } }

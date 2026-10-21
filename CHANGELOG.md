@@ -1,3 +1,11 @@
+## V34 — Optional community support
+
+- Added quiet Support card in Help tab and footer; no automatic donation popups.
+- Added accessible QRIS modal, one-click image download, GitHub contribution route and ID/EN localization.
+- QR image re-encoded from the supplied QRIS payload; exact decoded content verified locally.
+- Explicitly disclose recipient **KOPDES NUSANTARA**, not JRHagents; no claims of processing or verifying payments.
+- Added support documentation and regression tests. No payment backend, analytics or new runtime dependencies.
+
 ## V33 — Compact global Skill experience
 - 66 real scoped workflows, 11 fields, bilingual searchable capability grid.
 - Four-page tabbed lightweight docs, app-aware onboarding and full masked-preview copy.

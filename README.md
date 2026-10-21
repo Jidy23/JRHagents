@@ -100,3 +100,12 @@ The [public documentation website](https://jidy23.github.io/JRHagents/) offers a
 There are **66 scoped workflow instructions across 11 life and work categories**: productivity, learning, career, personal finance, wellbeing, communication, research, business, engineering, design and digital safety. The Skill does not grant a host new permissions or provide medical advice, market quotes, or external integrations. See [the numbered list](skills/jrhagents/references/CAPABILITIES.md) and [interactive directory](https://jidy23.github.io/JRHagents/).
 
 For ChatGPT/Claude/Gemini web users without a terminal, the website provides **copy-ready full instructions**, not `npx` commands. Blurred preview content is only a visual effect; it is not a security measure.
+
+
+## Community support (optional)
+
+**JRHagents stays free and open source.** If the skill is useful, support can be as simple as fixing a typo, opening an issue, or contributing code. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+For voluntary appreciation, visit [Support JRHagents](https://jidy23.github.io/JRHagents/#bantuan) in the **Bantuan / Help** tab. The optional QRIS dialog shows the receiving merchant exactly as printed on the provided code: **KOPDES NUSANTARA** (not JRHagents). Verify the recipient inside your payment app before choosing an amount. We never track payments or require receipts.
+
+[Support policies & instructions](docs/SUPPORT.md). No donation is required to use the skill, and financial support unlocks no features.
