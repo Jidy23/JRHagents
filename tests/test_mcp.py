@@ -58,7 +58,7 @@ class MCPTests(unittest.TestCase):
         for client in ['generic','claude','cursor','vscode','copilot']:
             result=generate(client,self.root)
             group=result.get('servers',result.get('mcpServers'))
-            self.assertEqual(group['jrhagents']['args'][-1],str(self.root))
+            self.assertTrue(os.path.samefile(group['jrhagents']['args'][-1], self.root))
             self.assertIn('jrhagents.mcp',group['jrhagents']['args'])
     def test_seven_installer_targets(self):
         self.assertEqual(len(CLIENT_DIRS),7)
