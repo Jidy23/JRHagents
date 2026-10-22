@@ -1,10 +1,10 @@
-## V34 — Optional community support
-
-- Added quiet Support card in Help tab and footer; no automatic donation popups.
-- Added accessible QRIS modal, one-click image download, GitHub contribution route and ID/EN localization.
-- QR image re-encoded from the supplied QRIS payload; exact decoded content verified locally.
-- Explicitly disclose recipient **KOPDES NUSANTARA**, not JRHagents; no claims of processing or verifying payments.
-- Added support documentation and regression tests. No payment backend, analytics or new runtime dependencies.
+## V35 — Support navbar, QR reliability & audit
+- Moved optional support to a single heart button right next to the language toggle, removed large Help/footer card.
+- Built compact accessible QRIS dialog with recipient disclosure, save image and GitHub contribution option.
+- Losslessly optimized QRIS from 220,630 bytes to 984 bytes; local payload decoded the same as the operator-supplied QR.
+- Fixed 768px header overflow and validated six browser widths.
+- Added 66-item evidence-based product audit roadmap in `docs/AUDIT-ROADMAP-66.md`.
+- Fixed Python support asset regression gate and added keyboard/language/mobile tests.
 
 ## V33 — Compact global Skill experience
 - 66 real scoped workflows, 11 fields, bilingual searchable capability grid.

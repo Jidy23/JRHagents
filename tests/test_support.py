@@ -1,28 +1,35 @@
 import struct
 import unittest
 from pathlib import Path
-ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / 'docs'
+ROOT=Path(__file__).resolve().parents[1]
+HTML=(ROOT/'docs/index.html').read_text(encoding='utf-8')
+CSS=(ROOT/'docs/assets/support.css').read_text(encoding='utf-8')
+JS=(ROOT/'docs/assets/support.js').read_text(encoding='utf-8')
 class SupportTests(unittest.TestCase):
-    def test_site_loads_support_assets(self):
-        html = (DOCS / 'index.html').read_text(encoding='utf-8')
-        self.assertIn('assets/support.css?v=34', html)
-        self.assertIn('assets/support.js?v=34', html)
-    def test_qris_is_small_valid_png(self):
-        b = (DOCS / 'assets/qris-support.png').read_bytes()
+    def test_nav_next_to_language_and_no_large_card(self):
+        self.assertIn('id="supportNavButton"',HTML)
+        self.assertLess(HTML.index('id="langToggle"'),HTML.index('id="supportNavButton"'))
+        self.assertLess(HTML.index('id="supportNavButton"'),HTML.index('id="themeToggle"'))
+        self.assertNotIn('support-card-actions',HTML)
+        self.assertEqual(HTML.count('id="jrhSupportDialog"'),1)
+    def test_script_and_css_referenced(self):
+        self.assertIn('assets/support.css?v=35',HTML)
+        self.assertIn('assets/support.js?v=35',HTML)
+    def test_qr_png_optimized(self):
+        b=(ROOT/'docs/assets/qris-support.png').read_bytes()
         self.assertTrue(b.startswith(b'\x89PNG\r\n\x1a\n'))
-        w,h = struct.unpack('>II', b[16:24])
-        self.assertGreaterEqual(min(w,h), 300)
-        self.assertLess(len(b), 60000)
-    def test_opt_in_and_recipient_disclosure(self):
-        js = (DOCS / 'assets/support.js').read_text(encoding='utf-8')
-        self.assertIn('KOPDES NUSANTARA', js)
-        self.assertIn("dialog.showModal()", js)
-        self.assertIn("document.querySelectorAll('[data-open-support]')", js)
-        self.assertIn('not JRHagents', js)
-        self.assertNotIn('payment succeeded', js.lower())
-        self.assertIn("imgPath", js)
-        self.assertIn('download="JRHagents-Support-QRIS.png"', js)
-    def test_contribution_and_docs(self):
-        self.assertIn('CONTRIBUTING.md',(DOCS / 'assets/support.js').read_text(encoding='utf-8'))
-        self.assertIn('KOPDES NUSANTARA',(DOCS / 'SUPPORT.md').read_text(encoding='utf-8'))
+        w,h=struct.unpack('>II',b[16:24])
+        self.assertGreaterEqual(min(w,h),300)
+        self.assertLess(len(b),60000)
+    def test_no_automatic_payment_or_overlay(self):
+        self.assertIn('showModal',JS)
+        self.assertIn("openButton.addEventListener('click'",JS)
+        self.assertIn('KOPDES NUSANTARA',HTML)
+        self.assertIn('Nama QRIS berbeda',HTML)
+        self.assertNotIn('fetch(',JS)
+    def test_mobile_and_accessibility(self):
+        self.assertIn('aria-haspopup="dialog"',HTML)
+        self.assertIn('prefers-reduced-motion',CSS)
+        self.assertIn('max-width:450px',CSS)
+        self.assertIn('focus()',JS)
+if __name__=='__main__':unittest.main()

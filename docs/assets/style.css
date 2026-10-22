@@ -27,3 +27,12 @@
  .hero-visual::after{content:'66';position:absolute;top:2px;right:1px;width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#2268e7;color:#fff;font-size:11px;font-weight:850;box-shadow:0 5px 10px #2368e94d}
 }
 @media(max-width:390px){.hero-visual{height:84px}.hero-visual::before{inset:11px 6px 11px 3px;font-size:27px;border-radius:14px}.hero-visual::after{width:24px;height:24px}}
+/* V35: the desktop nav no longer pushes header actions off-screen on 721–900 px tablets. */
+@media (min-width:721px) and (max-width:900px){
+ .desktop-nav{display:none}
+ .mobile-bottom{position:fixed;bottom:0;left:0;right:0;z-index:25;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));min-height:62px;padding:6px 16px;background:var(--card);border-top:1px solid var(--border);box-shadow:0 -8px 23px #05162b10}
+ .mobile-bottom button{border:0;background:transparent;color:var(--muted);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+ .mobile-bottom button.active{color:var(--blue);background:var(--soft)}
+ .mobile-bottom small{font-size:12px;font-weight:800}
+ .main-wrap{padding-bottom:85px}
+}

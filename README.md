@@ -101,11 +101,10 @@ There are **66 scoped workflow instructions across 11 life and work categories**
 
 For ChatGPT/Claude/Gemini web users without a terminal, the website provides **copy-ready full instructions**, not `npx` commands. Blurred preview content is only a visual effect; it is not a security measure.
 
+## Support JRHagents (voluntary)
 
-## Community support (optional)
+JRHagents remains free. The compact **heart icon immediately beside the language toggle** offers an optional QRIS appreciation or a path to contribute code. The recipient shown on the operator-provided QRIS is **KOPDES NUSANTARA**, not JRHagents: always verify the recipient before paying. No donation required, no payment detection, and no user tracking. [More information](docs/SUPPORT.md).
 
-**JRHagents stays free and open source.** If the skill is useful, support can be as simple as fixing a typo, opening an issue, or contributing code. See [CONTRIBUTING.md](CONTRIBUTING.md).
+## 66 recommendations for improvement
 
-For voluntary appreciation, visit [Support JRHagents](https://jidy23.github.io/JRHagents/#bantuan) in the **Bantuan / Help** tab. The optional QRIS dialog shows the receiving merchant exactly as printed on the provided code: **KOPDES NUSANTARA** (not JRHagents). Verify the recipient inside your payment app before choosing an amount. We never track payments or require receipts.
-
-[Support policies & instructions](docs/SUPPORT.md). No donation is required to use the skill, and financial support unlocks no features.
+Read the evidence-based [audit and prioritized 66-item roadmap](docs/AUDIT-ROADMAP-66.md). The root `jidy23.github.io` and the project path `jidy23.github.io/JRHagents/` are different URLs; use the project path for this site.
