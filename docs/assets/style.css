@@ -36,3 +36,73 @@
  .mobile-bottom small{font-size:12px;font-weight:800}
  .main-wrap{padding-bottom:85px}
 }
+
+/* V36 focused polish: smaller mental load, same 66 workflows. */
+:root{--radius:16px;--shadow:0 10px 30px rgba(17,43,83,.045);--muted:#566a84}
+body{letter-spacing:-.005em}
+body[data-theme="dark"]{--muted:#b2c2d9}
+button,a,input,select{touch-action:manipulation}
+.topbar{box-shadow:none}
+.header-row{gap:12px}
+.desktop-nav{background:#152842;border-color:#293f61}
+.desktop-nav button{transition:background-color .15s ease,color .15s ease}
+.desktop-nav button[aria-current="page"]{background:#345174;color:#fff}
+.page-area{box-shadow:var(--shadow);border-radius:20px;padding:20px}
+.headline-zone{min-height:166px;padding:16px 0 15px}
+.headline-copy h1{font-size:clamp(28px,3vw,40px);margin:8px 0 6px}
+.headline-copy p{max-width:58ch;line-height:1.45}
+.hero-visual{height:150px}
+.holo-outer{transform:scale(.86) rotate(-9deg)}
+.page-head{margin-bottom:14px}
+.page-head h2{margin:3px 0;font-size:clamp(20px,2vw,25px)}
+.start-layout{gap:12px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.card{border-radius:15px;padding:17px}
+.main-panel,.result-panel{background:var(--card)}
+.type-grid{margin-top:10px;gap:8px}
+.type-card{min-height:72px;padding:10px 12px}
+.panel-title.second{margin-top:13px}
+.apps-grid{gap:7px;margin-top:10px}
+.app-card{min-height:65px;padding:7px 4px}
+.setup-footer{margin-top:10px}
+.masked-wrap{min-height:106px}
+.masked-preview{height:72px}
+.masked-overlay{inset:38px 5px 0}
+.next-steps{margin-top:12px}
+.btn{min-height:44px}
+.prompt-actions .btn-primary{flex:1}
+.cap-card{transition:border-color .15s ease,background-color .15s ease}
+.cap-card[aria-pressed="true"]{outline:2px solid #286bea;outline-offset:-2px}
+.cap-detail{scroll-margin-top:82px}
+.quick-switch{margin-top:12px}
+.footer-row{align-items:center;flex-wrap:wrap}
+.legal-links{display:inline-flex;gap:12px;align-items:center}
+.legal-links a,.footer-row>a{color:inherit;text-decoration:none}
+.legal-links a:hover,.footer-row>a:hover{text-decoration:underline}
+body[data-theme="dark"] .main-panel,body[data-theme="dark"] .result-panel{background:var(--card)}
+@media(max-width:900px) and (min-width:721px){.headline-zone{min-height:140px}.hero-visual{height:130px}.start-layout{gap:10px}.card{padding:14px}}
+@media(max-width:720px){
+ .header-row{gap:8px}
+ .headline-zone{min-height:111px;padding:12px 0}
+ .hero-visual{height:77px;align-self:center}
+ .headline-copy h1{font-size:clamp(24px,6vw,30px);line-height:1.08;margin:4px 0}
+ .hero-tags{margin-top:7px}
+ .page-area{border-radius:16px;padding:13px}
+ .page-head{margin-bottom:11px}
+ .page-head p{line-height:1.4}
+ .card{padding:13px}
+ .type-card{min-height:69px;padding:10px}
+ .app-card{min-height:60px}
+ .masked-wrap{min-height:98px}
+ .masked-preview{height:65px}
+ .masked-overlay{inset:37px 4px 0}
+ .prompt-actions .btn{min-height:44px}
+ .cap-card{min-height:94px}
+ .cap-detail{scroll-margin-top:70px}
+ .mobile-bottom button{min-height:47px}
+ .quick-switch{margin-top:10px}
+ .start-layout{grid-template-columns:minmax(0,1fr)}
+ .main-panel,.result-panel{width:100%}
+ .apps-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:390px){.headline-copy p{max-width:270px}.hero-visual{height:70px}.headline-copy h1{font-size:25px}.page-area{padding:11px}.page-head p,.headline-copy p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}

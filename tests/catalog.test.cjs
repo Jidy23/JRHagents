@@ -21,7 +21,7 @@ test('all 66 have real references and expected outputs',()=>{
 test('UI has only four primary tabs and local lightweight scripts',()=>{
  assert.equal((html.match(/data-screen=/g)||[]).length,4);
  assert.ok(html.includes('class="mobile-bottom"'));
- for(const n of ['catalog.js','universal.js','app.js'])assert.ok(html.includes(`assets/${n}?v=33`));
+ for(const n of ['catalog.js','universal.js','app.js'])assert.match(html, new RegExp(`assets/${n}\\?v=\\d+`));
  assert.ok(!html.includes('three.min.js'));assert.ok(!html.includes('https://cdn.'));
 });
 test('masked preview is not claimed to be secret',()=>{
