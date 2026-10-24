@@ -31,9 +31,13 @@ Interpret ordinary language; no required slash commands. Choose *one primary out
 
 If the host cannot open supplementary files, follow this file alone and state the limitation. The 66-item capability map is [CAPABILITIES.md](references/CAPABILITIES.md); it does **not** install those other tools.
 
+For academic research, thesis methods, or econometrics, also read [ACADEMIC.md](references/ACADEMIC.md) when relevant. The machine-readable [workflow index](workflow-index.json) maps each of the 66 workflows to its reference and optional host capabilities; these are hints, never authorization or a claim that tools exist.
+
 ## 2. Choose one of 66 practical workflows
 
 Read [CAPABILITIES.md](references/CAPABILITIES.md) only when needed. Match the requested result to one workflow and its reference. Deliver the specified artifact (plan, table, draft, test, analysis), not a list of promises. For sensitive health, finance and security topics apply appropriate boundaries and uncertainty. Language follows the user.
+
+If a task spans multiple capabilities, choose the one that owns the final deliverable and consult a second reference only for a concrete dependency. Treat risk as a property of the actual request, never as permission inferred from a catalog label.
 
 ## 3. Quick capability check (silent unless material)
 

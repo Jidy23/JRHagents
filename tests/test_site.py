@@ -25,9 +25,15 @@ class SiteV33Tests(unittest.TestCase):
                 self.assertGreaterEqual(len(x[k]),7,(x['id'],k))
     def test_generated_catalog_matches_json(self):
         script=(ROOT/'docs/assets/catalog.js').read_text(encoding='utf-8')
-        self.assertIn('return '+json.dumps(DATA,ensure_ascii=False,separators=(',',':'))+';',script)
+        indexed=json.loads((ROOT/'skills/jrhagents/workflow-index.json').read_text(encoding='utf-8'))['workflows']
+        self.assertIn('return '+json.dumps(indexed,ensure_ascii=False,separators=(',',':'))+';',script)
+        for source,entry in zip(DATA,indexed):
+            for field,value in source.items():self.assertEqual(entry[field],value)
         md=(ROOT/'skills/jrhagents/references/CAPABILITIES.md').read_text(encoding='utf-8')
         self.assertEqual(len(re.findall(r'^\| \d\d \|',md,re.M)),66)
+    def test_local_assets_exist(self):
+        for relative in re.findall(r'(?:href|src)="(assets/[^"?]+)',HTML):
+            self.assertTrue((ROOT/'docs'/relative).is_file(),relative)
     def test_only_single_skill(self):
         self.assertEqual([p.relative_to(ROOT).as_posix() for p in ROOT.rglob('SKILL.md')],['skills/jrhagents/SKILL.md'])
         self.assertIn('66-item capability map',SKILL)

@@ -11,6 +11,8 @@ JRHagents is an open-source **Agent Skill**, not an AI model, SaaS dashboard, AP
 
 **[Buka panduan interaktif JRHagents](https://jidy23.github.io/JRHagents/#mulai)** — pilih ChatGPT, Claude, Gemini, atau AI coding. Panduan otomatis menunjukkan cara yang relevan tanpa memaksakan Terminal.
 
+Di halaman Mulai, pilih satu dari lima contoh tugas atau isi tujuan dan batasan sendiri. Teks ini hanya digunakan untuk instruksi yang disalin di browser dan tidak disimpan oleh situs.
+
 ### A. ChatGPT / Claude web / Gemini web — tanpa Terminal dan tanpa API
 
 1. Di website, pilih **Chatbot biasa** dan nama aplikasinya.
@@ -51,6 +53,8 @@ No slash commands to memorize; the host recognizes intent if it loads the skill.
 
 **66 capabilities** are coordinated workflows and quality practices—not 66 separate third-party products. See [the capability map](skills/jrhagents/references/CAPABILITIES.md). The original 10 open-source concepts are acknowledged as **inspiration**, not bundled dependencies. No API key is needed to read the skill.
 
+The [workflow index](skills/jrhagents/workflow-index.json) exposes the 66 entries with stable IDs, references and optional host capabilities. Chat is the minimum; optional tools only help when the chosen AI actually provides them. For thesis and quantitative research, the [academic playbook](skills/jrhagents/references/ACADEMIC.md) covers theory, identification, diagnostics and interpretation.
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
@@ -84,6 +88,8 @@ tests/                     # portable offline quality checks
 python -m unittest discover -s tests -v
 python skills/jrhagents/scripts/project_scan.py --path .
 ```
+
+To build an offline portable Skill archive, run `python tools/package_release.py`. The archive is reproducible and contains only the Skill folder. See [release process](docs/RELEASE_PROCESS.md).
 
 The scanner is an **optional bounded heuristic**, not a security certification. It runs read-only. Tests have no third-party dependencies.
 

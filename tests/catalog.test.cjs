@@ -16,7 +16,12 @@ test('11 categories have six workflows each',()=>{
 });
 test('all 66 have real references and expected outputs',()=>{
  for(const c of caps){assert.ok(fs.existsSync(path.join(root,'skills/jrhagents/references',c.reference)),c.title);
- assert.ok(c.deliverable.length>=7);assert.ok(c.descriptionEn.length>=10);}
+ assert.ok(c.deliverable.length>=7);assert.ok(c.descriptionEn.length>=10);
+ assert.equal(c.minimum_host,'chat');assert.ok(Array.isArray(c.optional_host));}
+});
+test('website discloses optional host tools for selected workflow',()=>{
+ assert.ok(html.includes('id="detailAccess"'));
+ assert.ok(script.includes("v.optional_host.map"));
 });
 test('UI has only four primary tabs and local lightweight scripts',()=>{
  assert.equal((html.match(/data-screen=/g)||[]).length,4);
@@ -33,4 +38,13 @@ test('copy for non-shell platforms is a full prompt and coding has distinct comm
  assert.ok(universal.includes('You are JRHagents'));
  assert.ok(script.includes("state.type==='coding'?install"));
  assert.ok(script.includes('copy(taskText())'));
+});
+test('custom task stays local and does not silently select the first workflow',()=>{
+ assert.ok(html.includes('id="taskGoal"')&&html.includes('id="taskConstraints"'));
+ assert.ok(script.includes("restorePlatform();renderApps();translate();"));
+ assert.ok(script.includes("$('#taskGoal').value.trim()"));
+ assert.ok(script.includes("$('#taskConstraints').value.trim()"));
+ assert.ok(!script.includes('state.capability=capabilities[0];renderApps()'));
+ assert.ok(html.includes('id="taskTemplates"'));
+ assert.ok(script.includes("['Riset','Research'")&&script.includes("['Keputusan','Decision'"));
 });

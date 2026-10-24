@@ -44,6 +44,20 @@ class SkillFormatTests(unittest.TestCase):
         s=(REFS/'CAPABILITIES.md').read_text(encoding='utf-8')
         nums=re.findall(r'^\| (\d\d) \|',s,re.M)
         self.assertEqual(nums,[f'{i:02d}' for i in range(1,67)])
+    def test_workflow_index_matches_catalog_and_references(self):
+        source=json.loads((ROOT/'data/capabilities.json').read_text(encoding='utf-8'))
+        index=json.loads((SKILL.parent/'workflow-index.json').read_text(encoding='utf-8'))
+        self.assertEqual(index['schema_version'],1)
+        self.assertEqual(len(index['workflows']),66)
+        for original,workflow in zip(source,index['workflows']):
+            for field,value in original.items():self.assertEqual(workflow[field],value)
+            self.assertEqual(workflow['minimum_host'],'chat')
+            self.assertIsInstance(workflow['optional_host'],list)
+            self.assertTrue((REFS/workflow['reference']).is_file())
+    def test_academic_guidance_covers_inference_and_real_economy(self):
+        text=(REFS/'ACADEMIC.md').read_text(encoding='utf-8')
+        for term in ('heteroskedasticity','causal','economic behavior','NOT RUN'):
+            self.assertIn(term,text)
     def test_manual_prompt(self):
         s=(ROOT/'UNIVERSAL_PROMPT.md').read_text(encoding='utf-8')
         self.assertIn('manual fallback',s)
