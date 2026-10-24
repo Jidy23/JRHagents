@@ -1,58 +1,40 @@
-# JRHagents — public plugin submission preparation
+# JRHagents — public plugin submission
 
-Status: **preparation in progress; not submitted for review or public**.
-Updated: 2026-10-24.
+Updated: 2026-10-24. **Build complete; publication NOT complete.**
 
-## Verified source and scope
+## What exists
 
-- Existing personal plugin: `jrh-agents`, version `1.1.2`, scope `USER`, discoverability `PRIVATE`.
-- Source website: `https://jidy23.github.io/JRHagents/`.
-- Package type: skills-only. It provides reusable research, writing, software, design, data and review workflows.
-- It **does not** provide an AI model, an MCP server, credentials, social media connections, background agents, or additional platform tool access.
-- Keep the existing personal plugin intact. Prepare a separate public submission ZIP from its exact release sources, not a copy of the website.
+- **Public submission candidate:** `jrh-agents` version `1.2.0`. Source: this repository's current canonical `skills/jrhagents/` with 66 workflows.
+- **Personal Plugin Creator release:** `jrh-agents` version `1.1.2`, `USER` scope, `PRIVATE`. This private version is not modified by the packaging workflow.
+- Builder: `python tools/build_plugin_submission.py --verify`.
+- Output: `dist/JRHagents-public-submission-v1.2.0.zip`.
+- CI: [Build public plugin submission ZIP](https://github.com/Jidy23/JRHagents/actions/workflows/public-plugin.yml). Download the workflow's named artifact. GitHub wraps it in an outer ZIP; **extract it once** to get the actual uploadable `JRHagents-public-submission-v1.2.0.zip`.
+- The standalone ZIP contains `plugin.json`, `skills/jrhagents/` including the 66-entry workflow index, `LICENSE`, and a 512x512 PNG icon based on the site's blue/star favicon.
+- This is a skills-only package (no MCP server, apps, secrets, hook or OAuth). A plugin does not grant an AI extra tool permissions by installing this skill.
 
-## Submission listing URLs
+## Public listing (all four URLs)
 
-Set these in `plugin.json` at `extensions.com.openai.interface`:
-
-| Field | URL |
+| Field | Destination |
 | --- | --- |
-| `websiteURL` | `https://jidy23.github.io/JRHagents/` |
-| `supportURL` | `https://jidy23.github.io/JRHagents/support.html` |
-| `privacyPolicyURL` | `https://jidy23.github.io/JRHagents/privacy.html` |
-| `termsOfServiceURL` | `https://jidy23.github.io/JRHagents/terms.html` |
+| Website | https://jidy23.github.io/JRHagents/ |
+| Support | https://jidy23.github.io/JRHagents/support.html |
+| Privacy | https://jidy23.github.io/JRHagents/privacy.html |
+| Terms | https://jidy23.github.io/JRHagents/terms.html |
 
-Files are included in `docs/`, but links are **not publicly live until this branch is merged and GitHub Pages deploys**. Verify all four HTTPS destinations and actual page content from an unauthenticated browser before submitting; a successful build alone is not sufficient.
+The GitHub CI packaging workflow verifies those pages over HTTPS and checks for JRHagents content. The public listing uses **Productivity**, display name **JRH agents**, and subtitle **Clarity for complex work**.
 
-## Suggested listing
+## Publisher-only steps remaining
 
-- Display name: **JRH agents**
-- Subtitle: **Clarity for complex work**
-- Category: **Productivity**
-- Developer display name: select the **verified individual or business identity** in the actual submission portal. Do not treat the package's `author.name` as verification.
-- Long description: preserve the truthful wording from the current plugin release.
-- Brand colors/icons: preserve the original PNG assets and manifest references.
-- Release notes: **Prepared JRHagents skills-only package for public review with support, privacy and terms links. No new model, MCP connection, or account permission is added.**
+1. Open the ChatGPT **Plugins** submission portal and choose **Upload new or existing plugin** → **Skills only**. Use the extracted uploadable ZIP, **not** the GitHub artifact's outer wrapper.
+2. Select the intended organization and **verified individual/business developer identity**. The dashboard may override `developerName`; the source project's author name is not developer verification.
+3. Review the imported description, icon, URLs, skill inventory, release notes, and any findings under **Metadata & Skills**. Resolve errors by fixing source and rebuilding rather than altering unrelated private versions.
+4. Confirm region/country availability. Select only countries genuinely supported by the publisher, or explicitly choose all supported countries if desired.
+5. Confirm policy statements and whether the optional donation QRIS on the separate project website affects the portal's commerce declarations; it does not unlock plugin features. Do not claim an unverified payment flow.
+6. The developer must personally confirm the legal/policy attestations and click **Submit for review**.
+7. When review reports **Approved**, select the approved version and click **Publish plugin**. Verify the actual public listing.
 
-### Example user prompts for package review
+Skills-only plugins do not require MCP test cases, demo video, or reviewer app credentials. Review prompts are included in `plugin.json`.
 
-Use natural prompts reflecting actual workflow capabilities:
+Sources: [Official submission steps](https://developers.openai.com/plugins/deploy/submission), [errors](https://developers.openai.com/plugins/deploy/submission-errors), and [plugin guidelines](https://developers.openai.com/plugins/plugin-guidelines).
 
-1. “JRHagents, review the UX of this landing page and give me an actionable prioritized checklist.”
-2. “JRHagents, structure a quantitative research plan and separate assumptions from verified evidence.”
-3. “JRHagents, inspect the uploaded code and point out what has been tested versus what still needs validation.”
-4. “JRHagents, help compare business options using only the figures I supply, and label missing data.”
-
-Add these to `extensions.com.openai.review.prompts` in the submission manifest. Skills-only packages do not require app/MCP positive-negative test cases, app-demo video, or reviewer app credentials.
-
-## Remaining steps requiring publisher action
-
-1. Verify the intended publisher's individual/business identity in the portal.
-2. Confirm country/region targeting (or explicitly choose all currently supported regions).
-3. Review whether optional QRIS appreciation shown on the **website** requires a particular commerce declaration in the current portal. It does not unlock plugin functions. Do not guess the portal answer.
-4. Approve legal/policy attestations and confirm the submitted privacy and terms statements are accurate.
-5. Export a complete public ZIP of the existing source with original asset files, updated listing URLs, release notes and prompts. Validate the ZIP itself, including both manifest files and file references.
-6. Upload the ZIP as a separate submission draft, inspect imported metadata, complete applicable scans/review checks, then submit for review.
-7. Only after approval: publish the approved release and verify its listing/discoverability.
-
-A GitHub pull request or a personal `PRIVATE` release **does not** automatically publish the plugin in ChatGPT.
+**Status distinction:** GitHub Pages deployed ≠ ZIP built ≠ draft uploaded ≠ submitted ≠ approved ≠ published.
