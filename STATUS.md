@@ -20,3 +20,5 @@ Baseline: 38 Python tests passed before changes. Updated local checks: 40 Python
 Continuation: the start screen now accepts a local-only goal and constraints, offers five task examples, and starts without an implicit workflow selection. A deterministic offline Skill archive builder and release checklist were added. On this continuation, 42 Python tests, 8 JavaScript tests, catalog consistency, app.js syntax, and diff whitespace checks passed locally. Check CI on the updated PR head before merging.
 
 Production smoke after merge `0ef6d84e86e00d6377b6803458dfde14ee51a902` revealed that “skripsi” returned no catalog results and the empty panel showed an unrelated capability. A follow-up fix adds relevant search aliases and hides the detail panel for empty results; verify on Pages after deployment.
+
+After merge `9481134a81cd6f6f72fc69d71eefbc44cae3ba36`, Pages and main CI passed. Live browser confirmed empty state and clipboard behavior. Search aliases per reference proved too broad (finance results for “skripsi”), so the next patch narrows thesis synonyms to workflows 39–41.

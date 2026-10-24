@@ -49,10 +49,10 @@ test('custom task stays local and does not silently select the first workflow',(
  assert.ok(script.includes("['Riset','Research'")&&script.includes("['Keputusan','Decision'"));
 });
 test('catalog handles thesis queries and hides unrelated detail on empty results',()=>{
- assert.ok(script.includes("'RESEARCH.md':'skripsi"));
- assert.ok(script.includes("'DATA.md':'skripsi"));
+ assert.ok(script.includes("39:'skripsi")&&script.includes("40:'skripsi")&&script.includes("41:'skripsi"));
+ assert.ok(script.includes('searchHints[x.id]'));
  assert.ok(script.includes("$('#capDetail').hidden=!matches.length"));
  assert.ok(script.includes("renderCatalog();renderDetail()"));
- const hits=caps.filter(c=>['RESEARCH.md','DATA.md'].includes(c.reference));
- assert.ok(hits.length>=6);
+ const hits=caps.filter(c=>[39,40,41].includes(c.id));
+ assert.ok(hits.every(c=>c.reference==='RESEARCH.md'));
 });
