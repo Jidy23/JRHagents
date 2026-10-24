@@ -18,3 +18,5 @@ Make the existing 66-workflow skill easier to route, inspect, and verify while k
 Baseline: 38 Python tests passed before changes. Updated local checks: 40 Python tests passed, 7 JavaScript tests passed, catalog generation check passed, and app.js syntax passed. GitHub CI is a separate gate to check on the PR head SHA. Browser visual inspection and live GitHub Pages smoke test remain separate release gates.
 
 Continuation: the start screen now accepts a local-only goal and constraints, offers five task examples, and starts without an implicit workflow selection. A deterministic offline Skill archive builder and release checklist were added. On this continuation, 42 Python tests, 8 JavaScript tests, catalog consistency, app.js syntax, and diff whitespace checks passed locally. Check CI on the updated PR head before merging.
+
+Production smoke after merge `0ef6d84e86e00d6377b6803458dfde14ee51a902` revealed that “skripsi” returned no catalog results and the empty panel showed an unrelated capability. A follow-up fix adds relevant search aliases and hides the detail panel for empty results; verify on Pages after deployment.
