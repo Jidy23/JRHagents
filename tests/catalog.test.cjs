@@ -39,3 +39,12 @@ test('copy for non-shell platforms is a full prompt and coding has distinct comm
  assert.ok(script.includes("state.type==='coding'?install"));
  assert.ok(script.includes('copy(taskText())'));
 });
+test('custom task stays local and does not silently select the first workflow',()=>{
+ assert.ok(html.includes('id="taskGoal"')&&html.includes('id="taskConstraints"'));
+ assert.ok(script.includes("restorePlatform();renderApps();translate();"));
+ assert.ok(script.includes("$('#taskGoal').value.trim()"));
+ assert.ok(script.includes("$('#taskConstraints').value.trim()"));
+ assert.ok(!script.includes('state.capability=capabilities[0];renderApps()'));
+ assert.ok(html.includes('id="taskTemplates"'));
+ assert.ok(script.includes("['Riset','Research'")&&script.includes("['Keputusan','Decision'"));
+});

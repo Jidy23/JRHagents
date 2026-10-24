@@ -106,3 +106,14 @@ body[data-theme="dark"] .main-panel,body[data-theme="dark"] .result-panel{backgr
 }
 @media(max-width:390px){.headline-copy p{max-width:270px}.hero-visual{height:70px}.headline-copy h1{font-size:25px}.page-area{padding:11px}.page-head p,.headline-copy p{font-size:12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* Task customization stays local and follows the existing card spacing. */
+.task-fields{display:grid;gap:.45rem;margin:1rem 0 1.2rem}
+.task-fields label{font-weight:700;font-size:.9rem}
+.task-fields label small{font-weight:400;opacity:.7}
+.task-fields textarea{box-sizing:border-box;width:100%;min-height:3.5rem;resize:vertical;border:1px solid var(--line,#a8b5c6);border-radius:.75rem;padding:.75rem;font:inherit;color:inherit;background:transparent}
+.task-fields textarea:focus-visible{outline:2px solid #246add;outline-offset:2px}
+.task-fields>small{opacity:.75;line-height:1.45}
+.task-templates{display:flex;flex-wrap:wrap;gap:.45rem}
+.task-template{border:1px solid currentColor;border-radius:999px;background:transparent;color:inherit;padding:.45rem .75rem;min-height:2.75rem;font:inherit;cursor:pointer}
+.task-template:hover{background:rgba(36,106,221,.12)}
+.task-template:focus-visible{outline:2px solid #246add;outline-offset:2px}

@@ -6,11 +6,11 @@
 <meta name="robots" content="index,follow"><meta property="og:title" content="JRHagents — One skill. 66 useful workflows.">
 <title>JRHagents — Satu skill, 66 kemampuan praktis</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-<link rel="stylesheet" href="assets/style.css?v=36">
+<link rel="stylesheet" href="assets/style.css?v=38">
 <link rel="stylesheet" href="assets/support.css?v=35">
 <script defer src="assets/catalog.js?v=37"></script>
 <script defer src="assets/universal.js?v=33"></script>
-<script defer src="assets/app.js?v=37"></script>
+<script defer src="assets/app.js?v=39"></script>
 <script defer src="assets/support.js?v=35"></script>
 </head>
 <body data-theme="light">
@@ -44,6 +44,7 @@
           <button id="backToChoice" class="mobile-back" type="button"><span aria-hidden="true">←</span> <span data-i18n="backChoose">Ganti aplikasi AI</span></button>
           <div class="panel-title"><span class="num">03</span><strong data-i18n="readyTitle">Instruksi siap digunakan</strong><span class="tiny-chip" data-i18n="readyChip">TINGGAL SALIN</span></div>
           <p id="resultDescription" class="result-intro"></p>
+          <div class="task-fields"><span id="templateLabel">Contoh tugas cepat</span><div id="taskTemplates" class="task-templates" role="group" aria-labelledby="templateLabel"></div><label for="taskGoal">Tujuan tugas <small>(opsional)</small></label><textarea id="taskGoal" rows="2" maxlength="1000" placeholder="Contoh: audit UI halaman utama dan perbaiki navigasi mobile"></textarea><label for="taskConstraints">Batasan penting <small>(opsional)</small></label><textarea id="taskConstraints" rows="2" maxlength="600" placeholder="Contoh: jangan ubah API, pertahankan tampilan desktop"></textarea><small id="taskPrivacy">Ditambahkan hanya ke teks yang kamu salin; tidak dikirim atau disimpan oleh halaman ini.</small></div>
           <div class="masked-wrap"><div class="masked-head"><span id="maskLabel" data-i18n="maskLabel">PRATINJAU DISAMARKAN</span><span class="mask-dot"></span></div><div id="maskedPreview" class="masked-preview" aria-label="Pratinjau instruksi disamarkan" aria-hidden="true"><div id="previewContent" class="masked-text"></div></div><div class="masked-overlay"><span>✦</span><strong data-i18n="maskMessage">Instruksi lengkap siap disalin</strong><small data-i18n="maskExplanation">Pratinjau diburamkan demi tampilan rapi, bukan dienkripsi.</small></div></div>
           <div class="prompt-actions"><button id="copyMain" type="button" class="btn btn-primary"><span data-i18n="copyComplete">Salin instruksi lengkap</span><span>↗</span></button><button id="showPrompt" type="button" class="btn btn-neutral"><span data-i18n="peek">Lihat</span></button><button id="downloadPrompt" type="button" class="btn btn-icon" aria-label="Unduh instruksi Markdown" title="Unduh .md">↓</button></div>
           <div id="copyFallback" class="copy-fallback" hidden><label for="fallbackText" data-i18n="fallbackLabel">Salin manual teks lengkap di bawah ini:</label><textarea id="fallbackText" rows="5" readonly></textarea><button id="selectFallback" class="text-link" type="button" data-i18n="selectAll">Pilih seluruh teks</button></div>

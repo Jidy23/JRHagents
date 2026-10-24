@@ -11,6 +11,8 @@ JRHagents is an open-source **Agent Skill**, not an AI model, SaaS dashboard, AP
 
 **[Buka panduan interaktif JRHagents](https://jidy23.github.io/JRHagents/#mulai)** — pilih ChatGPT, Claude, Gemini, atau AI coding. Panduan otomatis menunjukkan cara yang relevan tanpa memaksakan Terminal.
 
+Di halaman Mulai, pilih satu dari lima contoh tugas atau isi tujuan dan batasan sendiri. Teks ini hanya digunakan untuk instruksi yang disalin di browser dan tidak disimpan oleh situs.
+
 ### A. ChatGPT / Claude web / Gemini web — tanpa Terminal dan tanpa API
 
 1. Di website, pilih **Chatbot biasa** dan nama aplikasinya.
@@ -86,6 +88,8 @@ tests/                     # portable offline quality checks
 python -m unittest discover -s tests -v
 python skills/jrhagents/scripts/project_scan.py --path .
 ```
+
+To build an offline portable Skill archive, run `python tools/package_release.py`. The archive is reproducible and contains only the Skill folder. See [release process](docs/RELEASE_PROCESS.md).
 
 The scanner is an **optional bounded heuristic**, not a security certification. It runs read-only. Tests have no third-party dependencies.
 
