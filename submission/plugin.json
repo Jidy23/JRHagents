@@ -1,0 +1,54 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jrh-agents",
+  "version": "1.2.0",
+  "description": "JRH agents is a focused, evidence-based workflow skill for research, writing, data, software, design, business, and practical decisions.",
+  "author": {
+    "name": "JRH agents"
+  },
+  "homepage": "https://jidy23.github.io/JRHagents/",
+  "repository": "https://github.com/Jidy23/JRHagents",
+  "license": "MIT",
+  "keywords": [
+    "jrhagents",
+    "agent-skill",
+    "research",
+    "engineering",
+    "design",
+    "productivity",
+    "workflows"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "JRH agents",
+        "shortDescription": "Clarity for complex work",
+        "longDescription": "JRH agents brings clarity and practical structure to complex work. It helps with research, writing, data analysis, engineering, UI/UX design, business decisions, and quality reviews.\n\nBuilt on the open-source JRHagents skill, it selects only the guidance relevant to your task, works within the tools and permissions available in the current environment, and distinguishes verified results from assumptions or untested steps.\n\nA lightweight skills-only plugin. It does not add models, API access, an MCP server, background automation, or permission to access accounts.",
+        "category": "Productivity",
+        "defaultPrompt": [
+          "JRHagents, bantu saya menyelesaikan tugas ini secara terstruktur, dengan hasil nyata dan verifikasi.",
+          "JRHagents, audit pekerjaan saya dan bedakan yang sudah terverifikasi dengan yang belum diuji.",
+          "JRHagents, buat rencana eksekusi yang sederhana dan bisa diuji."
+        ],
+        "logo": "./assets/jrh-icon.png",
+        "composerIcon": "./assets/jrh-icon.png",
+        "brandColor": "#2563EB",
+        "websiteURL": "https://jidy23.github.io/JRHagents/",
+        "supportURL": "https://jidy23.github.io/JRHagents/support.html",
+        "privacyPolicyURL": "https://jidy23.github.io/JRHagents/privacy.html",
+        "termsOfServiceURL": "https://jidy23.github.io/JRHagents/terms.html"
+      },
+      "review": {
+        "prompts": [
+          "JRHagents, rapikan tulisan ini supaya profesional tanpa mengubah maksudnya.",
+          "JRHagents, susun rencana riset kuantitatif dan bedakan asumsi dengan bukti.",
+          "JRHagents, audit kode yang saya lampirkan dan tandai bagian yang belum diuji.",
+          "JRHagents, bandingkan dua ide bisnis berdasarkan data yang saya berikan."
+        ]
+      },
+      "publication": {
+        "release_notes": "JRHagents public submission candidate: includes the latest verified open-source skills-only workflows, bilingual support and policy links, and review prompts. No new AI models, MCP connections, account permissions, or background automation are added."
+      }
+    }
+  }
+}
