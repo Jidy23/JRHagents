@@ -235,3 +235,10 @@ body[data-theme=dark] .type-card.selected,body[data-theme=dark] .app-card[aria-p
 
 /* The final desktop grid declaration must yield to the single-column mobile flow. */
 @media(max-width:720px){.start-layout{grid-template-columns:minmax(0,1fr)}.main-panel,.result-panel{width:100%}}
+.task-accordion{border-top:1px solid var(--border);margin-top:15px;padding-top:12px}
+.task-accordion summary{display:flex;align-items:center;justify-content:space-between;list-style:none;cursor:pointer;font-size:12px;font-weight:750;color:var(--blue);min-height:38px;padding:7px 10px;border:1px solid var(--border);border-radius:10px;background:var(--soft)}
+.task-accordion summary::-webkit-details-marker{display:none}
+.task-accordion summary span:last-child{font-size:18px;line-height:1;font-weight:400}
+.task-accordion[open] summary span:last-child{transform:rotate(45deg)}
+.task-accordion .task-fields{margin:0;padding:12px 0 2px;border:0}
+@media(max-width:720px){.task-accordion{margin-top:14px;padding-top:12px}.task-accordion summary{min-height:44px}.task-accordion .task-fields{margin:0;padding-top:12px}}
