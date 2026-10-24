@@ -51,6 +51,8 @@ No slash commands to memorize; the host recognizes intent if it loads the skill.
 
 **66 capabilities** are coordinated workflows and quality practices—not 66 separate third-party products. See [the capability map](skills/jrhagents/references/CAPABILITIES.md). The original 10 open-source concepts are acknowledged as **inspiration**, not bundled dependencies. No API key is needed to read the skill.
 
+The [workflow index](skills/jrhagents/workflow-index.json) exposes the 66 entries with stable IDs, references and optional host capabilities. Chat is the minimum; optional tools only help when the chosen AI actually provides them. For thesis and quantitative research, the [academic playbook](skills/jrhagents/references/ACADEMIC.md) covers theory, identification, diagnostics and interpretation.
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
