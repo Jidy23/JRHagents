@@ -1,0 +1,57 @@
+name: Build public plugin submission ZIP
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'submission/**'
+      - 'tools/build_plugin_submission.py'
+      - 'skills/jrhagents/**'
+      - 'docs/assets/favicon.svg'
+      - '.github/workflows/public-plugin.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'submission/**'
+      - 'tools/build_plugin_submission.py'
+      - 'skills/jrhagents/**'
+      - 'docs/assets/favicon.svg'
+      - '.github/workflows/public-plugin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package, scan and verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build deterministic ZIP and check archive contents
+        run: python tools/build_plugin_submission.py --verify
+      - name: Validate listing URLs and deployed page content
+        shell: bash
+        run: |
+          set -euo pipefail
+          for route in '' support.html privacy.html terms.html; do
+            url="https://jidy23.github.io/JRHagents/${route}"
+            echo "Checking ${url}"
+            file="$(mktemp)"
+            curl --fail --location --silent --show-error --retry 3 --max-time 25 "${url}" -o "${file}"
+            if ! grep -Eiq 'JRHagents|JRH agents' "${file}"; then
+              echo "::error::Expected JRHagents content missing at ${url}"
+              exit 1
+            fi
+            rm "${file}"
+          done
+      - name: Upload complete candidate ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: JRHagents-public-submission-v1.2.0
+          path: dist/JRHagents-public-submission-v1.2.0.zip
+          if-no-files-found: error
+          retention-days: 30
