@@ -45,6 +45,7 @@ test('custom task stays local and does not silently select the first workflow',(
  assert.ok(script.includes("$('#taskGoal').value.trim()"));
  assert.ok(script.includes("$('#taskConstraints').value.trim()"));
  assert.ok(!script.includes('state.capability=capabilities[0];renderApps()'));
+ assert.ok(script.includes('goal|| (c?'));
  assert.ok(html.includes('id="taskTemplates"'));
  assert.ok(script.includes("['Riset','Research'")&&script.includes("['Keputusan','Decision'"));
 });
