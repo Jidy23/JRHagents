@@ -30,6 +30,7 @@ try:
    if width<=720:
     assert page.locator('#choicePanel').evaluate('(el)=>el.getBoundingClientRect().width') >= width-80,('choice width',width)
     assert page.locator('#appsGrid').evaluate('(el)=>el.getBoundingClientRect().width') >= width-110,('apps width',width)
+   page.locator('#taskOptions summary').click()
    page.locator('#taskTemplates button').first.click()
    assert 'ringkasan riset' in page.locator('#taskGoal').input_value(),width
    page.locator('#taskConstraints').fill('Gunakan sumber primer')
