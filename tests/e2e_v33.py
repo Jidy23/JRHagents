@@ -19,8 +19,9 @@ try:
    page.on('pageerror',lambda e:errors.append(str(e)))
    page.set_content(html,wait_until='load')
    page.add_style_tag(content=(ROOT/'docs/assets/style.css').read_text(encoding='utf-8'))
+   page.add_style_tag(content=(ROOT/'docs/assets/support.css').read_text(encoding='utf-8'))
    page.evaluate('''() => {window.__copied = null; Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async(s)=>{window.__copied=s},readText:async()=>window.__copied}});try{Object.defineProperty(window,'isSecureContext',{configurable:true,value:true});}catch(e){} }''')
-   for name in ('catalog.js','universal.js','app.js'):page.add_script_tag(content=(ROOT/'docs/assets'/name).read_text(encoding='utf-8'))
+   for name in ('catalog.js','universal.js','app.js','support.js'):page.add_script_tag(content=(ROOT/'docs/assets'/name).read_text(encoding='utf-8'))
    assert page.locator('#screen-mulai').is_visible()
    assert page.locator('#typeChat').get_attribute('aria-pressed')=='true'
    assert page.locator('#previewContent').inner_text().startswith('You are JRHagents'),width
