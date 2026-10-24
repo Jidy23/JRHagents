@@ -34,6 +34,11 @@ class SiteV33Tests(unittest.TestCase):
     def test_local_assets_exist(self):
         for relative in re.findall(r'(?:href|src)="(assets/[^"?]+)',HTML):
             self.assertTrue((ROOT/'docs'/relative).is_file(),relative)
+    def test_task_builder_precedes_output_panel(self):
+        self.assertLess(HTML.index('id="taskGoal"'),HTML.index('id="promptBlock"'))
+        style=(ROOT/'docs/assets/style.css').read_text(encoding='utf-8')
+        self.assertIn('@media(max-width:720px)',style)
+        self.assertIn('@media(prefers-reduced-motion:reduce)',style)
     def test_only_single_skill(self):
         self.assertEqual([p.relative_to(ROOT).as_posix() for p in ROOT.rglob('SKILL.md')],['skills/jrhagents/SKILL.md'])
         self.assertIn('66-item capability map',SKILL)
