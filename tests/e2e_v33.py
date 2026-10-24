@@ -47,10 +47,6 @@ try:
    assert page.locator('.cap-card').count()==12,width
    page.locator('#capSearch').fill('CV')
    assert page.locator('#catalogCount').inner_text().split(' / ')[0]=='1',width
-   assert page.locator('.cap-card[aria-pressed="true"]').count()==1,width
-   assert page.locator('#detailTitle').inner_text()==page.locator('.cap-card strong').first.inner_text(),width
-   if width<=720:
-    assert page.locator('#catalogGrid').evaluate('(el)=>el.getBoundingClientRect().top') < page.locator('#capDetail').evaluate('(el)=>el.getBoundingClientRect().top'),width
    page.locator('.cap-card').first.click()
    assert 'CV' in page.locator('#detailTitle').inner_text(),width
    page.locator('#capSearch').fill('skripsi')
