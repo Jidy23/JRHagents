@@ -1,4 +1,4 @@
-"""Optional local browser smoke (requires playwright + Chromium)."""
+"""Offline browser smoke across desktop, tablet and mobile viewports."""
 import sys,re
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -9,8 +9,8 @@ html=re.sub(r'<link rel="stylesheet"[^>]+>','',html)
 html=re.sub(r'<script defer[^>]*></script>','',html)
 try:
  with sync_playwright() as pw:
-  browser=pw.chromium.launch(headless=True,executable_path='/usr/bin/chromium',args=['--no-sandbox','--disable-dev-shm-usage'])
-  for width in (320,390,768,1440):
+  browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
+  for width in (320,360,390,768,1024,1440):
    context=browser.new_context(viewport={'width':width,'height':820 if width>600 else 760},device_scale_factor=1,permissions=['clipboard-read','clipboard-write'])
    page=context.new_page()
    page.set_default_timeout(3500)
@@ -25,6 +25,10 @@ try:
    assert page.locator('#typeChat').get_attribute('aria-pressed')=='true'
    assert page.locator('#previewContent').inner_text().startswith('You are JRHagents'),width
    assert 'npx skills add' not in page.locator('#previewContent').inner_text(),width
+   assert page.locator('#choicePanel #taskGoal').count()==1,width
+   page.locator('#taskTemplates button').first.click()
+   assert 'ringkasan riset' in page.locator('#taskGoal').input_value(),width
+   page.locator('#taskConstraints').fill('Gunakan sumber primer')
    if width<=720:page.locator('#nextSetup').click()
    masked=page.locator('#previewContent').evaluate('(el)=>getComputedStyle(el).filter')
    assert masked.startswith('blur('),masked
@@ -36,6 +40,7 @@ try:
    page.wait_for_timeout(70)
    clip=page.evaluate('window.__copied ?? document.querySelector("#fallbackText").value')
    assert 'You are JRHagents' in clip and len(clip)>1500,width
+   assert 'ringkasan riset' in clip and 'Gunakan sumber primer' in clip,width
    page.locator('[data-tab="kemampuan"]:visible').first.click()
    assert page.locator('#catalogCount').inner_text()=='66 / 66',width
    assert page.locator('.cap-card').count()==12,width
@@ -43,6 +48,9 @@ try:
    assert page.locator('#catalogCount').inner_text().split(' / ')[0]=='1',width
    page.locator('.cap-card').first.click()
    assert 'CV' in page.locator('#detailTitle').inner_text(),width
+   page.locator('#capSearch').fill('skripsi')
+   assert page.locator('#catalogCount').inner_text()=='3 / 66',width
+   page.locator('#capSearch').fill('CV')
    page.locator('#useCapability').click()
    assert page.locator('#screen-mulai').is_visible(),width
    page.locator('#copyMain').click()
@@ -67,6 +75,7 @@ try:
    assert page.locator('details').count()==7,width
    page.locator('#themeToggle').click()
    assert page.locator('body').get_attribute('data-theme')=='dark',width
+   assert page.locator('#taskGoal').evaluate('(el)=>getComputedStyle(el,"::placeholder").color')=='rgb(179, 194, 213)',width
    page.locator('#langToggle').click()
    page.locator('#themeToggle').click()
    page.locator('[data-tab="mulai"]:visible').first.click()
