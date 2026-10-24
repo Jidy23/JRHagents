@@ -27,6 +27,9 @@ try:
    assert page.locator('#previewContent').inner_text().startswith('You are JRHagents'),width
    assert 'npx skills add' not in page.locator('#previewContent').inner_text(),width
    assert page.locator('#choicePanel #taskGoal').count()==1,width
+   if width<=720:
+    assert page.locator('#choicePanel').evaluate('(el)=>el.getBoundingClientRect().width') >= width-80,('choice width',width)
+    assert page.locator('#appsGrid').evaluate('(el)=>el.getBoundingClientRect().width') >= width-110,('apps width',width)
    page.locator('#taskTemplates button').first.click()
    assert 'ringkasan riset' in page.locator('#taskGoal').input_value(),width
    page.locator('#taskConstraints').fill('Gunakan sumber primer')

@@ -54,3 +54,10 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Verify responsive interactions in Chromium
         run: python tests/e2e_v33.py
+      - name: Capture visual audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-views
+          path: tests/_screenshots/*.png
+          if-no-files-found: ignore
