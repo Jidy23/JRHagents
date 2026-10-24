@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 .vscode/
 dist/
+tests/_screenshots/
 .env
 .env.*
 !.env.example

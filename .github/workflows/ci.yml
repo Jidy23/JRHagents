@@ -41,3 +41,16 @@ jobs:
           node --check docs/assets/universal.js
       - name: Validate catalog and site contracts
         run: node --test tests/catalog.test.cjs
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install browser test runtime
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Verify responsive interactions in Chromium
+        run: python tests/e2e_v33.py
