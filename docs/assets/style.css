@@ -170,6 +170,7 @@ body[data-theme=dark] .type-card.selected,body[data-theme=dark] .app-card[aria-p
 .footer{padding-top:11px}
 @media(hover:hover) and (pointer:fine){.type-card:hover,.app-card:hover,.cap-card:hover{transform:perspective(700px) rotateX(1.2deg) translateY(-2px);box-shadow:0 9px 16px rgba(24,56,99,.09),inset 0 1px #fff}}
 @media(max-width:900px){.result-panel{position:static}.headline-zone{grid-template-columns:minmax(0,1fr) 170px}}
+@media(min-width:721px) and (max-width:900px){.headline-zone{overflow:hidden}}
 @media(max-width:720px){.shell{width:calc(100% - 26px)}.header-row{height:58px}.headline-zone{grid-template-columns:minmax(0,1fr) 74px;min-height:108px;padding:10px 0}.hero-visual{height:77px;width:74px}.page-area{padding:12px}.card{padding:13px}.task-fields{margin-top:13px}.task-template{min-height:38px}.task-fields textarea{min-height:58px}.mobile-next{margin-top:13px}.cap-card{min-height:86px}.cap-detail{background:var(--soft)}}
 @media(max-width:390px){.headline-zone{grid-template-columns:minmax(0,1fr) 60px}.hero-visual{width:60px}.task-templates{gap:5px}.task-template{font-size:10px;padding:5px 8px}.hero-tags span{font-size:9px}}
 /* Keep the compact hero glyph inside the mobile grid track. */
