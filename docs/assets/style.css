@@ -180,3 +180,5 @@ body[data-theme=dark] .type-card.selected,body[data-theme=dark] .app-card[aria-p
 body[data-theme=dark] .task-fields textarea::placeholder{color:#b3c2d5;opacity:.9}
 body[data-theme=dark] .eyebrow,body[data-theme=dark] .section-kicker,body[data-theme=dark] .mini-label,body[data-theme=dark] .detail-label{color:#a3c6ff}
 body[data-theme=dark] .headline-copy h1 em{background:linear-gradient(100deg,#b5ceff,#7ba9ef);-webkit-background-clip:text;background-clip:text}
+/* Search results lead on small screens; a selected card reveals its detail below. */
+@media(max-width:720px){.cap-detail{order:0;scroll-margin-top:70px}.catalog-layout>div{min-width:0}}
