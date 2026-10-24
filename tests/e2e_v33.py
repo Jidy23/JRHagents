@@ -84,6 +84,8 @@ try:
    page.evaluate('window.scrollTo(0,0)')
    if width in (390,1440):page.screenshot(path=str(out/f'{width}.png'),full_page=True,animations='disabled',timeout=7000)
    overflow=page.evaluate('document.documentElement.scrollWidth-document.documentElement.clientWidth')
+   if overflow>1:
+    print('OVERFLOW ELEMENTS',page.evaluate('''() => [...document.querySelectorAll('body *')].filter(el => {const r=el.getBoundingClientRect();return r.width && (r.right>innerWidth+1 || r.left< -1)}).slice(0,20).map(el=>({tag:el.tagName,id:el.id,cls:el.className,rect:[Math.round(el.getBoundingClientRect().left),Math.round(el.getBoundingClientRect().right)]}))'''),flush=True)
    assert overflow<=1,(width,overflow)
    assert not errors,(width,errors)
    print('PASS viewport',width,'px, interactions, copy, grid, FAQ, language, theme, no overflow')
