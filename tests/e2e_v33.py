@@ -23,6 +23,10 @@ try:
    page.evaluate('''() => {window.__copied = null; Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async(s)=>{window.__copied=s},readText:async()=>window.__copied}});try{Object.defineProperty(window,'isSecureContext',{configurable:true,value:true});}catch(e){} }''')
    for name in ('catalog.js','universal.js','app.js','support.js'):page.add_script_tag(content=(ROOT/'docs/assets'/name).read_text(encoding='utf-8'))
    assert page.locator('#screen-mulai').is_visible()
+   assert not page.locator('#taskOptions').evaluate('(el)=>el.open'),width
+   if width==390:
+    assert page.locator('#nextSetup').evaluate('(el)=>el.getBoundingClientRect().bottom') < page.locator('.mobile-bottom').evaluate('(el)=>el.getBoundingClientRect().top'),width
+   if width in (390,1440):page.screenshot(path=str(out/f'initial-{width}.png'),full_page=True,animations='disabled',timeout=7000)
    assert page.locator('#typeChat').get_attribute('aria-pressed')=='true'
    assert page.locator('#previewContent').inner_text().startswith('You are JRHagents'),width
    assert 'npx skills add' not in page.locator('#previewContent').inner_text(),width
@@ -30,6 +34,7 @@ try:
    if width<=720:
     assert page.locator('#choicePanel').evaluate('(el)=>el.getBoundingClientRect().width') >= width-80,('choice width',width)
     assert page.locator('#appsGrid').evaluate('(el)=>el.getBoundingClientRect().width') >= width-110,('apps width',width)
+   page.locator('#taskOptions summary').click()
    page.locator('#taskTemplates button').first.click()
    assert 'ringkasan riset' in page.locator('#taskGoal').input_value(),width
    page.locator('#taskConstraints').fill('Gunakan sumber primer')
@@ -76,7 +81,7 @@ try:
    page.locator('[data-tab="panduan"]:visible').first.click()
    assert page.locator('.guide-card').count()==4,width
    page.locator('[data-tab="bantuan"]:visible').first.click()
-   assert page.locator('details').count()==7,width
+   assert page.locator('#faqList details').count()==7,width
    page.locator('#themeToggle').click()
    assert page.locator('body').get_attribute('data-theme')=='dark',width
    assert page.locator('#taskGoal').evaluate('(el)=>getComputedStyle(el,"::placeholder").color')=='rgb(179, 194, 213)',width
