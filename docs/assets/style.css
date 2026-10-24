@@ -117,3 +117,4 @@ body[data-theme="dark"] .main-panel,body[data-theme="dark"] .result-panel{backgr
 .task-template{border:1px solid currentColor;border-radius:999px;background:transparent;color:inherit;padding:.45rem .75rem;min-height:2.75rem;font:inherit;cursor:pointer}
 .task-template:hover{background:rgba(36,106,221,.12)}
 .task-template:focus-visible{outline:2px solid #246add;outline-offset:2px}
+#capDetail[hidden]{display:none}
