@@ -24,6 +24,8 @@ try:
    for name in ('catalog.js','universal.js','app.js','support.js'):page.add_script_tag(content=(ROOT/'docs/assets'/name).read_text(encoding='utf-8'))
    assert page.locator('#screen-mulai').is_visible()
    assert not page.locator('#taskOptions').evaluate('(el)=>el.open'),width
+   if width==390:
+    assert page.locator('#nextSetup').evaluate('(el)=>el.getBoundingClientRect().bottom') < page.locator('.mobile-bottom').evaluate('(el)=>el.getBoundingClientRect().top'),width
    if width in (390,1440):page.screenshot(path=str(out/f'initial-{width}.png'),full_page=True,animations='disabled',timeout=7000)
    assert page.locator('#typeChat').get_attribute('aria-pressed')=='true'
    assert page.locator('#previewContent').inner_text().startswith('You are JRHagents'),width
