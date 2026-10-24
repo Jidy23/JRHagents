@@ -79,7 +79,7 @@ try:
    page.locator('[data-tab="panduan"]:visible').first.click()
    assert page.locator('.guide-card').count()==4,width
    page.locator('[data-tab="bantuan"]:visible').first.click()
-   assert page.locator('details').count()==7,width
+   assert page.locator('#faqList details').count()==7,width
    page.locator('#themeToggle').click()
    assert page.locator('body').get_attribute('data-theme')=='dark',width
    assert page.locator('#taskGoal').evaluate('(el)=>getComputedStyle(el,"::placeholder").color')=='rgb(179, 194, 213)',width
