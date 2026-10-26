@@ -61,6 +61,30 @@ result = RunManager(registry).execute(
 The example is an interface contract, not a claim that JRHagents supplies
 `research_handler` or `merge_handler`.
 
+## JSON adapter boundary
+
+Hosts can exchange a reviewed plan without importing the Python classes:
+
+```json
+{
+  "schema_version": 1,
+  "plan_id": "plan_demo",
+  "goal": "Echo a value",
+  "steps": [
+    {"id": "one", "skill_id": "echo", "input": {"value": 7}}
+  ]
+}
+```
+
+Validate it before execution with:
+
+```bash
+python tools/validate_workflow.py workflow.json
+```
+
+The validator only checks and normalizes the plan. It never calls a model,
+browser, shell, network, or registered handler.
+
 ## Roadmap
 
 1. **Core (implemented here):** registry, reviewed plans, fail-closed runner,
