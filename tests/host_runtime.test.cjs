@@ -102,6 +102,20 @@ test('host stops at the configured step budget', async () => {
   );
 });
 
+test('host rejects oversized step output', async () => {
+  const largeAdapter = {
+    skills: { 'demo.large': { id: 'demo.large', description: 'Large demo', risk: 'low', requiresApproval: false } },
+    handlers: { 'demo.large': async () => ({ payload: 'x'.repeat(100) }) }
+  };
+  const host = createJRHHost({ adapters: [largeAdapter] });
+  await assert.rejects(
+    () => host.execute({ goal: 'size', steps: [{ id: 'large', skill_id: 'demo.large' }] }, { executionPolicy: { maxOutputBytes: 20 } }),
+    (error) => error.code === 'RUN_BUDGET_EXCEEDED'
+      && error.events.some((event) => event.type === 'step.output_rejected')
+      && error.metrics.steps.large.output_bytes > 20
+  );
+});
+
 test('host allowlist and duplicate protection fail closed', () => {
   const host = createJRHHost({ adapters: [readAdapter, writeAdapter], allowedSkills: ['demo.read'] });
   assert.equal(host.statusFor('demo.write').available, false);
