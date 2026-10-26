@@ -119,32 +119,35 @@ function createFileIdempotencyStore({ filePath, maxKeys = 1000, ttlMs, now = () 
   };
 }
 
-function createIdempotentHost({ host, store } = {}) {
+function createIdempotentHost({ host, store, namespace = null } = {}) {
   if (!host || typeof host.execute !== 'function') throw new Error('Idempotent host requires an executable host.');
   if (!store || typeof store.get !== 'function' || typeof store.set !== 'function') {
     throw new Error('Idempotent host requires a get/set store.');
   }
+  if (namespace !== null && (typeof namespace !== 'string' || !namespace.trim())) throw new Error('namespace must be a non-empty string.');
   const inFlight = new Map();
+  const scopedKey = (key) => namespace === null ? key : JSON.stringify([namespace, key]);
   return {
     listSkills: (...args) => typeof host.listSkills === 'function' ? host.listSkills(...args) : [],
     statusFor: (...args) => typeof host.statusFor === 'function' ? host.statusFor(...args) : { available: false, requiresApproval: false },
     async execute(plan, options = {}) {
       const key = options.idempotencyKey;
       if (typeof key !== 'string' || !key.trim()) throw new Error('idempotencyKey is required.');
-      const concurrent = inFlight.get(key);
+      const storageKey = scopedKey(key);
+      const concurrent = inFlight.get(storageKey);
       if (concurrent) return { ...(await concurrent), replayed: true };
       const pending = (async () => {
-        const existing = await store.get(key);
+        const existing = await store.get(storageKey);
         if (existing) return { ...existing, replayed: true };
         const result = await host.execute(plan, options);
-        if (result && result.status === 'completed') await store.set(key, result);
+        if (result && result.status === 'completed') await store.set(storageKey, result);
         return result;
       })();
-      inFlight.set(key, pending);
+      inFlight.set(storageKey, pending);
       try {
         return await pending;
       } finally {
-        if (inFlight.get(key) === pending) inFlight.delete(key);
+        if (inFlight.get(storageKey) === pending) inFlight.delete(storageKey);
       }
     }
   };
