@@ -78,6 +78,15 @@ try:
    if width<=720:page.locator('#nextSetup').click()
    page.locator('#langToggle').click()
    assert page.locator('#catalogTitle').inner_text()=='Find what you need.',width
+   assert page.locator('#themeToggle').get_attribute('aria-label')=='Toggle theme',width
+   assert page.locator('#appsGrid').get_attribute('aria-label')=='AI app list',width
+   assert page.locator('#downloadPrompt').get_attribute('aria-label')=='Download full instructions',width
+   assert page.locator('.skip-link').inner_text()=='Skip to the app',width
+   assert page.locator('.mobile-bottom').get_attribute('aria-label')=='Mobile navigation',width
+   if width<=720:
+    page.locator('#backToChoice').click()
+    assert page.locator('.app-card').last.inner_text().endswith('Other AI chat'),width
+    page.locator('#nextSetup').click()
    page.locator('[data-tab="panduan"]:visible').first.click()
    assert page.locator('.guide-card').count()==4,width
    page.locator('[data-tab="bantuan"]:visible').first.click()
