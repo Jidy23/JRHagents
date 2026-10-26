@@ -1,5 +1,7 @@
 'use strict';
 
+const { planFingerprint } = require('../planner/fingerprint');
+
 class RunCancelledError extends Error {
   constructor(message = 'Run cancelled.') {
     super(message);
@@ -67,6 +69,9 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
           throw new Error('approval must contain plan_id and approvedSteps.');
         }
         if (plan.plan_id && approval.plan_id !== plan.plan_id) throw new Error('Approval plan_id does not match workflow plan.');
+        if (approval.plan_fingerprint !== undefined && approval.plan_fingerprint !== planFingerprint(plan)) {
+          throw new Error('Approval plan_fingerprint does not match workflow plan.');
+        }
         approvedSteps = approval.approvedSteps;
       }
       if (!approvedSteps || typeof approvedSteps[Symbol.iterator] !== 'function') throw new Error('approvedSteps must be iterable.');
