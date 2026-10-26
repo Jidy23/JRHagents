@@ -28,7 +28,7 @@ await host.execute(plan, {
   approval: { plan_id: plan.plan_id, approvedSteps: ['publish'] },
   signal: controller.signal,
   retryPolicy: { maxAttempts: 2, retryableSkills: ['demo.read'] },
-  executionPolicy: { maxSteps: 10, maxDurationMs: 30_000 }
+  executionPolicy: { maxSteps: 10, maxDurationMs: 30_000, maxOutputBytes: 100_000 }
 });
 ```
 
@@ -47,3 +47,5 @@ Successful results expose `metrics.started_at`, `metrics.ended_at`,
 `metrics.duration_ms`, and a `metrics.steps` map for timeline dashboards.
 When a budget is exceeded, the host throws `RUN_BUDGET_EXCEEDED`, emits
 `run.budget_exceeded`, and preserves the partial metrics for audit.
+`maxOutputBytes` applies per step and emits `step.output_rejected` when a
+handler returns a payload above the configured limit.
