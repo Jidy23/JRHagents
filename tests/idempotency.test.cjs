@@ -40,6 +40,30 @@ test('idempotent host does not cache failed or paused runs', async () => {
   assert.equal(executions, 2);
 });
 
+test('concurrent identical requests execute the host once', async () => {
+  let executions = 0;
+  let release;
+  const gate = new Promise((resolve) => { release = resolve; });
+  const host = createIdempotentHost({
+    store: createIdempotencyStore(),
+    host: {
+      execute: async () => {
+        executions += 1;
+        await gate;
+        return { run_id: 'run-concurrent', status: 'completed', outputs: {}, events: [] };
+      }
+    }
+  });
+  const first = host.execute({}, { idempotencyKey: 'concurrent' });
+  const second = host.execute({}, { idempotencyKey: 'concurrent' });
+  await new Promise((resolve) => setImmediate(resolve));
+  release();
+  const [firstResult, secondResult] = await Promise.all([first, second]);
+  assert.equal(executions, 1);
+  assert.equal(firstResult.replayed, undefined);
+  assert.equal(secondResult.replayed, true);
+});
+
 test('idempotency validates key and bounds memory', () => {
   assert.throws(() => createIdempotencyStore({ maxKeys: 0 }), /positive integer/);
   assert.throws(() => createIdempotencyStore({ ttlMs: 0 }), /positive integer/);
