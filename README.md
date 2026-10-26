@@ -95,8 +95,9 @@ JSON file with serialized writes and atomic replacement. See
 [`adapters/audit/`](adapters/audit/).
 
 The idempotency boundary prevents a client retry from executing the same
-successful action twice. It is bounded in-memory by default; durable storage
-and expiry remain host responsibilities. See [`adapters/idempotency/`](adapters/idempotency/).
+successful action twice. It supports bounded in-memory or host-owned JSON file
+storage; expiry and tenant scoping remain host responsibilities. See
+[`adapters/idempotency/`](adapters/idempotency/).
 
 ## Platform pathways
 
