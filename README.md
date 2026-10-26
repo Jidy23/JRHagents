@@ -55,6 +55,12 @@ No slash commands to memorize; the host recognizes intent if it loads the skill.
 
 The [workflow index](skills/jrhagents/workflow-index.json) exposes the 66 entries with stable IDs, references and optional host capabilities. Chat is the minimum; optional tools only help when the chosen AI actually provides them. For thesis and quantitative research, the [academic playbook](skills/jrhagents/references/ACADEMIC.md) covers theory, identification, diagnostics and interpretation.
 
+For applications that want to execute reviewed workflows, the repository also
+ships a small dependency-free [Agent Runtime contract](docs/AGENT-RUNTIME.md).
+It provides explicit skill registration, fail-closed execution, step-scoped
+approval, and audit events. It does not provide models, API keys, network
+access, or external integrations; those must be injected by the host app.
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
@@ -74,6 +80,7 @@ skills/jrhagents/
   references/              # concise specialist playbooks, read on demand
   assets/                  # report/plan templates
   scripts/project_scan.py  # optional, read-only scan for shell-enabled hosts
+runtime/                    # optional host-agnostic execution primitives
 UNIVERSAL_PROMPT.md        # chat-only fallback
 README.md                  # user-facing onboarding
 docs/                      # documentation, NOT an AI web app
