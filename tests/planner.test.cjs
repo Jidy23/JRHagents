@@ -48,5 +48,6 @@ test('planner prepares explicit approvals without executing the host', async () 
   assert.throws(() => planner.prepareExecution(plan), /Approval required before execution/);
   const prepared = planner.prepareExecution(plan, ['write']);
   assert.equal(prepared.execution.plan_id, plan.plan_id);
+  assert.match(prepared.execution.plan_fingerprint, /^[a-f0-9]{64}$/);
   assert.deepEqual(prepared.execution.approvedSteps, ['write']);
 });

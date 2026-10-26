@@ -1,5 +1,7 @@
 'use strict';
 
+const { planFingerprint } = require('./fingerprint');
+
 function createGoalPlanner({ propose, host } = {}) {
   if (typeof propose !== 'function') throw new Error('Goal planner requires an injected propose function.');
   if (!host || typeof host.statusFor !== 'function' || typeof host.listSkills !== 'function') throw new Error('Goal planner requires a JRH host runtime.');
@@ -35,7 +37,7 @@ function createGoalPlanner({ propose, host } = {}) {
       const status = host.statusFor(step.skill_id);
       if (status.requiresApproval && !approvals.has(step.id)) throw new Error(`Approval required before execution: ${step.id}`);
     }
-    return { plan, execution: { plan_id: plan.plan_id, approvedSteps: [...approvals] } };
+    return { plan, execution: { plan_id: plan.plan_id, plan_fingerprint: planFingerprint(plan), approvedSteps: [...approvals] } };
   };
 
   return {
