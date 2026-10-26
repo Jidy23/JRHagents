@@ -24,3 +24,12 @@ Production smoke after merge `0ef6d84e86e00d6377b6803458dfde14ee51a902` revealed
 After merge `9481134a81cd6f6f72fc69d71eefbc44cae3ba36`, Pages and main CI passed. Live browser confirmed empty state and clipboard behavior. Search aliases per reference proved too broad (finance results for “skripsi”), so the next patch narrows thesis synonyms to workflows 39–41.
 
 UI refinement: move goal/constraints into the selection panel and apply restrained dimensional surfaces, compact spacing, dark-mode tokens, and reduced-motion support. Verify desktop and narrow viewports after Pages deploy; source-level tests alone do not prove visual quality.
+
+## Agent Runtime foundation
+
+Added an optional, dependency-free `runtime/` package and
+`docs/AGENT-RUNTIME.md`. It deliberately does not turn the Skill into an API
+host or dashboard. The package provides explicit skill registration, reviewed
+workflow plans, step-scoped high-risk approval, fail-closed handler lookup,
+and structured audit events. Host applications must inject the actual model,
+network, browser, filesystem, or service handlers.
