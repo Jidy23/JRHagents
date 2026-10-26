@@ -36,6 +36,11 @@ function attachRun(error, runId, events, status, metrics) {
   return error;
 }
 
+function serializedBytes(value) {
+  const serialized = JSON.stringify(value);
+  return Buffer.byteLength(serialized === undefined ? 'null' : serialized, 'utf8');
+}
+
 function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Date().toISOString() } = {}) {
   if (!Array.isArray(adapters) || adapters.length === 0) throw new Error('JRH host requires at least one adapter.');
   const skills = new Map();
@@ -96,8 +101,10 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
       if (!Array.isArray(retryPolicy.retryableSkills || [])) throw new Error('retryPolicy.retryableSkills must be an array.');
       const maxSteps = executionPolicy.maxSteps === undefined ? Infinity : executionPolicy.maxSteps;
       const maxDurationMs = executionPolicy.maxDurationMs === undefined ? Infinity : executionPolicy.maxDurationMs;
+      const maxOutputBytes = executionPolicy.maxOutputBytes === undefined ? Infinity : executionPolicy.maxOutputBytes;
       if (!(maxSteps === Infinity || (Number.isInteger(maxSteps) && maxSteps >= 0))) throw new Error('executionPolicy.maxSteps must be a non-negative integer.');
       if (!(maxDurationMs === Infinity || (Number.isFinite(maxDurationMs) && maxDurationMs >= 0))) throw new Error('executionPolicy.maxDurationMs must be a non-negative number.');
+      if (!(maxOutputBytes === Infinity || (Number.isInteger(maxOutputBytes) && maxOutputBytes >= 0))) throw new Error('executionPolicy.maxOutputBytes must be a non-negative integer.');
       const runId = `run_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
       const outputs = {};
       const startedAt = Date.now();
@@ -151,7 +158,7 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
         const attemptsAllowed = spec.risk === 'high' ? 0 : (retryableSkills.has(step.skill_id) ? maxAttempts : 0);
         let attempt = 0;
         let stepStartedAt = Date.now();
-        stepMetrics[step.id] = { attempts: 0, status: 'running', duration_ms: 0 };
+        stepMetrics[step.id] = { attempts: 0, status: 'running', duration_ms: 0, output_bytes: 0 };
         while (true) {
           if (signal && signal.aborted) {
             stepMetrics[step.id].status = 'cancelled';
@@ -175,6 +182,13 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
               stepMetrics[step.id].duration_ms += Math.max(0, Date.now() - stepStartedAt);
               emit('step.completed', { step_id: step.id, attempt });
               throw budgetFail(step.id, 'max_duration_ms');
+            }
+            const outputBytes = serializedBytes(outputs[step.id]);
+            stepMetrics[step.id].output_bytes = outputBytes;
+            if (outputBytes > maxOutputBytes) {
+              stepMetrics[step.id].status = 'budget_exceeded';
+              emit('step.output_rejected', { step_id: step.id, attempt, output_bytes: outputBytes, max_output_bytes: maxOutputBytes });
+              throw budgetFail(step.id, 'max_output_bytes');
             }
             stepMetrics[step.id].status = 'completed';
             stepMetrics[step.id].duration_ms += Math.max(0, Date.now() - stepStartedAt);
@@ -201,4 +215,4 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
   };
 }
 
-module.exports = { createJRHHost, RunCancelledError, RunBudgetError, ApprovalRejectedError };
+module.exports = { createJRHHost, RunCancelledError, RunBudgetError, ApprovalRejectedError, serializedBytes };
