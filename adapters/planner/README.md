@@ -13,3 +13,8 @@ goal → injected proposal → strict validation → human review/ACC → host.e
 
 An unavailable skill, duplicate step, missing goal, or invalid proposal is
 rejected before it reaches execution. Planner output is untrusted input.
+
+After review, call `planner.prepareExecution(plan, approvedSteps)` to create a
+JSON-safe execution request. It validates exact step IDs and requires approval
+for every high-risk step, but it never calls `host.execute`; the host remains
+the only execution boundary.

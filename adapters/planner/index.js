@@ -23,6 +23,21 @@ function createGoalPlanner({ propose, host } = {}) {
     return { schema_version: 1, plan_id: plan.plan_id || `plan_${Date.now().toString(36)}`, goal: plan.goal.trim(), steps };
   };
 
+  const prepareExecution = (plan, approvedSteps = []) => {
+    if (!plan || typeof plan.goal !== 'string' || !Array.isArray(plan.steps)) throw new Error('Execution preparation requires a validated plan.');
+    if (!Array.isArray(approvedSteps)) throw new Error('approvedSteps must be an array.');
+    const stepIds = new Set(plan.steps.map((step) => step.id));
+    for (const stepId of approvedSteps) {
+      if (typeof stepId !== 'string' || !stepIds.has(stepId)) throw new Error(`Approval references unknown step: ${stepId}`);
+    }
+    const approvals = new Set(approvedSteps);
+    for (const step of plan.steps) {
+      const status = host.statusFor(step.skill_id);
+      if (status.requiresApproval && !approvals.has(step.id)) throw new Error(`Approval required before execution: ${step.id}`);
+    }
+    return { plan, execution: { approvedSteps: [...approvals] } };
+  };
+
   return {
     availableSkills() { return host.listSkills().map(({ id, description, risk, requiresApproval }) => ({ id, description, risk, requiresApproval })); },
     async propose(goal, context = {}) {
@@ -30,7 +45,8 @@ function createGoalPlanner({ propose, host } = {}) {
       const proposal = await propose({ goal: goal.trim(), context, availableSkills: this.availableSkills() });
       const plan = normalizeProposal(proposal);
       return { plan, review: plan.steps.map((step) => ({ ...step, ...host.statusFor(step.skill_id) })) };
-    }
+    },
+    prepareExecution(plan, approvedSteps = []) { return prepareExecution(plan, approvedSteps); }
   };
 }
 

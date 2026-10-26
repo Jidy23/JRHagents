@@ -26,3 +26,26 @@ test('planner requires a host and injected proposal function', () => {
   assert.throws(() => createGoalPlanner({ host }), /injected propose/);
   assert.throws(() => createGoalPlanner({ propose: () => ({}) }), /JRH host runtime/);
 });
+
+test('planner prepares explicit approvals without executing the host', async () => {
+  const approvalHost = {
+    listSkills: () => [
+      { id: 'demo.read', description: 'Read', risk: 'low', requiresApproval: false },
+      { id: 'demo.write', description: 'Write', risk: 'high', requiresApproval: true }
+    ],
+    statusFor: (id) => id === 'demo.write'
+      ? { available: true, requiresApproval: true, risk: 'high' }
+      : { available: true, requiresApproval: false, risk: 'low' }
+  };
+  const planner = createGoalPlanner({
+    host: approvalHost,
+    propose: async () => ({ goal: 'review', steps: [
+      { id: 'read', skill_id: 'demo.read' },
+      { id: 'write', skill_id: 'demo.write' }
+    ] })
+  });
+  const { plan } = await planner.propose('review');
+  assert.throws(() => planner.prepareExecution(plan), /Approval required before execution/);
+  const prepared = planner.prepareExecution(plan, ['write']);
+  assert.deepEqual(prepared.execution.approvedSteps, ['write']);
+});
