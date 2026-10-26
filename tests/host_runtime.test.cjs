@@ -36,10 +36,11 @@ test('host binds approval envelopes to the exact plan ID', async () => {
   const plan = { plan_id: 'plan-1', goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write' }] };
   await assert.rejects(
     () => host.execute(plan, { approval: { plan_id: 'plan-2', approvedSteps: ['w1'] } }),
-    /does not match workflow plan/
+    (error) => error.code === 'APPROVAL_REJECTED' && error.reason === 'plan_id_mismatch'
   );
   const result = await host.execute(plan, { approval: { plan_id: 'plan-1', approvedSteps: ['w1'] } });
   assert.equal(result.status, 'completed');
+  assert.equal(result.events.find((event) => event.type === 'approval.accepted').approved_steps, 1);
 });
 
 test('host rejects approval when plan content changes under the same ID', async () => {
@@ -56,7 +57,7 @@ test('host rejects expired approval envelopes before execution', async () => {
   const plan = { plan_id: 'plan-expired', goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write' }] };
   await assert.rejects(
     () => host.execute(plan, { approval: { plan_id: 'plan-expired', approvedSteps: ['w1'], expires_at: '2020-01-01T00:00:00.000Z' } }),
-    /Approval has expired/
+    (error) => error.code === 'APPROVAL_REJECTED' && error.reason === 'expired'
   );
 });
 
