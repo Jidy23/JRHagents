@@ -87,6 +87,9 @@ The goal planner boundary converts an injected natural-language proposal into
 a validated plan for review; it never executes tools by itself. See
 [`adapters/planner/`](adapters/planner/).
 
+The audit run store records bounded, redacted execution history and can be
+replaced by a persistent database adapter. See [`adapters/audit/`](adapters/audit/).
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
