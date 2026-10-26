@@ -72,6 +72,9 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
         if (approval.plan_fingerprint !== undefined && approval.plan_fingerprint !== planFingerprint(plan)) {
           throw new Error('Approval plan_fingerprint does not match workflow plan.');
         }
+        if (approval.expires_at !== undefined && (!Number.isFinite(Date.parse(approval.expires_at)) || Date.parse(approval.expires_at) <= Date.now())) {
+          throw new Error('Approval has expired.');
+        }
         approvedSteps = approval.approvedSteps;
       }
       if (!approvedSteps || typeof approvedSteps[Symbol.iterator] !== 'function') throw new Error('approvedSteps must be iterable.');
