@@ -1,6 +1,6 @@
 # JRHagents Audit Run Store
 
-Dependency-free in-memory audit store for the host runtime.
+Dependency-free audit stores for the host runtime.
 
 - stores completed and failed runs;
 - preserves outputs and ordered events;
@@ -8,7 +8,18 @@ Dependency-free in-memory audit store for the host runtime.
   `api_key`, or `private_key`;
 - bounds retained history with `maxRuns`;
 - exports JSON for a database, file store, or dashboard adapter;
-- does not claim durability until the host supplies persistent storage.
+- `createAuditStore` is in-memory;
+- `createFileAuditStore` persists JSON with serialized writes and atomic rename.
 
 Wrap the unified host with `createAuditedHost({ host, store })` before exposing
-it to the planner or web adapter.
+it to the planner or web adapter. File-store methods are asynchronous:
+
+```js
+const { createFileAuditStore } = require('./');
+const store = createFileAuditStore({ filePath: './data/jrh-runs.json' });
+await store.record(run);
+const recent = await store.list();
+```
+
+The host application owns directory creation, access permissions, backup, and
+encryption at rest. Malformed files fail closed instead of being overwritten.
