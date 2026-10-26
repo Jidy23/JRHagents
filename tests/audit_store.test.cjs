@@ -36,6 +36,17 @@ test('audited host stores successful and failed executions', async () => {
   assert.equal(store.list()[0].status, 'failed');
 });
 
+test('audited host preserves approval rejection reason', async () => {
+  const store = createAuditStore();
+  const host = createAuditedHost({
+    store,
+    host: { execute: async () => { const error = new Error('expired'); error.code = 'APPROVAL_REJECTED'; error.reason = 'expired'; throw error; } }
+  });
+  await assert.rejects(() => host.execute({}), /expired/);
+  assert.equal(store.list()[0].status, 'blocked');
+  assert.equal(store.list()[0].events[0].reason, 'expired');
+});
+
 test('audit store rejects invalid configuration and records', () => {
   assert.throws(() => createAuditStore({ maxRuns: 0 }), /positive integer/);
   const store = createAuditStore();

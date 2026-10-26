@@ -37,6 +37,8 @@ planner, its content fingerprint. A mismatched plan is rejected before any
 handler starts. This is a workflow-binding check, not a replacement for the
 host's authentication or authorization system.
 If `expires_at` is present, expired approval is rejected before execution.
+Accepted approvals emit `approval.accepted`; rejected approval envelopes use
+`APPROVAL_REJECTED` with a reason such as `expired` or `fingerprint_mismatch`.
 
 `maxAttempts` means additional attempts after the first attempt. A cancelled
 run reports `status: 'cancelled'` on the thrown error and preserves its events;

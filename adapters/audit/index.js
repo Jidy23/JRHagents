@@ -182,8 +182,11 @@ function createAuditedHost({ host, store } = {}) {
         return result;
       } catch (error) {
         const runId = error.run_id || `failed_${Date.now().toString(36)}`;
-        const status = error.status || 'failed';
-        const events = Array.isArray(error.events) ? error.events : [{ type: 'run.failed', error: error.message }];
+        const status = error.status || (error.code === 'APPROVAL_REJECTED' ? 'blocked' : 'failed');
+        const events = Array.isArray(error.events) ? error.events : [{
+          type: error.code === 'APPROVAL_REJECTED' ? 'approval.rejected' : 'run.failed',
+          reason: error.reason || error.code || 'unknown'
+        }];
         await store.record({ run_id: runId, status, outputs: {}, events });
         throw error;
       }
