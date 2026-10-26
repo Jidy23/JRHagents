@@ -25,11 +25,16 @@ Retry and cancellation are explicit at execution time:
 
 ```js
 await host.execute(plan, {
+  approval: { plan_id: plan.plan_id, approvedSteps: ['publish'] },
   signal: controller.signal,
   retryPolicy: { maxAttempts: 2, retryableSkills: ['demo.read'] },
   executionPolicy: { maxSteps: 10, maxDurationMs: 30_000 }
 });
 ```
+
+An approval envelope is bound to the exact `plan_id`; a mismatched plan is
+rejected before any handler starts. The envelope is a workflow-binding check,
+not a replacement for the host's authentication or authorization system.
 
 `maxAttempts` means additional attempts after the first attempt. A cancelled
 run reports `status: 'cancelled'` on the thrown error and preserves its events;
