@@ -19,7 +19,12 @@ const { createFileAuditStore } = require('./');
 const store = createFileAuditStore({ filePath: './data/jrh-runs.json' });
 await store.record(run);
 const recent = await store.list();
+const failed = await store.list({ status: 'failed', limit: 20 });
+const summary = await store.stats();
 ```
+
+`list` accepts `status`, ISO `since`, and positive integer `limit` filters.
+`stats` returns total runs, counts by status, and measured duration totals.
 
 The host application owns directory creation, access permissions, backup, and
 encryption at rest. Malformed files fail closed instead of being overwritten.
