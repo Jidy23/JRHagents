@@ -19,3 +19,5 @@ JSON-safe execution request bound to the plan's `plan_id` and content
 fingerprint. It validates exact step IDs and requires approval for every
 high-risk step, but it never calls
 `host.execute`; the host remains the only execution boundary.
+Pass `{ ttlMs }` as the third argument to issue a time-bounded approval; the
+host rejects it after `expires_at`.
