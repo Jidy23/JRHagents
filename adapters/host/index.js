@@ -18,6 +18,16 @@ class RunBudgetError extends Error {
   }
 }
 
+class ApprovalRejectedError extends Error {
+  constructor(message, reason) {
+    super(message);
+    this.name = 'ApprovalRejectedError';
+    this.code = 'APPROVAL_REJECTED';
+    this.reason = reason;
+    this.status = 'blocked';
+  }
+}
+
 function attachRun(error, runId, events, status, metrics) {
   error.run_id = runId;
   error.events = events;
@@ -66,14 +76,14 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
       validatePlan(plan);
       if (approval !== null) {
         if (!approval || typeof approval.plan_id !== 'string' || !Array.isArray(approval.approvedSteps)) {
-          throw new Error('approval must contain plan_id and approvedSteps.');
+          throw new ApprovalRejectedError('approval must contain plan_id and approvedSteps.', 'malformed');
         }
-        if (plan.plan_id && approval.plan_id !== plan.plan_id) throw new Error('Approval plan_id does not match workflow plan.');
+        if (plan.plan_id && approval.plan_id !== plan.plan_id) throw new ApprovalRejectedError('Approval plan_id does not match workflow plan.', 'plan_id_mismatch');
         if (approval.plan_fingerprint !== undefined && approval.plan_fingerprint !== planFingerprint(plan)) {
-          throw new Error('Approval plan_fingerprint does not match workflow plan.');
+          throw new ApprovalRejectedError('Approval plan_fingerprint does not match workflow plan.', 'fingerprint_mismatch');
         }
         if (approval.expires_at !== undefined && (!Number.isFinite(Date.parse(approval.expires_at)) || Date.parse(approval.expires_at) <= Date.now())) {
-          throw new Error('Approval has expired.');
+          throw new ApprovalRejectedError('Approval has expired.', 'expired');
         }
         approvedSteps = approval.approvedSteps;
       }
@@ -115,6 +125,7 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
       };
       emit('run.queued');
       emit('run.started');
+      if (approval !== null) emit('approval.accepted', { plan_id: approval.plan_id, approved_steps: approval.approvedSteps.length });
       for (const [stepIndex, step] of plan.steps.entries()) {
         if (stepIndex >= maxSteps) throw budgetFail(step.id, 'max_steps');
         if (Date.now() - startedAt > maxDurationMs) throw budgetFail(step.id, 'max_duration_ms');
@@ -190,4 +201,4 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
   };
 }
 
-module.exports = { createJRHHost, RunCancelledError, RunBudgetError };
+module.exports = { createJRHHost, RunCancelledError, RunBudgetError, ApprovalRejectedError };
