@@ -13,6 +13,7 @@ Security properties:
 - approval is checked against the exact workflow step ID;
 - an optional `AbortSignal` cancels between handler boundaries;
 - retries are opt-in, bounded, and disabled for high-risk skills;
+- completed and interrupted runs include timestamps, duration, and per-step attempt metrics;
 - credentials remain inside their adapter and never enter the plan.
 
 The host runtime does not discover or connect services by itself. The host
@@ -31,3 +32,5 @@ await host.execute(plan, {
 `maxAttempts` means additional attempts after the first attempt. A cancelled
 run reports `status: 'cancelled'` on the thrown error and preserves its events;
 the handler itself must honor cancellation if it performs long external work.
+Successful results expose `metrics.started_at`, `metrics.ended_at`,
+`metrics.duration_ms`, and a `metrics.steps` map for timeline dashboards.
