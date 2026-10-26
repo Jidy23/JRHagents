@@ -2,7 +2,18 @@
 
 const nodeFs = require('node:fs/promises');
 const nodePath = require('node:path');
-const { planFingerprint } = require('../planner/fingerprint');
+const crypto = require('node:crypto');
+const { planFingerprint, stableSerialize } = require('../planner/fingerprint');
+
+function requestFingerprint(plan, options) {
+  const approvedSteps = options.approvedSteps == null ? [] : [...options.approvedSteps].sort();
+  return crypto.createHash('sha256').update(stableSerialize({
+    plan: planFingerprint(plan),
+    approval: options.approval || null,
+    approvedSteps,
+    actor: options.actorId || null
+  })).digest('hex');
+}
 
 function validateTtl(ttlMs) {
   if (ttlMs !== undefined && (!Number.isInteger(ttlMs) || ttlMs < 1)) throw new Error('ttlMs must be a positive integer.');
@@ -134,7 +145,7 @@ function createIdempotentHost({ host, store, namespace = null } = {}) {
     async execute(plan, options = {}) {
       const key = options.idempotencyKey;
       if (typeof key !== 'string' || !key.trim()) throw new Error('idempotencyKey is required.');
-      const fingerprint = planFingerprint(plan);
+      const fingerprint = requestFingerprint(plan, options);
       const storageKey = scopedKey(key);
       const concurrent = inFlight.get(storageKey);
       if (concurrent) {
