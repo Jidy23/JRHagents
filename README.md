@@ -60,6 +60,8 @@ ships a small dependency-free [Agent Runtime contract](docs/AGENT-RUNTIME.md).
 It provides explicit skill registration, fail-closed execution, step-scoped
 approval, and audit events. It does not provide models, API keys, network
 access, or external integrations; those must be injected by the host app.
+The runtime also exposes a versioned JSON plan boundary for web, CLI, and MCP
+adapters.
 
 ## Platform pathways
 
