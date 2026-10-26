@@ -62,6 +62,8 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
     },
     async execute(plan, { approvedSteps = new Set(), signal = null, retryPolicy = {}, executionPolicy = {} } = {}) {
       validatePlan(plan);
+      if (!approvedSteps || typeof approvedSteps[Symbol.iterator] !== 'function') throw new Error('approvedSteps must be iterable.');
+      const approvalSet = new Set(approvedSteps);
       if (signal && typeof signal.aborted !== 'boolean') throw new Error('signal must be an AbortSignal-like object.');
       const maxAttempts = retryPolicy.maxAttempts === undefined ? 0 : retryPolicy.maxAttempts;
       const retryableSkills = new Set(retryPolicy.retryableSkills || []);
@@ -114,7 +116,7 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
           emit('run.failed');
           throw attachRun(new Error(`Host skill unavailable: ${step.skill_id}`), runId, events, 'failed', metrics('failed'));
         }
-        if (spec.requiresApproval === true && !approvedSteps.has(step.id)) {
+        if (spec.requiresApproval === true && !approvalSet.has(step.id)) {
           stepMetrics[step.id] = { attempts: 0, status: 'paused', duration_ms: 0 };
           emit('step.blocked', { step_id: step.id, reason: 'approval_required' });
           emit('run.paused', { reason: 'approval_required' });
