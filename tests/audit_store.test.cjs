@@ -14,6 +14,8 @@ test('audit store records runs, bounds history, and redacts sensitive keys', () 
   store.record({ run_id: 'r4', status: 'completed', outputs: {}, events: [] });
   assert.equal(store.get('r1'), null);
   assert.equal(store.list().length, 3);
+  assert.equal(store.list({ status: 'completed', limit: 1 })[0].run_id, 'r4');
+  assert.equal(store.stats().by_status.completed, 3);
   assert.match(store.exportJson(), /r3/);
 });
 
