@@ -10,6 +10,8 @@
   const LOCAL_HANDLERS = {
     echo: (input) => ({ ...input })
   };
+  const HOST = typeof window !== 'undefined' ? window.JRH_HOST_ADAPTER : null;
+  const approvedSteps = new Set();
   let currentPlan = null;
 
   const $ = (id) => document.getElementById(id);
@@ -45,15 +47,31 @@
     const list = $('steps');
     list.replaceChildren(...plan.steps.map((step) => {
       const item = document.createElement('li');
-      if (!LOCAL_HANDLERS[step.skill_id]) item.className = 'blocked';
+      const hostStatus = HOST && typeof HOST.statusFor === 'function' ? HOST.statusFor(step.skill_id) : null;
+      const isLocal = Boolean(LOCAL_HANDLERS[step.skill_id]);
+      const available = hostStatus ? hostStatus.available : isLocal;
+      const requiresApproval = hostStatus ? hostStatus.requiresApproval : false;
+      if (!available || requiresApproval) item.className = 'blocked';
       const name = document.createElement('strong');
       name.textContent = step.id;
       const state = document.createElement('span');
-      state.textContent = LOCAL_HANDLERS[step.skill_id] ? `${step.skill_id} · tersedia` : `${step.skill_id} · host belum terhubung`;
+      state.textContent = !available ? `${step.skill_id} · host belum terhubung` : requiresApproval ? `${step.skill_id} · butuh ACC` : `${step.skill_id} · tersedia`;
       item.append(name, state);
+      if (requiresApproval) {
+        const approval = document.createElement('input');
+        approval.type = 'checkbox';
+        approval.checked = approvedSteps.has(step.id);
+        approval.setAttribute('aria-label', `ACC untuk ${step.id}`);
+        approval.addEventListener('change', () => { if (approval.checked) approvedSteps.add(step.id); else approvedSteps.delete(step.id); renderPlan(plan); });
+        item.prepend(approval);
+      }
       return item;
     }));
-    $('runButton').disabled = plan.steps.some((step) => !LOCAL_HANDLERS[step.skill_id]);
+    $('runButton').disabled = plan.steps.some((step) => {
+      const hostStatus = HOST && typeof HOST.statusFor === 'function' ? HOST.statusFor(step.skill_id) : null;
+      const available = hostStatus ? hostStatus.available : Boolean(LOCAL_HANDLERS[step.skill_id]);
+      return !available || (hostStatus && hostStatus.requiresApproval && !approvedSteps.has(step.id));
+    });
     $('output').classList.add('hidden');
   }
 
@@ -73,14 +91,15 @@
     }
   }
 
-  function runLocal() {
+  async function runLocal() {
     if (!currentPlan) return;
-    const outputs = {};
-    currentPlan.steps.forEach((step) => { outputs[step.id] = LOCAL_HANDLERS[step.skill_id](step.input || {}); });
-    const output = $('output');
-    output.textContent = JSON.stringify({ status: 'completed', outputs }, null, 2);
-    output.classList.remove('hidden');
-    showMessage('Selesai. Ini hanya eksekusi handler lokal yang terdaftar.', 'success');
+    try {
+      const result = HOST ? await HOST.execute(currentPlan, approvedSteps) : { status: 'completed', outputs: Object.fromEntries(currentPlan.steps.map((step) => [step.id, LOCAL_HANDLERS[step.skill_id](step.input || {})])) };
+      const output = $('output');
+      output.textContent = JSON.stringify(result, null, 2);
+      output.classList.remove('hidden');
+      showMessage(HOST ? 'Selesai melalui host adapter yang terdaftar.' : 'Selesai. Ini hanya eksekusi handler lokal yang terdaftar.', 'success');
+    } catch (error) { showMessage(error.message, 'error'); }
   }
 
   $('sampleButton').addEventListener('click', () => { input.value = JSON.stringify(SAMPLE, null, 2); validateFromInput(); });
