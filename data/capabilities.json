@@ -8,7 +8,8 @@
     "description": "Pilih tiga pekerjaan terpenting hari ini.",
     "descriptionEn": "Choose the three most important tasks today.",
     "deliverable": "3 prioritas + alasan + langkah awal",
-    "reference": "AUTOMATION.md"
+    "reference": "AUTOMATION.md",
+    "deliverableEn": "Top 3 priorities + reasons + first steps"
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "description": "Susun agenda mingguan realistis dan jeda.",
     "descriptionEn": "Build a realistic weekly schedule with breaks.",
     "deliverable": "agenda 7 hari + buffer",
-    "reference": "AUTOMATION.md"
+    "reference": "AUTOMATION.md",
+    "deliverableEn": "7-day agenda + buffer time"
   },
   {
     "id": 3,
@@ -30,7 +32,8 @@
     "description": "Buat blok waktu sesuai energi dan batasan.",
     "descriptionEn": "Arrange focused time blocks around constraints.",
     "deliverable": "jadwal blok waktu",
-    "reference": "AUTOMATION.md"
+    "reference": "AUTOMATION.md",
+    "deliverableEn": "Time-block schedule"
   },
   {
     "id": 4,
@@ -41,7 +44,8 @@
     "description": "Bandingkan opsi berdasarkan kriteria dan risiko.",
     "descriptionEn": "Compare options against criteria and risks.",
     "deliverable": "matriks keputusan",
-    "reference": "AUTOMATION.md"
+    "reference": "AUTOMATION.md",
+    "deliverableEn": "Decision matrix"
   },
   {
     "id": 5,
@@ -52,7 +56,8 @@
     "description": "Ubah tujuan besar menjadi tugas kecil berurutan.",
     "descriptionEn": "Break a large goal into manageable tasks.",
     "deliverable": "milestone + dependensi",
-    "reference": "AUTOMATION.md"
+    "reference": "AUTOMATION.md",
+    "deliverableEn": "Milestones + dependencies"
   },
   {
     "id": 6,
@@ -63,7 +68,8 @@
     "description": "Tinjau kebiasaan tanpa penilaian menghakimi.",
     "descriptionEn": "Review habits without judgment.",
     "deliverable": "review + eksperimen kecil",
-    "reference": "AUTOMATION.md"
+    "reference": "AUTOMATION.md",
+    "deliverableEn": "Review + small experiment"
   },
   {
     "id": 7,
@@ -74,7 +80,8 @@
     "description": "Pahami konsep dengan analogi yang akurat.",
     "descriptionEn": "Learn difficult ideas with grounded analogies.",
     "deliverable": "penjelasan + contoh",
-    "reference": "LEARNING.md"
+    "reference": "LEARNING.md",
+    "deliverableEn": "Explanation + example"
   },
   {
     "id": 8,
@@ -85,7 +92,8 @@
     "description": "Uji pemahaman lewat pertanyaan bertahap.",
     "descriptionEn": "Practice retrieval with progressive questions.",
     "deliverable": "latihan + kunci",
-    "reference": "LEARNING.md"
+    "reference": "LEARNING.md",
+    "deliverableEn": "Practice questions + answer key"
   },
   {
     "id": 9,
@@ -96,7 +104,8 @@
     "description": "Buat kartu hafalan singkat dan relevan.",
     "descriptionEn": "Create concise, useful flashcards.",
     "deliverable": "10 kartu tanya-jawab",
-    "reference": "LEARNING.md"
+    "reference": "LEARNING.md",
+    "deliverableEn": "10 question-and-answer cards"
   },
   {
     "id": 10,
@@ -107,7 +116,8 @@
     "description": "Latih soal seperti ujian beserta pembahasan.",
     "descriptionEn": "Practice exam questions with explanations.",
     "deliverable": "soal + pembahasan",
-    "reference": "LEARNING.md"
+    "reference": "LEARNING.md",
+    "deliverableEn": "Questions + explanations"
   },
   {
     "id": 11,
@@ -118,7 +128,8 @@
     "description": "Susun kurikulum dan target sesuai waktu tersedia.",
     "descriptionEn": "Plan a study path within available time.",
     "deliverable": "silabus + evaluasi",
-    "reference": "LEARNING.md"
+    "reference": "LEARNING.md",
+    "deliverableEn": "Syllabus + evaluation"
   },
   {
     "id": 12,
@@ -129,7 +140,8 @@
     "description": "Perbaiki percakapan dan tulisan bahasa asing.",
     "descriptionEn": "Improve foreign-language speaking and writing.",
     "deliverable": "latihan + koreksi",
-    "reference": "LEARNING.md"
+    "reference": "LEARNING.md",
+    "deliverableEn": "Exercises + corrections"
   },
   {
     "id": 13,
@@ -140,7 +152,8 @@
     "description": "Rapikan CV dengan bukti dan relevansi posisi.",
     "descriptionEn": "Tailor resumes to roles with evidence.",
     "deliverable": "CV + saran terukur",
-    "reference": "CAREER.md"
+    "reference": "CAREER.md",
+    "deliverableEn": "Resume + actionable suggestions"
   },
   {
     "id": 14,
@@ -151,7 +164,8 @@
     "description": "Tentukan proyek unggulan dan cara menampilkannya.",
     "descriptionEn": "Select and present portfolio projects.",
     "deliverable": "struktur portofolio",
-    "reference": "CAREER.md"
+    "reference": "CAREER.md",
+    "deliverableEn": "Portfolio structure"
   },
   {
     "id": 15,
@@ -162,7 +176,8 @@
     "description": "Simulasikan pertanyaan wawancara relevan.",
     "descriptionEn": "Practice role-specific interview questions.",
     "deliverable": "simulasi + masukan",
-    "reference": "CAREER.md"
+    "reference": "CAREER.md",
+    "deliverableEn": "Mock interview + feedback"
   },
   {
     "id": 16,
@@ -173,7 +188,8 @@
     "description": "Tulis surat lamaran spesifik tanpa klaim palsu.",
     "descriptionEn": "Draft specific cover letters without fabrications.",
     "deliverable": "surat lamaran",
-    "reference": "CAREER.md"
+    "reference": "CAREER.md",
+    "deliverableEn": "Cover letter"
   },
   {
     "id": 17,
@@ -184,7 +200,8 @@
     "description": "Petakan keterampilan target dan langkah belajar.",
     "descriptionEn": "Map skill gaps and learning priorities.",
     "deliverable": "matriks gap",
-    "reference": "CAREER.md"
+    "reference": "CAREER.md",
+    "deliverableEn": "Skills-gap matrix"
   },
   {
     "id": 18,
@@ -195,7 +212,8 @@
     "description": "Siapkan argumen dan opsi negosiasi realistis.",
     "descriptionEn": "Prepare grounded negotiation options.",
     "deliverable": "skrip + batasan",
-    "reference": "CAREER.md"
+    "reference": "CAREER.md",
+    "deliverableEn": "Negotiation script + boundaries"
   },
   {
     "id": 19,
@@ -206,7 +224,8 @@
     "description": "Susun anggaran berdasarkan arus kas pengguna.",
     "descriptionEn": "Make a budget from user-provided cashflow.",
     "deliverable": "tabel anggaran",
-    "reference": "DATA.md"
+    "reference": "DATA.md",
+    "deliverableEn": "Budget table"
   },
   {
     "id": 20,
@@ -217,7 +236,8 @@
     "description": "Catat pemasukan, pengeluaran, dan pola kebocoran.",
     "descriptionEn": "Review income, spending and cash leaks.",
     "deliverable": "ringkasan arus kas",
-    "reference": "DATA.md"
+    "reference": "DATA.md",
+    "deliverableEn": "Cash-flow summary"
   },
   {
     "id": 21,
@@ -228,7 +248,8 @@
     "description": "Buat target tabungan dengan asumsi transparan.",
     "descriptionEn": "Plan emergency savings with clear assumptions.",
     "deliverable": "target + simulasi",
-    "reference": "DATA.md"
+    "reference": "DATA.md",
+    "deliverableEn": "Savings goal + simulation"
   },
   {
     "id": 22,
@@ -239,7 +260,8 @@
     "description": "Kenali profil risiko tanpa janji imbal hasil.",
     "descriptionEn": "Understand investment risk without return promises.",
     "deliverable": "peta risiko",
-    "reference": "DATA.md"
+    "reference": "DATA.md",
+    "deliverableEn": "Risk map"
   },
   {
     "id": 23,
@@ -250,7 +272,8 @@
     "description": "Bandingkan bunga, tenor, dan total biaya.",
     "descriptionEn": "Compare rates, terms and total borrowing cost.",
     "deliverable": "tabel biaya",
-    "reference": "DATA.md"
+    "reference": "DATA.md",
+    "deliverableEn": "Cost table"
   },
   {
     "id": 24,
@@ -261,7 +284,8 @@
     "description": "Hitung target tabungan pada beberapa skenario.",
     "descriptionEn": "Model savings goals under alternative scenarios.",
     "deliverable": "simulasi + asumsi",
-    "reference": "DATA.md"
+    "reference": "DATA.md",
+    "deliverableEn": "Simulation + assumptions"
   },
   {
     "id": 25,
@@ -272,7 +296,8 @@
     "description": "Buat kebiasaan tidur sehat non-diagnostik.",
     "descriptionEn": "Build general sleep habits without diagnosis.",
     "deliverable": "rencana kebiasaan",
-    "reference": "WELLBEING.md"
+    "reference": "WELLBEING.md",
+    "deliverableEn": "Habit plan"
   },
   {
     "id": 26,
@@ -283,7 +308,8 @@
     "description": "Atur aktivitas aman sesuai informasi pengguna.",
     "descriptionEn": "Plan general activity within user constraints.",
     "deliverable": "rencana aktivitas",
-    "reference": "WELLBEING.md"
+    "reference": "WELLBEING.md",
+    "deliverableEn": "Activity plan"
   },
   {
     "id": 27,
@@ -294,7 +320,8 @@
     "description": "Susun ide makan umum tanpa terapi medis.",
     "descriptionEn": "Plan general balanced meals, not medical treatment.",
     "deliverable": "contoh menu",
-    "reference": "WELLBEING.md"
+    "reference": "WELLBEING.md",
+    "deliverableEn": "Sample meal plan"
   },
   {
     "id": 28,
@@ -305,7 +332,8 @@
     "description": "Rapikan pertanyaan untuk tenaga kesehatan.",
     "descriptionEn": "Prepare questions for healthcare professionals.",
     "deliverable": "daftar pertanyaan",
-    "reference": "WELLBEING.md"
+    "reference": "WELLBEING.md",
+    "deliverableEn": "Questions to ask"
   },
   {
     "id": 29,
@@ -316,7 +344,8 @@
     "description": "Evaluasi kualitas bukti klaim kesehatan.",
     "descriptionEn": "Evaluate evidence behind health claims.",
     "deliverable": "cek sumber + batasan",
-    "reference": "WELLBEING.md"
+    "reference": "WELLBEING.md",
+    "deliverableEn": "Source check + limitations"
   },
   {
     "id": 30,
@@ -327,7 +356,8 @@
     "description": "Buat strategi coping non-klinis dan realistis.",
     "descriptionEn": "Plan everyday non-clinical coping routines.",
     "deliverable": "strategi sederhana",
-    "reference": "WELLBEING.md"
+    "reference": "WELLBEING.md",
+    "deliverableEn": "Simple strategy"
   },
   {
     "id": 31,
@@ -338,7 +368,8 @@
     "description": "Susun pesan jelas sesuai hubungan penerima.",
     "descriptionEn": "Draft context-aware professional emails.",
     "deliverable": "email siap kirim",
-    "reference": "WRITING.md"
+    "reference": "WRITING.md",
+    "deliverableEn": "Ready-to-send email"
   },
   {
     "id": 32,
@@ -349,7 +380,8 @@
     "description": "Susun pesan utama dan alur presentasi.",
     "descriptionEn": "Structure key messages and presentation flow.",
     "deliverable": "outline slide",
-    "reference": "WRITING.md"
+    "reference": "WRITING.md",
+    "deliverableEn": "Slide outline"
   },
   {
     "id": 33,
@@ -360,7 +392,8 @@
     "description": "Rapikan bahasa tanpa mengubah fakta penting.",
     "descriptionEn": "Improve clarity while preserving facts.",
     "deliverable": "teks hasil revisi",
-    "reference": "WRITING.md"
+    "reference": "WRITING.md",
+    "deliverableEn": "Revised text"
   },
   {
     "id": 34,
@@ -371,7 +404,8 @@
     "description": "Susun percakapan tegas tetapi sopan.",
     "descriptionEn": "Prepare respectful, firm conversations.",
     "deliverable": "skrip percakapan",
-    "reference": "WRITING.md"
+    "reference": "WRITING.md",
+    "deliverableEn": "Conversation script"
   },
   {
     "id": 35,
@@ -382,7 +416,8 @@
     "description": "Buat konten natural sesuai audiens dan platform.",
     "descriptionEn": "Write natural platform-specific content.",
     "deliverable": "post + variasi hook",
-    "reference": "WRITING.md"
+    "reference": "WRITING.md",
+    "deliverableEn": "Post + hook variations"
   },
   {
     "id": 36,
@@ -393,7 +428,8 @@
     "description": "Ringkas keputusan dan tindak lanjut berdasarkan catatan.",
     "descriptionEn": "Extract decisions and actions from notes.",
     "deliverable": "notulen + aksi",
-    "reference": "WRITING.md"
+    "reference": "WRITING.md",
+    "deliverableEn": "Meeting notes + actions"
   },
   {
     "id": 37,
@@ -404,7 +440,8 @@
     "description": "Cari sumber jika host punya akses pencarian.",
     "descriptionEn": "Find references when search tools are available.",
     "deliverable": "daftar sumber",
-    "reference": "RESEARCH.md"
+    "reference": "RESEARCH.md",
+    "deliverableEn": "Source list"
   },
   {
     "id": 38,
@@ -415,7 +452,8 @@
     "description": "Pisahkan klaim, bukti, dan hal belum terverifikasi.",
     "descriptionEn": "Separate claims, evidence and unknowns.",
     "deliverable": "tabel verifikasi",
-    "reference": "RESEARCH.md"
+    "reference": "RESEARCH.md",
+    "deliverableEn": "Verification table"
   },
   {
     "id": 39,
@@ -426,7 +464,8 @@
     "description": "Bandingkan teori, metode, dan temuan publikasi.",
     "descriptionEn": "Compare methods, theories and findings.",
     "deliverable": "matriks studi",
-    "reference": "RESEARCH.md"
+    "reference": "RESEARCH.md",
+    "deliverableEn": "Study matrix"
   },
   {
     "id": 40,
@@ -437,7 +476,8 @@
     "description": "Selaraskan pertanyaan, variabel, dan metode.",
     "descriptionEn": "Align questions, variables and methods.",
     "deliverable": "kerangka riset",
-    "reference": "RESEARCH.md"
+    "reference": "RESEARCH.md",
+    "deliverableEn": "Research outline"
   },
   {
     "id": 41,
@@ -448,7 +488,8 @@
     "description": "Temukan asumsi dan kelemahan desain penelitian.",
     "descriptionEn": "Review methodological assumptions and biases.",
     "deliverable": "kritik metode",
-    "reference": "RESEARCH.md"
+    "reference": "RESEARCH.md",
+    "deliverableEn": "Method critique"
   },
   {
     "id": 42,
@@ -459,7 +500,8 @@
     "description": "Ubah dokumen sumber menjadi keputusan penting.",
     "descriptionEn": "Synthesize source documents into findings.",
     "deliverable": "ringkasan + sumber",
-    "reference": "RESEARCH.md"
+    "reference": "RESEARCH.md",
+    "deliverableEn": "Summary + sources"
   },
   {
     "id": 43,
@@ -470,7 +512,8 @@
     "description": "Uji masalah pelanggan sebelum membangun.",
     "descriptionEn": "Validate demand before building.",
     "deliverable": "hipotesis + tes",
-    "reference": "BUSINESS.md"
+    "reference": "BUSINESS.md",
+    "deliverableEn": "Hypothesis + test plan"
   },
   {
     "id": 44,
@@ -481,7 +524,8 @@
     "description": "Buat persona dari data, bukan stereotip.",
     "descriptionEn": "Build evidence-based customer personas.",
     "deliverable": "persona terukur",
-    "reference": "BUSINESS.md"
+    "reference": "BUSINESS.md",
+    "deliverableEn": "Evidence-based persona"
   },
   {
     "id": 45,
@@ -492,7 +536,8 @@
     "description": "Pilih fitur minimum yang benar-benar berguna.",
     "descriptionEn": "Scope a useful minimum viable product.",
     "deliverable": "backlog MVP",
-    "reference": "BUSINESS.md"
+    "reference": "BUSINESS.md",
+    "deliverableEn": "MVP backlog"
   },
   {
     "id": 46,
@@ -503,7 +548,8 @@
     "description": "Bandingkan harga berbasis nilai dan biaya.",
     "descriptionEn": "Evaluate value- and cost-based pricing.",
     "deliverable": "opsi harga + asumsi",
-    "reference": "BUSINESS.md"
+    "reference": "BUSINESS.md",
+    "deliverableEn": "Pricing options + assumptions"
   },
   {
     "id": 47,
@@ -514,7 +560,8 @@
     "description": "Bandingkan alternatif pasar secara transparan.",
     "descriptionEn": "Compare market alternatives transparently.",
     "deliverable": "matriks pesaing",
-    "reference": "BUSINESS.md"
+    "reference": "BUSINESS.md",
+    "deliverableEn": "Competitor matrix"
   },
   {
     "id": 48,
@@ -525,7 +572,8 @@
     "description": "Pilih kanal dan eksperimen dengan anggaran.",
     "descriptionEn": "Prioritize channels and budgeted experiments.",
     "deliverable": "rencana kampanye",
-    "reference": "BUSINESS.md"
+    "reference": "BUSINESS.md",
+    "deliverableEn": "Campaign plan"
   },
   {
     "id": 49,
@@ -536,7 +584,8 @@
     "description": "Periksa kode, risiko, dan dependensi jika dapat diakses.",
     "descriptionEn": "Review accessible code, risks and dependencies.",
     "deliverable": "temuan + bukti",
-    "reference": "ENGINEERING.md"
+    "reference": "ENGINEERING.md",
+    "deliverableEn": "Findings + evidence"
   },
   {
     "id": 50,
@@ -547,7 +596,8 @@
     "description": "Reproduksi error sebelum mengubah kode.",
     "descriptionEn": "Reproduce failures before applying fixes.",
     "deliverable": "penyebab + perbaikan",
-    "reference": "ENGINEERING.md"
+    "reference": "ENGINEERING.md",
+    "deliverableEn": "Root cause + fix"
   },
   {
     "id": 51,
@@ -558,7 +608,8 @@
     "description": "Implementasikan perubahan kecil dan uji perilakunya.",
     "descriptionEn": "Implement minimal changes with tests.",
     "deliverable": "patch + uji",
-    "reference": "ENGINEERING.md"
+    "reference": "ENGINEERING.md",
+    "deliverableEn": "Patch + tests"
   },
   {
     "id": 52,
@@ -569,7 +620,8 @@
     "description": "Susun tes untuk fungsi normal dan kasus tepi.",
     "descriptionEn": "Create normal and edge-case tests.",
     "deliverable": "skenario tes",
-    "reference": "ENGINEERING.md"
+    "reference": "ENGINEERING.md",
+    "deliverableEn": "Test scenarios"
   },
   {
     "id": 53,
@@ -580,7 +632,8 @@
     "description": "Nilai komponen, alur data, dan trade-off.",
     "descriptionEn": "Review architecture and trade-offs.",
     "deliverable": "diagram + keputusan",
-    "reference": "ENGINEERING.md"
+    "reference": "ENGINEERING.md",
+    "deliverableEn": "Diagram + decisions"
   },
   {
     "id": 54,
@@ -591,7 +644,8 @@
     "description": "Jelaskan pemasangan dan penggunaan yang nyata.",
     "descriptionEn": "Document setup and actual usage.",
     "deliverable": "README teknis",
-    "reference": "ENGINEERING.md"
+    "reference": "ENGINEERING.md",
+    "deliverableEn": "Technical README"
   },
   {
     "id": 55,
@@ -602,7 +656,8 @@
     "description": "Periksa navigasi, hierarki, dan hambatan pengguna.",
     "descriptionEn": "Evaluate navigation, hierarchy and friction.",
     "deliverable": "audit + prioritas",
-    "reference": "DESIGN.md"
+    "reference": "DESIGN.md",
+    "deliverableEn": "Audit + priorities"
   },
   {
     "id": 56,
@@ -613,7 +668,8 @@
     "description": "Buat token visual konsisten dan dapat diakses.",
     "descriptionEn": "Create accessible, reusable visual tokens.",
     "deliverable": "token + komponen",
-    "reference": "DESIGN.md"
+    "reference": "DESIGN.md",
+    "deliverableEn": "Design tokens + components"
   },
   {
     "id": 57,
@@ -624,7 +680,8 @@
     "description": "Perpendek langkah pengguna pada layar kecil.",
     "descriptionEn": "Simplify small-screen user flows.",
     "deliverable": "alur + wireframe",
-    "reference": "DESIGN.md"
+    "reference": "DESIGN.md",
+    "deliverableEn": "User flow + wireframe"
   },
   {
     "id": 58,
@@ -635,7 +692,8 @@
     "description": "Periksa kontras, keyboard, label dan motion.",
     "descriptionEn": "Review contrast, keyboard, labels and motion.",
     "deliverable": "checklist a11y",
-    "reference": "DESIGN.md"
+    "reference": "DESIGN.md",
+    "deliverableEn": "Accessibility checklist"
   },
   {
     "id": 59,
@@ -646,7 +704,8 @@
     "description": "Rancang gerak ringan dengan reduced motion.",
     "descriptionEn": "Design lightweight accessible motion.",
     "deliverable": "spesifikasi animasi",
-    "reference": "DESIGN.md"
+    "reference": "DESIGN.md",
+    "deliverableEn": "Animation specification"
   },
   {
     "id": 60,
@@ -657,7 +716,8 @@
     "description": "Buat label, pesan error, dan bantuan yang jelas.",
     "descriptionEn": "Write clear UI labels and errors.",
     "deliverable": "microcopy + contoh",
-    "reference": "DESIGN.md"
+    "reference": "DESIGN.md",
+    "deliverableEn": "Microcopy + examples"
   },
   {
     "id": 61,
@@ -668,7 +728,8 @@
     "description": "Susun panduan password manager dan MFA.",
     "descriptionEn": "Plan safer passwords and multifactor access.",
     "deliverable": "checklist akun",
-    "reference": "DIGITAL_SAFETY.md"
+    "reference": "DIGITAL_SAFETY.md",
+    "deliverableEn": "Account checklist"
   },
   {
     "id": 62,
@@ -679,7 +740,8 @@
     "description": "Kenali tanda penipuan tanpa membuka tautan.",
     "descriptionEn": "Spot phishing signals without opening links.",
     "deliverable": "indikator risiko",
-    "reference": "DIGITAL_SAFETY.md"
+    "reference": "DIGITAL_SAFETY.md",
+    "deliverableEn": "Risk indicators"
   },
   {
     "id": 63,
@@ -690,7 +752,8 @@
     "description": "Tinjau pembagian data dan izin aplikasi.",
     "descriptionEn": "Review data sharing and app permissions.",
     "deliverable": "audit privasi",
-    "reference": "DIGITAL_SAFETY.md"
+    "reference": "DIGITAL_SAFETY.md",
+    "deliverableEn": "Privacy audit"
   },
   {
     "id": 64,
@@ -701,7 +764,8 @@
     "description": "Rencanakan backup dan pengujian pemulihan.",
     "descriptionEn": "Design backups with recovery checks.",
     "deliverable": "rencana backup",
-    "reference": "DIGITAL_SAFETY.md"
+    "reference": "DIGITAL_SAFETY.md",
+    "deliverableEn": "Backup plan"
   },
   {
     "id": 65,
@@ -712,7 +776,8 @@
     "description": "Cari indikasi API key bocor tanpa mencetak nilainya.",
     "descriptionEn": "Inspect possible secret leaks without exposing values.",
     "deliverable": "temuan disamarkan",
-    "reference": "DIGITAL_SAFETY.md"
+    "reference": "DIGITAL_SAFETY.md",
+    "deliverableEn": "Redacted findings"
   },
   {
     "id": 66,
@@ -723,6 +788,7 @@
     "description": "Evaluasi hak akses minimum untuk aplikasi.",
     "descriptionEn": "Review least-privilege application access.",
     "deliverable": "matriks izin",
-    "reference": "DIGITAL_SAFETY.md"
+    "reference": "DIGITAL_SAFETY.md",
+    "deliverableEn": "Permission matrix"
   }
 ]
