@@ -124,17 +124,28 @@ function createIdempotentHost({ host, store } = {}) {
   if (!store || typeof store.get !== 'function' || typeof store.set !== 'function') {
     throw new Error('Idempotent host requires a get/set store.');
   }
+  const inFlight = new Map();
   return {
     listSkills: (...args) => typeof host.listSkills === 'function' ? host.listSkills(...args) : [],
     statusFor: (...args) => typeof host.statusFor === 'function' ? host.statusFor(...args) : { available: false, requiresApproval: false },
     async execute(plan, options = {}) {
       const key = options.idempotencyKey;
       if (typeof key !== 'string' || !key.trim()) throw new Error('idempotencyKey is required.');
-      const existing = await store.get(key);
-      if (existing) return { ...existing, replayed: true };
-      const result = await host.execute(plan, options);
-      if (result && result.status === 'completed') await store.set(key, result);
-      return result;
+      const concurrent = inFlight.get(key);
+      if (concurrent) return { ...(await concurrent), replayed: true };
+      const pending = (async () => {
+        const existing = await store.get(key);
+        if (existing) return { ...existing, replayed: true };
+        const result = await host.execute(plan, options);
+        if (result && result.status === 'completed') await store.set(key, result);
+        return result;
+      })();
+      inFlight.set(key, pending);
+      try {
+        return await pending;
+      } finally {
+        if (inFlight.get(key) === pending) inFlight.delete(key);
+      }
     }
   };
 }
