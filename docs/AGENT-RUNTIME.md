@@ -95,5 +95,9 @@ browser, shell, network, or registered handler.
 4. **Quality layer:** replayable runs, policy tests, capability health checks,
    and benchmark fixtures.
 
+The first concrete service adapter is `adapters/github/`. It demonstrates the
+required pattern: host-injected secret, explicit handlers, read operations
+separated from high-risk mutation, and exact-step approval before merge.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
