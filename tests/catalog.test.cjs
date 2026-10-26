@@ -16,7 +16,7 @@ test('11 categories have six workflows each',()=>{
 });
 test('all 66 have real references and expected outputs',()=>{
  for(const c of caps){assert.ok(fs.existsSync(path.join(root,'skills/jrhagents/references',c.reference)),c.title);
- assert.ok(c.deliverable.length>=7);assert.ok(c.descriptionEn.length>=10);
+ assert.ok(c.deliverable.length>=7);assert.ok(c.deliverableEn.length>=7);assert.ok(c.descriptionEn.length>=10);
  assert.equal(c.minimum_host,'chat');assert.ok(Array.isArray(c.optional_host));}
 });
 test('website discloses optional host tools for selected workflow',()=>{
