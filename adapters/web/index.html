@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JRHagents · Workflow Review Console</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">JRHagents runtime</p>
+          <h1>Review sebelum agent bekerja.</h1>
+          <p class="lede">Masukkan workflow JSON, periksa langkahnya, lalu jalankan hanya kemampuan yang benar-benar tersedia.</p>
+        </div>
+        <span class="status-pill" id="hostStatus">LOCAL · TERBATAS</span>
+      </header>
+
+      <section class="grid" aria-label="Workflow review console">
+        <article class="card input-card">
+          <div class="card-heading">
+            <div><span class="step">01</span><h2>Workflow JSON</h2></div>
+            <button class="quiet" id="sampleButton" type="button">Contoh</button>
+          </div>
+          <label for="planInput">Plan yang akan direview</label>
+          <textarea id="planInput" spellcheck="false" aria-describedby="schemaHint"></textarea>
+          <p class="hint" id="schemaHint">Schema v1 · validasi lokal · tidak ada data yang dikirim.</p>
+          <div class="actions">
+            <button class="primary" id="validateButton" type="button">Validasi workflow</button>
+            <button class="secondary" id="clearButton" type="button">Bersihkan</button>
+          </div>
+        </article>
+
+        <article class="card review-card" aria-live="polite">
+          <div class="card-heading">
+            <div><span class="step">02</span><h2>Review & status</h2></div>
+            <span id="planBadge" class="badge">Belum divalidasi</span>
+          </div>
+          <div id="message" class="message">Validasi plan untuk melihat langkah dan batasan host.</div>
+          <div id="planMeta" class="meta hidden"></div>
+          <ol id="steps" class="steps"></ol>
+          <div class="approval" id="approvalBox">
+            <strong>Approval gate</strong>
+            <span>Skill eksternal atau berisiko tidak akan dijalankan oleh adapter lokal ini.</span>
+          </div>
+          <button class="primary full" id="runButton" type="button" disabled>Jalankan kemampuan lokal</button>
+          <pre id="output" class="output hidden" aria-label="Hasil eksekusi"></pre>
+        </article>
+      </section>
+
+      <footer>JRHagents tidak menambahkan API, akun, permission, atau koneksi eksternal dari browser.</footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
