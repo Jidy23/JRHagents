@@ -27,6 +27,30 @@ test('host blocks high-risk steps without exact approval', async () => {
   await assert.rejects(() => host.execute({ goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write' }] }), /Approval required: w1/);
 });
 
+test('host retries only explicitly selected low-risk skills', async () => {
+  let attempts = 0;
+  const flakyAdapter = {
+    skills: { 'demo.flaky': { id: 'demo.flaky', description: 'Flaky demo', risk: 'low', requiresApproval: false } },
+    handlers: { 'demo.flaky': async () => { attempts += 1; if (attempts < 2) throw new Error('temporary'); return { ok: true }; } }
+  };
+  const host = createJRHHost({ adapters: [flakyAdapter] });
+  const result = await host.execute({ goal: 'retry', steps: [{ id: 'f', skill_id: 'demo.flaky' }] }, {
+    retryPolicy: { maxAttempts: 1, retryableSkills: ['demo.flaky'] }
+  });
+  assert.equal(attempts, 2);
+  assert.equal(result.events.filter((event) => event.type === 'step.retrying').length, 1);
+});
+
+test('host cancels before the next step and preserves lifecycle events', async () => {
+  const controller = new AbortController();
+  const host = createJRHHost({ adapters: [readAdapter] });
+  controller.abort();
+  await assert.rejects(
+    () => host.execute({ goal: 'cancel', steps: [{ id: 'read', skill_id: 'demo.read' }] }, { signal: controller.signal }),
+    (error) => error.code === 'RUN_CANCELLED' && error.status === 'cancelled' && error.events.at(-1).type === 'run.cancelled'
+  );
+});
+
 test('host allowlist and duplicate protection fail closed', () => {
   const host = createJRHHost({ adapters: [readAdapter, writeAdapter], allowedSkills: ['demo.read'] });
   assert.equal(host.statusFor('demo.write').available, false);
