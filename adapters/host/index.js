@@ -60,8 +60,15 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
       const spec = skills.get(skillId);
       return spec ? { available: true, requiresApproval: spec.requiresApproval === true, risk: spec.risk || 'low' } : { available: false, requiresApproval: false };
     },
-    async execute(plan, { approvedSteps = new Set(), signal = null, retryPolicy = {}, executionPolicy = {} } = {}) {
+    async execute(plan, { approvedSteps = new Set(), approval = null, signal = null, retryPolicy = {}, executionPolicy = {} } = {}) {
       validatePlan(plan);
+      if (approval !== null) {
+        if (!approval || typeof approval.plan_id !== 'string' || !Array.isArray(approval.approvedSteps)) {
+          throw new Error('approval must contain plan_id and approvedSteps.');
+        }
+        if (plan.plan_id && approval.plan_id !== plan.plan_id) throw new Error('Approval plan_id does not match workflow plan.');
+        approvedSteps = approval.approvedSteps;
+      }
       if (!approvedSteps || typeof approvedSteps[Symbol.iterator] !== 'function') throw new Error('approvedSteps must be iterable.');
       const approvalSet = new Set(approvedSteps);
       if (signal && typeof signal.aborted !== 'boolean') throw new Error('signal must be an AbortSignal-like object.');

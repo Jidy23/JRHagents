@@ -31,6 +31,17 @@ test('host blocks high-risk steps without exact approval', async () => {
   await assert.rejects(() => host.execute({ goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write' }] }), /Approval required: w1/);
 });
 
+test('host binds approval envelopes to the exact plan ID', async () => {
+  const host = createJRHHost({ adapters: [writeAdapter] });
+  const plan = { plan_id: 'plan-1', goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write' }] };
+  await assert.rejects(
+    () => host.execute(plan, { approval: { plan_id: 'plan-2', approvedSteps: ['w1'] } }),
+    /does not match workflow plan/
+  );
+  const result = await host.execute(plan, { approval: { plan_id: 'plan-1', approvedSteps: ['w1'] } });
+  assert.equal(result.status, 'completed');
+});
+
 test('host retries only explicitly selected low-risk skills', async () => {
   let attempts = 0;
   const flakyAdapter = {

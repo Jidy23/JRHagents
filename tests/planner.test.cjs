@@ -47,5 +47,6 @@ test('planner prepares explicit approvals without executing the host', async () 
   const { plan } = await planner.propose('review');
   assert.throws(() => planner.prepareExecution(plan), /Approval required before execution/);
   const prepared = planner.prepareExecution(plan, ['write']);
+  assert.equal(prepared.execution.plan_id, plan.plan_id);
   assert.deepEqual(prepared.execution.approvedSteps, ['write']);
 });
