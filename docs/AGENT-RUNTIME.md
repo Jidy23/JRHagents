@@ -113,5 +113,9 @@ host must still configure grants and RLS correctly.
 calls. It injects the transport, adds required JSON-RPC metadata, and blocks
 tools unless they are explicitly safe or the exact call has been approved.
 
+`adapters/host/` composes multiple service adapters into one runtime. It
+rejects duplicate skills, supports a narrower host allowlist, and preserves
+step-scoped approval when one workflow crosses multiple services.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
