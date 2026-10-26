@@ -24,6 +24,16 @@ test('idempotent host replays successful results without executing twice', async
   assert.equal(second.outputs.ok, true);
 });
 
+test('same key cannot replay a different plan', async () => {
+  let executions = 0;
+  const host = createIdempotentHost({ store: createIdempotencyStore(), host: {
+    execute: async () => ({ run_id: `run_${++executions}`, status: 'completed', outputs: {}, events: [] })
+  } });
+  await host.execute({ goal: 'first', steps: [] }, { idempotencyKey: 'same' });
+  await assert.rejects(() => host.execute({ goal: 'second', steps: [] }, { idempotencyKey: 'same' }), /different plan/);
+  assert.equal(executions, 1);
+});
+
 test('idempotent host does not cache failed or paused runs', async () => {
   let executions = 0;
   const host = createIdempotentHost({
