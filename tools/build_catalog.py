@@ -5,7 +5,7 @@ import argparse
 import json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-FIELDS=('id','category','categoryEn','title','titleEn','description','descriptionEn','deliverable','reference')
+FIELDS=('id','category','categoryEn','title','titleEn','description','descriptionEn','deliverable','deliverableEn','reference')
 REFERENCE_PROFILES={
     'AUTOMATION.md':('chat',('calendar','automation')),
     'BUSINESS.md':('chat',('web','files')),

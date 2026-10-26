@@ -21,7 +21,7 @@ class SiteV33Tests(unittest.TestCase):
         refs=ROOT/'skills/jrhagents/references'
         for x in DATA:
             self.assertTrue((refs/x['reference']).is_file(),x)
-            for k in ('title','titleEn','description','descriptionEn','deliverable'):
+            for k in ('title','titleEn','description','descriptionEn','deliverable','deliverableEn'):
                 self.assertGreaterEqual(len(x[k]),7,(x['id'],k))
     def test_generated_catalog_matches_json(self):
         script=(ROOT/'docs/assets/catalog.js').read_text(encoding='utf-8')

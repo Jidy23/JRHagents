@@ -78,6 +78,12 @@ try:
    if width<=720:page.locator('#nextSetup').click()
    page.locator('#langToggle').click()
    assert page.locator('#catalogTitle').inner_text()=='Find what you need.',width
+   page.locator('[data-tab="kemampuan"]:visible').first.click()
+   assert page.locator('#detailResult').inner_text()=='Resume + actionable suggestions',width
+   page.locator('#useCapability').click()
+   page.locator('#copyMain').click()
+   clip=page.evaluate('window.__copied ?? document.querySelector("#fallbackText").value')
+   assert 'Deliver: Resume + actionable suggestions.' in clip,width
    assert page.locator('#themeToggle').get_attribute('aria-label')=='Toggle theme',width
    assert page.locator('#appsGrid').get_attribute('aria-label')=='AI app list',width
    assert page.locator('#downloadPrompt').get_attribute('aria-label')=='Download full instructions',width

@@ -12,6 +12,7 @@
       "descriptionEn": "Choose the three most important tasks today.",
       "deliverable": "3 prioritas + alasan + langkah awal",
       "reference": "AUTOMATION.md",
+      "deliverableEn": "Top 3 priorities + reasons + first steps",
       "minimum_host": "chat",
       "optional_host": [
         "calendar",
@@ -29,6 +30,7 @@
       "descriptionEn": "Build a realistic weekly schedule with breaks.",
       "deliverable": "agenda 7 hari + buffer",
       "reference": "AUTOMATION.md",
+      "deliverableEn": "7-day agenda + buffer time",
       "minimum_host": "chat",
       "optional_host": [
         "calendar",
@@ -46,6 +48,7 @@
       "descriptionEn": "Arrange focused time blocks around constraints.",
       "deliverable": "jadwal blok waktu",
       "reference": "AUTOMATION.md",
+      "deliverableEn": "Time-block schedule",
       "minimum_host": "chat",
       "optional_host": [
         "calendar",
@@ -63,6 +66,7 @@
       "descriptionEn": "Compare options against criteria and risks.",
       "deliverable": "matriks keputusan",
       "reference": "AUTOMATION.md",
+      "deliverableEn": "Decision matrix",
       "minimum_host": "chat",
       "optional_host": [
         "calendar",
@@ -80,6 +84,7 @@
       "descriptionEn": "Break a large goal into manageable tasks.",
       "deliverable": "milestone + dependensi",
       "reference": "AUTOMATION.md",
+      "deliverableEn": "Milestones + dependencies",
       "minimum_host": "chat",
       "optional_host": [
         "calendar",
@@ -97,6 +102,7 @@
       "descriptionEn": "Review habits without judgment.",
       "deliverable": "review + eksperimen kecil",
       "reference": "AUTOMATION.md",
+      "deliverableEn": "Review + small experiment",
       "minimum_host": "chat",
       "optional_host": [
         "calendar",
@@ -114,6 +120,7 @@
       "descriptionEn": "Learn difficult ideas with grounded analogies.",
       "deliverable": "penjelasan + contoh",
       "reference": "LEARNING.md",
+      "deliverableEn": "Explanation + example",
       "minimum_host": "chat",
       "optional_host": [],
       "verification": "Check claims against provided material; label external actions and tests NOT RUN unless observed."
@@ -128,6 +135,7 @@
       "descriptionEn": "Practice retrieval with progressive questions.",
       "deliverable": "latihan + kunci",
       "reference": "LEARNING.md",
+      "deliverableEn": "Practice questions + answer key",
       "minimum_host": "chat",
       "optional_host": [],
       "verification": "Check claims against provided material; label external actions and tests NOT RUN unless observed."
@@ -142,6 +150,7 @@
       "descriptionEn": "Create concise, useful flashcards.",
       "deliverable": "10 kartu tanya-jawab",
       "reference": "LEARNING.md",
+      "deliverableEn": "10 question-and-answer cards",
       "minimum_host": "chat",
       "optional_host": [],
       "verification": "Check claims against provided material; label external actions and tests NOT RUN unless observed."
@@ -156,6 +165,7 @@
       "descriptionEn": "Practice exam questions with explanations.",
       "deliverable": "soal + pembahasan",
       "reference": "LEARNING.md",
+      "deliverableEn": "Questions + explanations",
       "minimum_host": "chat",
       "optional_host": [],
       "verification": "Check claims against provided material; label external actions and tests NOT RUN unless observed."
@@ -170,6 +180,7 @@
       "descriptionEn": "Plan a study path within available time.",
       "deliverable": "silabus + evaluasi",
       "reference": "LEARNING.md",
+      "deliverableEn": "Syllabus + evaluation",
       "minimum_host": "chat",
       "optional_host": [],
       "verification": "Check claims against provided material; label external actions and tests NOT RUN unless observed."
@@ -184,6 +195,7 @@
       "descriptionEn": "Improve foreign-language speaking and writing.",
       "deliverable": "latihan + koreksi",
       "reference": "LEARNING.md",
+      "deliverableEn": "Exercises + corrections",
       "minimum_host": "chat",
       "optional_host": [],
       "verification": "Check claims against provided material; label external actions and tests NOT RUN unless observed."
@@ -198,6 +210,7 @@
       "descriptionEn": "Tailor resumes to roles with evidence.",
       "deliverable": "CV + saran terukur",
       "reference": "CAREER.md",
+      "deliverableEn": "Resume + actionable suggestions",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -215,6 +228,7 @@
       "descriptionEn": "Select and present portfolio projects.",
       "deliverable": "struktur portofolio",
       "reference": "CAREER.md",
+      "deliverableEn": "Portfolio structure",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -232,6 +246,7 @@
       "descriptionEn": "Practice role-specific interview questions.",
       "deliverable": "simulasi + masukan",
       "reference": "CAREER.md",
+      "deliverableEn": "Mock interview + feedback",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -249,6 +264,7 @@
       "descriptionEn": "Draft specific cover letters without fabrications.",
       "deliverable": "surat lamaran",
       "reference": "CAREER.md",
+      "deliverableEn": "Cover letter",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -266,6 +282,7 @@
       "descriptionEn": "Map skill gaps and learning priorities.",
       "deliverable": "matriks gap",
       "reference": "CAREER.md",
+      "deliverableEn": "Skills-gap matrix",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -283,6 +300,7 @@
       "descriptionEn": "Prepare grounded negotiation options.",
       "deliverable": "skrip + batasan",
       "reference": "CAREER.md",
+      "deliverableEn": "Negotiation script + boundaries",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -300,6 +318,7 @@
       "descriptionEn": "Make a budget from user-provided cashflow.",
       "deliverable": "tabel anggaran",
       "reference": "DATA.md",
+      "deliverableEn": "Budget table",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -317,6 +336,7 @@
       "descriptionEn": "Review income, spending and cash leaks.",
       "deliverable": "ringkasan arus kas",
       "reference": "DATA.md",
+      "deliverableEn": "Cash-flow summary",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -334,6 +354,7 @@
       "descriptionEn": "Plan emergency savings with clear assumptions.",
       "deliverable": "target + simulasi",
       "reference": "DATA.md",
+      "deliverableEn": "Savings goal + simulation",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -351,6 +372,7 @@
       "descriptionEn": "Understand investment risk without return promises.",
       "deliverable": "peta risiko",
       "reference": "DATA.md",
+      "deliverableEn": "Risk map",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -368,6 +390,7 @@
       "descriptionEn": "Compare rates, terms and total borrowing cost.",
       "deliverable": "tabel biaya",
       "reference": "DATA.md",
+      "deliverableEn": "Cost table",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -385,6 +408,7 @@
       "descriptionEn": "Model savings goals under alternative scenarios.",
       "deliverable": "simulasi + asumsi",
       "reference": "DATA.md",
+      "deliverableEn": "Simulation + assumptions",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -402,6 +426,7 @@
       "descriptionEn": "Build general sleep habits without diagnosis.",
       "deliverable": "rencana kebiasaan",
       "reference": "WELLBEING.md",
+      "deliverableEn": "Habit plan",
       "minimum_host": "chat",
       "optional_host": [
         "web"
@@ -418,6 +443,7 @@
       "descriptionEn": "Plan general activity within user constraints.",
       "deliverable": "rencana aktivitas",
       "reference": "WELLBEING.md",
+      "deliverableEn": "Activity plan",
       "minimum_host": "chat",
       "optional_host": [
         "web"
@@ -434,6 +460,7 @@
       "descriptionEn": "Plan general balanced meals, not medical treatment.",
       "deliverable": "contoh menu",
       "reference": "WELLBEING.md",
+      "deliverableEn": "Sample meal plan",
       "minimum_host": "chat",
       "optional_host": [
         "web"
@@ -450,6 +477,7 @@
       "descriptionEn": "Prepare questions for healthcare professionals.",
       "deliverable": "daftar pertanyaan",
       "reference": "WELLBEING.md",
+      "deliverableEn": "Questions to ask",
       "minimum_host": "chat",
       "optional_host": [
         "web"
@@ -466,6 +494,7 @@
       "descriptionEn": "Evaluate evidence behind health claims.",
       "deliverable": "cek sumber + batasan",
       "reference": "WELLBEING.md",
+      "deliverableEn": "Source check + limitations",
       "minimum_host": "chat",
       "optional_host": [
         "web"
@@ -482,6 +511,7 @@
       "descriptionEn": "Plan everyday non-clinical coping routines.",
       "deliverable": "strategi sederhana",
       "reference": "WELLBEING.md",
+      "deliverableEn": "Simple strategy",
       "minimum_host": "chat",
       "optional_host": [
         "web"
@@ -498,6 +528,7 @@
       "descriptionEn": "Draft context-aware professional emails.",
       "deliverable": "email siap kirim",
       "reference": "WRITING.md",
+      "deliverableEn": "Ready-to-send email",
       "minimum_host": "chat",
       "optional_host": [
         "files"
@@ -514,6 +545,7 @@
       "descriptionEn": "Structure key messages and presentation flow.",
       "deliverable": "outline slide",
       "reference": "WRITING.md",
+      "deliverableEn": "Slide outline",
       "minimum_host": "chat",
       "optional_host": [
         "files"
@@ -530,6 +562,7 @@
       "descriptionEn": "Improve clarity while preserving facts.",
       "deliverable": "teks hasil revisi",
       "reference": "WRITING.md",
+      "deliverableEn": "Revised text",
       "minimum_host": "chat",
       "optional_host": [
         "files"
@@ -546,6 +579,7 @@
       "descriptionEn": "Prepare respectful, firm conversations.",
       "deliverable": "skrip percakapan",
       "reference": "WRITING.md",
+      "deliverableEn": "Conversation script",
       "minimum_host": "chat",
       "optional_host": [
         "files"
@@ -562,6 +596,7 @@
       "descriptionEn": "Write natural platform-specific content.",
       "deliverable": "post + variasi hook",
       "reference": "WRITING.md",
+      "deliverableEn": "Post + hook variations",
       "minimum_host": "chat",
       "optional_host": [
         "files"
@@ -578,6 +613,7 @@
       "descriptionEn": "Extract decisions and actions from notes.",
       "deliverable": "notulen + aksi",
       "reference": "WRITING.md",
+      "deliverableEn": "Meeting notes + actions",
       "minimum_host": "chat",
       "optional_host": [
         "files"
@@ -594,6 +630,7 @@
       "descriptionEn": "Find references when search tools are available.",
       "deliverable": "daftar sumber",
       "reference": "RESEARCH.md",
+      "deliverableEn": "Source list",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -611,6 +648,7 @@
       "descriptionEn": "Separate claims, evidence and unknowns.",
       "deliverable": "tabel verifikasi",
       "reference": "RESEARCH.md",
+      "deliverableEn": "Verification table",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -628,6 +666,7 @@
       "descriptionEn": "Compare methods, theories and findings.",
       "deliverable": "matriks studi",
       "reference": "RESEARCH.md",
+      "deliverableEn": "Study matrix",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -645,6 +684,7 @@
       "descriptionEn": "Align questions, variables and methods.",
       "deliverable": "kerangka riset",
       "reference": "RESEARCH.md",
+      "deliverableEn": "Research outline",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -662,6 +702,7 @@
       "descriptionEn": "Review methodological assumptions and biases.",
       "deliverable": "kritik metode",
       "reference": "RESEARCH.md",
+      "deliverableEn": "Method critique",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -679,6 +720,7 @@
       "descriptionEn": "Synthesize source documents into findings.",
       "deliverable": "ringkasan + sumber",
       "reference": "RESEARCH.md",
+      "deliverableEn": "Summary + sources",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -696,6 +738,7 @@
       "descriptionEn": "Validate demand before building.",
       "deliverable": "hipotesis + tes",
       "reference": "BUSINESS.md",
+      "deliverableEn": "Hypothesis + test plan",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -713,6 +756,7 @@
       "descriptionEn": "Build evidence-based customer personas.",
       "deliverable": "persona terukur",
       "reference": "BUSINESS.md",
+      "deliverableEn": "Evidence-based persona",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -730,6 +774,7 @@
       "descriptionEn": "Scope a useful minimum viable product.",
       "deliverable": "backlog MVP",
       "reference": "BUSINESS.md",
+      "deliverableEn": "MVP backlog",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -747,6 +792,7 @@
       "descriptionEn": "Evaluate value- and cost-based pricing.",
       "deliverable": "opsi harga + asumsi",
       "reference": "BUSINESS.md",
+      "deliverableEn": "Pricing options + assumptions",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -764,6 +810,7 @@
       "descriptionEn": "Compare market alternatives transparently.",
       "deliverable": "matriks pesaing",
       "reference": "BUSINESS.md",
+      "deliverableEn": "Competitor matrix",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -781,6 +828,7 @@
       "descriptionEn": "Prioritize channels and budgeted experiments.",
       "deliverable": "rencana kampanye",
       "reference": "BUSINESS.md",
+      "deliverableEn": "Campaign plan",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -798,6 +846,7 @@
       "descriptionEn": "Review accessible code, risks and dependencies.",
       "deliverable": "temuan + bukti",
       "reference": "ENGINEERING.md",
+      "deliverableEn": "Findings + evidence",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -815,6 +864,7 @@
       "descriptionEn": "Reproduce failures before applying fixes.",
       "deliverable": "penyebab + perbaikan",
       "reference": "ENGINEERING.md",
+      "deliverableEn": "Root cause + fix",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -832,6 +882,7 @@
       "descriptionEn": "Implement minimal changes with tests.",
       "deliverable": "patch + uji",
       "reference": "ENGINEERING.md",
+      "deliverableEn": "Patch + tests",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -849,6 +900,7 @@
       "descriptionEn": "Create normal and edge-case tests.",
       "deliverable": "skenario tes",
       "reference": "ENGINEERING.md",
+      "deliverableEn": "Test scenarios",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -866,6 +918,7 @@
       "descriptionEn": "Review architecture and trade-offs.",
       "deliverable": "diagram + keputusan",
       "reference": "ENGINEERING.md",
+      "deliverableEn": "Diagram + decisions",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -883,6 +936,7 @@
       "descriptionEn": "Document setup and actual usage.",
       "deliverable": "README teknis",
       "reference": "ENGINEERING.md",
+      "deliverableEn": "Technical README",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -900,6 +954,7 @@
       "descriptionEn": "Evaluate navigation, hierarchy and friction.",
       "deliverable": "audit + prioritas",
       "reference": "DESIGN.md",
+      "deliverableEn": "Audit + priorities",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -917,6 +972,7 @@
       "descriptionEn": "Create accessible, reusable visual tokens.",
       "deliverable": "token + komponen",
       "reference": "DESIGN.md",
+      "deliverableEn": "Design tokens + components",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -934,6 +990,7 @@
       "descriptionEn": "Simplify small-screen user flows.",
       "deliverable": "alur + wireframe",
       "reference": "DESIGN.md",
+      "deliverableEn": "User flow + wireframe",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -951,6 +1008,7 @@
       "descriptionEn": "Review contrast, keyboard, labels and motion.",
       "deliverable": "checklist a11y",
       "reference": "DESIGN.md",
+      "deliverableEn": "Accessibility checklist",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -968,6 +1026,7 @@
       "descriptionEn": "Design lightweight accessible motion.",
       "deliverable": "spesifikasi animasi",
       "reference": "DESIGN.md",
+      "deliverableEn": "Animation specification",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -985,6 +1044,7 @@
       "descriptionEn": "Write clear UI labels and errors.",
       "deliverable": "microcopy + contoh",
       "reference": "DESIGN.md",
+      "deliverableEn": "Microcopy + examples",
       "minimum_host": "chat",
       "optional_host": [
         "files",
@@ -1002,6 +1062,7 @@
       "descriptionEn": "Plan safer passwords and multifactor access.",
       "deliverable": "checklist akun",
       "reference": "DIGITAL_SAFETY.md",
+      "deliverableEn": "Account checklist",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -1019,6 +1080,7 @@
       "descriptionEn": "Spot phishing signals without opening links.",
       "deliverable": "indikator risiko",
       "reference": "DIGITAL_SAFETY.md",
+      "deliverableEn": "Risk indicators",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -1036,6 +1098,7 @@
       "descriptionEn": "Review data sharing and app permissions.",
       "deliverable": "audit privasi",
       "reference": "DIGITAL_SAFETY.md",
+      "deliverableEn": "Privacy audit",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -1053,6 +1116,7 @@
       "descriptionEn": "Design backups with recovery checks.",
       "deliverable": "rencana backup",
       "reference": "DIGITAL_SAFETY.md",
+      "deliverableEn": "Backup plan",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -1070,6 +1134,7 @@
       "descriptionEn": "Inspect possible secret leaks without exposing values.",
       "deliverable": "temuan disamarkan",
       "reference": "DIGITAL_SAFETY.md",
+      "deliverableEn": "Redacted findings",
       "minimum_host": "chat",
       "optional_host": [
         "web",
@@ -1087,6 +1152,7 @@
       "descriptionEn": "Review least-privilege application access.",
       "deliverable": "matriks izin",
       "reference": "DIGITAL_SAFETY.md",
+      "deliverableEn": "Permission matrix",
       "minimum_host": "chat",
       "optional_host": [
         "web",
