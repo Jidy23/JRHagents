@@ -82,6 +82,8 @@ tool listing, and approval-gated tool calls. See [`adapters/mcp/`](adapters/mcp/
 
 The unified host runtime composes these adapters into one workflow surface with
 an optional skill allowlist and per-step approval. See [`adapters/host/`](adapters/host/).
+It also supports explicit low-risk retries and cooperative cancellation with
+preserved lifecycle events.
 
 The goal planner boundary converts an injected natural-language proposal into
 a validated plan for review; it never executes tools by itself. See
