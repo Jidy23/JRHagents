@@ -94,6 +94,10 @@ in-memory store for ephemeral runs or `createFileAuditStore` for a host-owned
 JSON file with serialized writes and atomic replacement. See
 [`adapters/audit/`](adapters/audit/).
 
+The idempotency boundary prevents a client retry from executing the same
+successful action twice. It is bounded in-memory by default; durable storage
+and expiry remain host responsibilities. See [`adapters/idempotency/`](adapters/idempotency/).
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
