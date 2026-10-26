@@ -63,6 +63,11 @@ access, or external integrations; those must be injected by the host app.
 The runtime also exposes a versioned JSON plan boundary for web, CLI, and MCP
 adapters.
 
+The first service adapter is a server-side GitHub adapter with read-only
+repository/PR operations and an approval-required PR merge operation. See
+[`adapters/github/`](adapters/github/); credentials remain the host's secret,
+never the Skill or browser.
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
