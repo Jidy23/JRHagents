@@ -51,3 +51,11 @@ test('planner prepares explicit approvals without executing the host', async () 
   assert.match(prepared.execution.plan_fingerprint, /^[a-f0-9]{64}$/);
   assert.deepEqual(prepared.execution.approvedSteps, ['write']);
 });
+
+test('planner can issue an expiring approval envelope', async () => {
+  const planner = createGoalPlanner({ host, propose: async ({ goal }) => ({ goal, steps: [{ id: 'read', skill_id: 'demo.read' }] }) });
+  const { plan } = await planner.propose('read');
+  const prepared = planner.prepareExecution(plan, [], { ttlMs: 1000, now: () => '2026-01-01T00:00:00.000Z' });
+  assert.equal(prepared.execution.issued_at, '2026-01-01T00:00:00.000Z');
+  assert.equal(prepared.execution.expires_at, '2026-01-01T00:00:01.000Z');
+});
