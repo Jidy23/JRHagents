@@ -80,6 +80,9 @@ It does not expose arbitrary SQL, delete, or auth-admin actions. See
 MCP is supported through an injected JSON-RPC client boundary with discovery,
 tool listing, and approval-gated tool calls. See [`adapters/mcp/`](adapters/mcp/).
 
+The unified host runtime composes these adapters into one workflow surface with
+an optional skill allowlist and per-step approval. See [`adapters/host/`](adapters/host/).
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
