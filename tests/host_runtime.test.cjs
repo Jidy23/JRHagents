@@ -51,6 +51,15 @@ test('host rejects approval when plan content changes under the same ID', async 
   await assert.rejects(() => host.execute(changed, { approval }), /plan_fingerprint does not match/);
 });
 
+test('host rejects expired approval envelopes before execution', async () => {
+  const host = createJRHHost({ adapters: [writeAdapter] });
+  const plan = { plan_id: 'plan-expired', goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write' }] };
+  await assert.rejects(
+    () => host.execute(plan, { approval: { plan_id: 'plan-expired', approvedSteps: ['w1'], expires_at: '2020-01-01T00:00:00.000Z' } }),
+    /Approval has expired/
+  );
+});
+
 test('host retries only explicitly selected low-risk skills', async () => {
   let attempts = 0;
   const flakyAdapter = {

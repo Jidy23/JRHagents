@@ -25,9 +25,10 @@ function createGoalPlanner({ propose, host } = {}) {
     return { schema_version: 1, plan_id: plan.plan_id || `plan_${Date.now().toString(36)}`, goal: plan.goal.trim(), steps };
   };
 
-  const prepareExecution = (plan, approvedSteps = []) => {
+  const prepareExecution = (plan, approvedSteps = [], { ttlMs, now = () => new Date().toISOString() } = {}) => {
     if (!plan || typeof plan.goal !== 'string' || !Array.isArray(plan.steps)) throw new Error('Execution preparation requires a validated plan.');
     if (!Array.isArray(approvedSteps)) throw new Error('approvedSteps must be an array.');
+    if (ttlMs !== undefined && (!Number.isInteger(ttlMs) || ttlMs < 1)) throw new Error('ttlMs must be a positive integer.');
     const stepIds = new Set(plan.steps.map((step) => step.id));
     for (const stepId of approvedSteps) {
       if (typeof stepId !== 'string' || !stepIds.has(stepId)) throw new Error(`Approval references unknown step: ${stepId}`);
@@ -37,7 +38,15 @@ function createGoalPlanner({ propose, host } = {}) {
       const status = host.statusFor(step.skill_id);
       if (status.requiresApproval && !approvals.has(step.id)) throw new Error(`Approval required before execution: ${step.id}`);
     }
-    return { plan, execution: { plan_id: plan.plan_id, plan_fingerprint: planFingerprint(plan), approvedSteps: [...approvals] } };
+    const execution = { plan_id: plan.plan_id, plan_fingerprint: planFingerprint(plan), approvedSteps: [...approvals] };
+    if (ttlMs !== undefined) {
+      const issuedAt = now();
+      const issuedMs = Date.parse(issuedAt);
+      if (!Number.isFinite(issuedMs)) throw new Error('now must return an ISO date string.');
+      execution.issued_at = issuedAt;
+      execution.expires_at = new Date(issuedMs + ttlMs).toISOString();
+    }
+    return { plan, execution };
   };
 
   return {
@@ -48,7 +57,7 @@ function createGoalPlanner({ propose, host } = {}) {
       const plan = normalizeProposal(proposal);
       return { plan, review: plan.steps.map((step) => ({ ...step, ...host.statusFor(step.skill_id) })) };
     },
-    prepareExecution(plan, approvedSteps = []) { return prepareExecution(plan, approvedSteps); }
+    prepareExecution(plan, approvedSteps = [], options = {}) { return prepareExecution(plan, approvedSteps, options); }
   };
 }
 
