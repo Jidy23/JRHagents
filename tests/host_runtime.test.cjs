@@ -57,6 +57,21 @@ test('host cancels before the next step and preserves lifecycle events', async (
   );
 });
 
+test('host stops at the configured step budget', async () => {
+  const host = createJRHHost({ adapters: [readAdapter] });
+  await assert.rejects(
+    () => host.execute({ goal: 'budget', steps: [
+      { id: 'one', skill_id: 'demo.read' },
+      { id: 'two', skill_id: 'demo.read' }
+    ] }, { executionPolicy: { maxSteps: 1 } }),
+    (error) => error.code === 'RUN_BUDGET_EXCEEDED'
+      && error.status === 'budget_exceeded'
+      && error.events.at(-1).type === 'run.budget_exceeded'
+      && error.metrics.steps.one.status === 'completed'
+      && error.metrics.steps.two.status === 'budget_exceeded'
+  );
+});
+
 test('host allowlist and duplicate protection fail closed', () => {
   const host = createJRHHost({ adapters: [readAdapter, writeAdapter], allowedSkills: ['demo.read'] });
   assert.equal(host.statusFor('demo.write').available, false);
