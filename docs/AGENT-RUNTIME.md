@@ -109,5 +109,9 @@ bounded and read-only, writes require approval, updates require equality
 filters, and arbitrary SQL/auth-admin/delete operations are not exposed. The
 host must still configure grants and RLS correctly.
 
+`adapters/mcp/` provides the protocol boundary for MCP discovery and tool
+calls. It injects the transport, adds required JSON-RPC metadata, and blocks
+tools unless they are explicitly safe or the exact call has been approved.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
