@@ -35,7 +35,7 @@ function createGoalPlanner({ propose, host } = {}) {
       const status = host.statusFor(step.skill_id);
       if (status.requiresApproval && !approvals.has(step.id)) throw new Error(`Approval required before execution: ${step.id}`);
     }
-    return { plan, execution: { approvedSteps: [...approvals] } };
+    return { plan, execution: { plan_id: plan.plan_id, approvedSteps: [...approvals] } };
   };
 
   return {
