@@ -14,6 +14,7 @@ Security properties:
 - an optional `AbortSignal` cancels between handler boundaries;
 - retries are opt-in, bounded, and disabled for high-risk skills;
 - completed and interrupted runs include timestamps, duration, and per-step attempt metrics;
+- execution budgets can cap steps and wall-clock duration;
 - credentials remain inside their adapter and never enter the plan.
 
 The host runtime does not discover or connect services by itself. The host
@@ -25,7 +26,8 @@ Retry and cancellation are explicit at execution time:
 ```js
 await host.execute(plan, {
   signal: controller.signal,
-  retryPolicy: { maxAttempts: 2, retryableSkills: ['demo.read'] }
+  retryPolicy: { maxAttempts: 2, retryableSkills: ['demo.read'] },
+  executionPolicy: { maxSteps: 10, maxDurationMs: 30_000 }
 });
 ```
 
@@ -34,3 +36,5 @@ run reports `status: 'cancelled'` on the thrown error and preserves its events;
 the handler itself must honor cancellation if it performs long external work.
 Successful results expose `metrics.started_at`, `metrics.ended_at`,
 `metrics.duration_ms`, and a `metrics.steps` map for timeline dashboards.
+When a budget is exceeded, the host throws `RUN_BUDGET_EXCEEDED`, emits
+`run.budget_exceeded`, and preserves the partial metrics for audit.

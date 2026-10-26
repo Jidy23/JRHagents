@@ -8,6 +8,14 @@ class RunCancelledError extends Error {
   }
 }
 
+class RunBudgetError extends Error {
+  constructor(message = 'Run execution budget exceeded.') {
+    super(message);
+    this.name = 'RunBudgetError';
+    this.code = 'RUN_BUDGET_EXCEEDED';
+  }
+}
+
 function attachRun(error, runId, events, status, metrics) {
   error.run_id = runId;
   error.events = events;
@@ -52,13 +60,17 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
       const spec = skills.get(skillId);
       return spec ? { available: true, requiresApproval: spec.requiresApproval === true, risk: spec.risk || 'low' } : { available: false, requiresApproval: false };
     },
-    async execute(plan, { approvedSteps = new Set(), signal = null, retryPolicy = {} } = {}) {
+    async execute(plan, { approvedSteps = new Set(), signal = null, retryPolicy = {}, executionPolicy = {} } = {}) {
       validatePlan(plan);
       if (signal && typeof signal.aborted !== 'boolean') throw new Error('signal must be an AbortSignal-like object.');
       const maxAttempts = retryPolicy.maxAttempts === undefined ? 0 : retryPolicy.maxAttempts;
       const retryableSkills = new Set(retryPolicy.retryableSkills || []);
       if (!Number.isInteger(maxAttempts) || maxAttempts < 0) throw new Error('retryPolicy.maxAttempts must be a non-negative integer.');
       if (!Array.isArray(retryPolicy.retryableSkills || [])) throw new Error('retryPolicy.retryableSkills must be an array.');
+      const maxSteps = executionPolicy.maxSteps === undefined ? Infinity : executionPolicy.maxSteps;
+      const maxDurationMs = executionPolicy.maxDurationMs === undefined ? Infinity : executionPolicy.maxDurationMs;
+      if (!(maxSteps === Infinity || (Number.isInteger(maxSteps) && maxSteps >= 0))) throw new Error('executionPolicy.maxSteps must be a non-negative integer.');
+      if (!(maxDurationMs === Infinity || (Number.isFinite(maxDurationMs) && maxDurationMs >= 0))) throw new Error('executionPolicy.maxDurationMs must be a non-negative number.');
       const runId = `run_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
       const outputs = {};
       const startedAt = Date.now();
@@ -78,9 +90,17 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
         steps: { ...stepMetrics }
       });
       const cancel = () => attachRun(new RunCancelledError(), runId, events, 'cancelled', metrics('cancelled'));
+      const budgetFail = (stepId, reason) => {
+        stepMetrics[stepId] = stepMetrics[stepId] || { attempts: 0, status: 'budget_exceeded', duration_ms: 0 };
+        stepMetrics[stepId].status = 'budget_exceeded';
+        emit('run.budget_exceeded', { step_id: stepId, reason });
+        return attachRun(new RunBudgetError(`Execution budget exceeded: ${reason}`), runId, events, 'budget_exceeded', metrics('budget_exceeded'));
+      };
       emit('run.queued');
       emit('run.started');
-      for (const step of plan.steps) {
+      for (const [stepIndex, step] of plan.steps.entries()) {
+        if (stepIndex >= maxSteps) throw budgetFail(step.id, 'max_steps');
+        if (Date.now() - startedAt > maxDurationMs) throw budgetFail(step.id, 'max_duration_ms');
         if (signal && signal.aborted) {
           stepMetrics[step.id] = { attempts: 0, status: 'cancelled', duration_ms: 0 };
           emit('run.cancelled', { step_id: step.id, reason: 'signal_aborted' });
@@ -123,12 +143,17 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
               emit('run.cancelled', { step_id: step.id, reason: 'signal_aborted' });
               throw cancel();
             }
+            if (Date.now() - startedAt > maxDurationMs) {
+              stepMetrics[step.id].duration_ms += Math.max(0, Date.now() - stepStartedAt);
+              emit('step.completed', { step_id: step.id, attempt });
+              throw budgetFail(step.id, 'max_duration_ms');
+            }
             stepMetrics[step.id].status = 'completed';
             stepMetrics[step.id].duration_ms += Math.max(0, Date.now() - stepStartedAt);
             emit('step.completed', { step_id: step.id, attempt });
             break;
           } catch (error) {
-            if (error && error.code === 'RUN_CANCELLED') throw error;
+            if (error && (error.code === 'RUN_CANCELLED' || error.code === 'RUN_BUDGET_EXCEEDED')) throw error;
             stepMetrics[step.id].duration_ms += Math.max(0, Date.now() - stepStartedAt);
             emit('step.failed', { step_id: step.id, attempt, error: error.message });
             if (attempt <= attemptsAllowed) {
@@ -148,4 +173,4 @@ function createJRHHost({ adapters = [], allowedSkills = null, now = () => new Da
   };
 }
 
-module.exports = { createJRHHost, RunCancelledError };
+module.exports = { createJRHHost, RunCancelledError, RunBudgetError };
