@@ -34,6 +34,16 @@ test('same key cannot replay a different plan', async () => {
   assert.equal(executions, 1);
 });
 
+test('replay with missing approval or a different actor fails closed', async () => {
+  const host = createIdempotentHost({ store: createIdempotencyStore(), host: {
+    execute: async () => ({ run_id: 'run_1', status: 'completed', outputs: {}, events: [] })
+  } });
+  const plan = { plan_id: 'p1', goal: 'write', steps: [{ id: 'write', skill_id: 'demo.write' }] };
+  await host.execute(plan, { idempotencyKey: 'write:1', approvedSteps: ['write'], actorId: 'alice' });
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'write:1', actorId: 'alice' }), /different plan/);
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'write:1', approvedSteps: ['write'], actorId: 'bob' }), /different plan/);
+});
+
 test('idempotent host does not cache failed or paused runs', async () => {
   let executions = 0;
   const host = createIdempotentHost({
