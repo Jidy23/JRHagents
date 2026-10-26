@@ -1,5 +1,20 @@
 'use strict';
 
+class RunCancelledError extends Error {
+  constructor(message = 'Run cancelled.') {
+    super(message);
+    this.name = 'RunCancelledError';
+    this.code = 'RUN_CANCELLED';
+  }
+}
+
+function attachRun(error, runId, events, status) {
+  error.run_id = runId;
+  error.events = events;
+  error.status = status;
+  return error;
+}
+
 function createJRHHost({ adapters = [], allowedSkills = null } = {}) {
   if (!Array.isArray(adapters) || adapters.length === 0) throw new Error('JRH host requires at least one adapter.');
   const skills = new Map();
@@ -36,22 +51,62 @@ function createJRHHost({ adapters = [], allowedSkills = null } = {}) {
       const spec = skills.get(skillId);
       return spec ? { available: true, requiresApproval: spec.requiresApproval === true, risk: spec.risk || 'low' } : { available: false, requiresApproval: false };
     },
-    async execute(plan, { approvedSteps = new Set() } = {}) {
+    async execute(plan, { approvedSteps = new Set(), signal = null, retryPolicy = {} } = {}) {
       validatePlan(plan);
-      const runId = `run_${Date.now().toString(36)}`;
+      if (signal && typeof signal.aborted !== 'boolean') throw new Error('signal must be an AbortSignal-like object.');
+      const maxAttempts = retryPolicy.maxAttempts === undefined ? 0 : retryPolicy.maxAttempts;
+      const retryableSkills = new Set(retryPolicy.retryableSkills || []);
+      if (!Number.isInteger(maxAttempts) || maxAttempts < 0) throw new Error('retryPolicy.maxAttempts must be a non-negative integer.');
+      if (!Array.isArray(retryPolicy.retryableSkills || [])) throw new Error('retryPolicy.retryableSkills must be an array.');
+      const runId = `run_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
       const outputs = {};
-      const events = [{ type: 'run.started', run_id: runId }];
+      const events = [{ type: 'run.queued', run_id: runId }, { type: 'run.started', run_id: runId }];
+      const cancel = () => attachRun(new RunCancelledError(), runId, events, 'cancelled');
       for (const step of plan.steps) {
+        if (signal && signal.aborted) {
+          events.push({ type: 'run.cancelled', run_id: runId, step_id: step.id, reason: 'signal_aborted' });
+          throw cancel();
+        }
         const spec = skills.get(step.skill_id);
         const handler = handlers.get(step.skill_id);
-        if (!spec || !handler) throw new Error(`Host skill unavailable: ${step.skill_id}`);
+        if (!spec || !handler) {
+          events.push({ type: 'step.failed', step_id: step.id, reason: 'skill_unavailable' });
+          events.push({ type: 'run.failed', run_id: runId });
+          throw attachRun(new Error(`Host skill unavailable: ${step.skill_id}`), runId, events, 'failed');
+        }
         if (spec.requiresApproval === true && !approvedSteps.has(step.id)) {
           events.push({ type: 'step.blocked', step_id: step.id, reason: 'approval_required' });
-          throw new Error(`Approval required: ${step.id}`);
+          events.push({ type: 'run.paused', run_id: runId, reason: 'approval_required' });
+          throw attachRun(new Error(`Approval required: ${step.id}`), runId, events, 'paused');
         }
-        events.push({ type: 'step.started', step_id: step.id, skill_id: step.skill_id });
-        outputs[step.id] = await handler(step.input || {});
-        events.push({ type: 'step.completed', step_id: step.id });
+        const attemptsAllowed = spec.risk === 'high' ? 0 : (retryableSkills.has(step.skill_id) ? maxAttempts : 0);
+        let attempt = 0;
+        while (true) {
+          if (signal && signal.aborted) {
+            events.push({ type: 'run.cancelled', run_id: runId, step_id: step.id, reason: 'signal_aborted' });
+            throw cancel();
+          }
+          attempt += 1;
+          events.push({ type: 'step.started', step_id: step.id, skill_id: step.skill_id, attempt });
+          try {
+            outputs[step.id] = await handler(step.input || {});
+            if (signal && signal.aborted) {
+              events.push({ type: 'run.cancelled', run_id: runId, step_id: step.id, reason: 'signal_aborted' });
+              throw cancel();
+            }
+            events.push({ type: 'step.completed', step_id: step.id, attempt });
+            break;
+          } catch (error) {
+            if (error && error.code === 'RUN_CANCELLED') throw error;
+            events.push({ type: 'step.failed', step_id: step.id, attempt, error: error.message });
+            if (attempt <= attemptsAllowed) {
+              events.push({ type: 'step.retrying', step_id: step.id, attempt: attempt + 1, reason: error.message });
+              continue;
+            }
+            events.push({ type: 'run.failed', run_id: runId });
+            throw attachRun(error, runId, events, 'failed');
+          }
+        }
       }
       events.push({ type: 'run.completed', run_id: runId });
       return { run_id: runId, status: 'completed', outputs, events };
@@ -59,4 +114,4 @@ function createJRHHost({ adapters = [], allowedSkills = null } = {}) {
   };
 }
 
-module.exports = { createJRHHost };
+module.exports = { createJRHHost, RunCancelledError };
