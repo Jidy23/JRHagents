@@ -99,5 +99,10 @@ The first concrete service adapter is `adapters/github/`. It demonstrates the
 required pattern: host-injected secret, explicit handlers, read operations
 separated from high-risk mutation, and exact-step approval before merge.
 
+`adapters/cloudflare/` applies the same pattern to Cloudflare Pages. Its
+deployment form follows the official Pages API's multipart `branch` field;
+deploy, retry, and rollback are all high-risk handlers and remain approval
+gated.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
