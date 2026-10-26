@@ -77,6 +77,9 @@ read-only selects by default and approval-required insert/update operations.
 It does not expose arbitrary SQL, delete, or auth-admin actions. See
 [`adapters/supabase/`](adapters/supabase/).
 
+MCP is supported through an injected JSON-RPC client boundary with discovery,
+tool listing, and approval-gated tool calls. See [`adapters/mcp/`](adapters/mcp/).
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
