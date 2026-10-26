@@ -42,6 +42,15 @@ test('host binds approval envelopes to the exact plan ID', async () => {
   assert.equal(result.status, 'completed');
 });
 
+test('host rejects approval when plan content changes under the same ID', async () => {
+  const host = createJRHHost({ adapters: [writeAdapter] });
+  const plan = { plan_id: 'plan-stable', goal: 'write', steps: [{ id: 'w1', skill_id: 'demo.write', input: { amount: 1 } }] };
+  const { planFingerprint } = require('../adapters/planner/fingerprint');
+  const approval = { plan_id: 'plan-stable', plan_fingerprint: planFingerprint(plan), approvedSteps: ['w1'] };
+  const changed = { ...plan, steps: [{ ...plan.steps[0], input: { amount: 999 } }] };
+  await assert.rejects(() => host.execute(changed, { approval }), /plan_fingerprint does not match/);
+});
+
 test('host retries only explicitly selected low-risk skills', async () => {
   let attempts = 0;
   const flakyAdapter = {
