@@ -2,7 +2,13 @@
 (function(){'use strict';
 const $=(s,root=document)=>root.querySelector(s), $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
 const capabilities=globalThis.JRHCapabilities,universal=globalThis.JRHUniversalPrompt;
-if(!Array.isArray(capabilities)||capabilities.length!==66||typeof universal!=='string'||universal.length<500){document.body.insertAdjacentText('afterbegin','JRHagents resources failed to load. Reload this page.');return;}
+if(!Array.isArray(capabilities)||capabilities.length!==66||typeof universal!=='string'||universal.length<500){
+ const panel=document.createElement('section');panel.className='page-area';panel.id='resourceError';panel.setAttribute('role','alert');
+ const title=document.createElement('h2');title.textContent='JRHagents belum berhasil dimuat.';
+ const detail=document.createElement('p');detail.textContent='Periksa koneksi, lalu coba muat ulang halaman ini.';
+ const retry=document.createElement('button');retry.type='button';retry.className='btn btn-primary';retry.textContent='Muat ulang';retry.addEventListener('click',()=>location.reload());
+ panel.append(title,detail,retry);(document.querySelector('#workspace')||document.body).replaceChildren(panel);return;
+}
 const repo='https://github.com/Jidy23/JRHagents', install='npx skills add Jidy23/JRHagents --skill jrhagents';
 const apps={chat:[['chatgpt','ChatGPT','✳'],['claude','Claude Web','◉'],['gemini','Gemini','✦'],['other','AI chat lain','◈']],coding:[['codex','Codex','⌘'],['claudecode','Claude Code','✳'],['cursor','Cursor','▥'],['geminicli','Gemini CLI','✦'],['copilot','Copilot','⊞'],['opencode','OpenCode','◇'],['windsurf','Windsurf','≋']]};
 const templates=[['Riset','Research','Buat ringkasan riset dengan sumber yang terverifikasi dan tandai klaim yang belum pasti.','Summarize research with verified sources and mark uncertain claims.'],['Menulis','Writing','Rapikan tulisan saya agar jelas, ringkas, dan sesuai pembaca yang saya tuju.','Edit my text for clarity, brevity and the intended audience.'],['Data','Data','Analisis data yang saya berikan dan jelaskan arti angka serta keterbatasannya.','Analyze the data I provide and explain the numbers and limitations.'],['Coding','Coding','Audit kode proyek saya, perbaiki masalah prioritas, lalu jalankan tes yang relevan.','Audit my project code, fix priority issues and run relevant tests.'],['Keputusan','Decision','Bandingkan pilihan saya berdasarkan biaya, manfaat, risiko, lalu rekomendasikan satu.','Compare my options by cost, benefit and risk, then recommend one.']];

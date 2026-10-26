@@ -1,5 +1,7 @@
 """Offline browser smoke across desktop, tablet and mobile viewports."""
-import sys,re
+import sys,re,threading
+from http.server import SimpleHTTPRequestHandler,ThreadingHTTPServer
+from functools import partial
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
@@ -10,6 +12,25 @@ html=re.sub(r'<script defer[^>]*></script>','',html)
 try:
  with sync_playwright() as pw:
   browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
+  class QuietHandler(SimpleHTTPRequestHandler):
+   def log_message(self,*args):pass
+  server=ThreadingHTTPServer(('127.0.0.1',0),partial(QuietHandler,directory=str(ROOT/'docs')))
+  threading.Thread(target=server.serve_forever,daemon=True).start()
+  try:
+   live=browser.new_page()
+   live.goto(f'http://127.0.0.1:{server.server_port}/index.html',wait_until='load')
+   assert live.locator('.app-card').count()==4,'HTTP asset load did not initialize the app'
+   assert live.locator('.cap-card').count()==12,'HTTP catalog load failed'
+   assert not live.locator('#resourceError').count(),'Unexpected resource error on HTTP load'
+   live.close()
+  finally:
+   server.shutdown();server.server_close()
+  missing=browser.new_page()
+  missing.set_content(html,wait_until='load')
+  missing.add_script_tag(content=(ROOT/'docs/assets/app.js').read_text(encoding='utf-8'))
+  assert missing.locator('#resourceError[role="alert"]').is_visible()
+  assert missing.locator('#resourceError button').inner_text()=='Muat ulang'
+  missing.close()
   for width in (320,360,390,768,1024,1440):
    context=browser.new_context(viewport={'width':width,'height':820 if width>600 else 760},device_scale_factor=1,permissions=['clipboard-read','clipboard-write'])
    page=context.new_page()
