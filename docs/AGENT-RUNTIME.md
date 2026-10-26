@@ -104,5 +104,10 @@ deployment form follows the official Pages API's multipart `branch` field;
 deploy, retry, and rollback are all high-risk handlers and remain approval
 gated.
 
+`adapters/supabase/` applies an allowlist-first database pattern: selects are
+bounded and read-only, writes require approval, updates require equality
+filters, and arbitrary SQL/auth-admin/delete operations are not exposed. The
+host must still configure grants and RLS correctly.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
