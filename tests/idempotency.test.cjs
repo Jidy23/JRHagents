@@ -42,11 +42,22 @@ test('idempotent host does not cache failed or paused runs', async () => {
 
 test('idempotency validates key and bounds memory', () => {
   assert.throws(() => createIdempotencyStore({ maxKeys: 0 }), /positive integer/);
+  assert.throws(() => createIdempotencyStore({ ttlMs: 0 }), /positive integer/);
   const store = createIdempotencyStore({ maxKeys: 1 });
   store.set('a', { status: 'completed' });
   store.set('b', { status: 'completed' });
   assert.equal(store.get('a'), null);
   assert.throws(() => store.set('', {}), /required/);
+});
+
+test('memory idempotency keys expire after the configured TTL', () => {
+  let clock = 1000;
+  const store = createIdempotencyStore({ ttlMs: 10, now: () => clock });
+  store.set('expiring', { run_id: 'r1' });
+  assert.deepEqual(store.get('expiring'), { run_id: 'r1' });
+  clock += 11;
+  assert.equal(store.get('expiring'), null);
+  assert.equal(store.has('expiring'), false);
 });
 
 test('file idempotency store survives a restart and remains bounded', async () => {
