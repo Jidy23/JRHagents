@@ -18,6 +18,8 @@ test('file audit store persists redacted, bounded history across instances', asy
     assert.equal((await second.get('r3')).status, 'completed');
     assert.equal((await second.get('r2')).outputs.token, undefined);
     assert.equal((await second.get('r2')).recorded_at, 'fixed-time');
+    assert.equal((await second.list({ status: 'completed', limit: 2 })).length, 2);
+    assert.equal((await second.stats()).total, 2);
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }
