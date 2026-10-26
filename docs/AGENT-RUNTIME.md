@@ -117,5 +117,10 @@ tools unless they are explicitly safe or the exact call has been approved.
 rejects duplicate skills, supports a narrower host allowlist, and preserves
 step-scoped approval when one workflow crosses multiple services.
 
+`adapters/planner/` is the final boundary between natural-language planning
+and execution. Its injected proposal function is untrusted: the planner checks
+goal, step IDs, and host availability, then returns a review payload. Only the
+host runtime may execute the accepted plan.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
