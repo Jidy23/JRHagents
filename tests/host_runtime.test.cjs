@@ -20,6 +20,10 @@ test('host composes adapters and runs an approved workflow in order', async () =
   ] }, { approvedSteps: new Set(['write']) });
   assert.deepEqual(result.outputs, { read: { value: 3 }, write: { saved: true } });
   assert.equal(result.events.at(-1).type, 'run.completed');
+  assert.equal(result.metrics.status, 'completed');
+  assert.equal(result.metrics.steps.read.attempts, 1);
+  assert.equal(result.metrics.steps.write.status, 'completed');
+  assert.ok(result.events.every((event) => event.at && event.run_id === result.run_id));
 });
 
 test('host blocks high-risk steps without exact approval', async () => {
@@ -39,6 +43,8 @@ test('host retries only explicitly selected low-risk skills', async () => {
   });
   assert.equal(attempts, 2);
   assert.equal(result.events.filter((event) => event.type === 'step.retrying').length, 1);
+  assert.equal(result.metrics.steps.f.attempts, 2);
+  assert.equal(result.metrics.steps.f.status, 'completed');
 });
 
 test('host cancels before the next step and preserves lifecycle events', async () => {
@@ -47,7 +53,7 @@ test('host cancels before the next step and preserves lifecycle events', async (
   controller.abort();
   await assert.rejects(
     () => host.execute({ goal: 'cancel', steps: [{ id: 'read', skill_id: 'demo.read' }] }, { signal: controller.signal }),
-    (error) => error.code === 'RUN_CANCELLED' && error.status === 'cancelled' && error.events.at(-1).type === 'run.cancelled'
+    (error) => error.code === 'RUN_CANCELLED' && error.status === 'cancelled' && error.metrics.status === 'cancelled' && error.events.at(-1).type === 'run.cancelled'
   );
 });
 
