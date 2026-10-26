@@ -122,5 +122,9 @@ and execution. Its injected proposal function is untrusted: the planner checks
 goal, step IDs, and host availability, then returns a review payload. Only the
 host runtime may execute the accepted plan.
 
+`adapters/audit/` wraps the host to record completed and failed runs. It
+redacts common credential-shaped keys and bounds in-memory history. A host must
+replace it with persistent storage when audit durability is required.
+
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
