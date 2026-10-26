@@ -18,6 +18,38 @@ function sanitize(value, depth = 0) {
   return `[${typeof value}]`;
 }
 
+function selectRuns(runs, { status, since, limit } = {}) {
+  if (status !== undefined && typeof status !== 'string') throw new Error('status filter must be a string.');
+  if (since !== undefined && typeof since !== 'string') throw new Error('since filter must be an ISO string.');
+  if (limit !== undefined && (!Number.isInteger(limit) || limit < 1)) throw new Error('limit must be a positive integer.');
+  const selected = runs.filter((run) => {
+    if (status && run.status !== status) return false;
+    if (since && typeof run.recorded_at === 'string' && run.recorded_at < since) return false;
+    return true;
+  });
+  return limit ? selected.slice(0, limit) : selected;
+}
+
+function summarizeRuns(runs) {
+  const byStatus = {};
+  let totalDurationMs = 0;
+  let measuredRuns = 0;
+  for (const run of runs) {
+    byStatus[run.status || 'unknown'] = (byStatus[run.status || 'unknown'] || 0) + 1;
+    const duration = run.metrics && run.metrics.duration_ms;
+    if (typeof duration === 'number' && Number.isFinite(duration)) {
+      totalDurationMs += duration;
+      measuredRuns += 1;
+    }
+  }
+  return {
+    total: runs.length,
+    by_status: byStatus,
+    total_duration_ms: totalDurationMs,
+    average_duration_ms: measuredRuns ? totalDurationMs / measuredRuns : 0
+  };
+}
+
 function createAuditStore({ maxRuns = 500, now = () => new Date().toISOString() } = {}) {
   if (!Number.isInteger(maxRuns) || maxRuns < 1) throw new Error('maxRuns must be a positive integer.');
   const runs = new Map();
@@ -32,8 +64,9 @@ function createAuditStore({ maxRuns = 500, now = () => new Date().toISOString() 
   return {
     record,
     get(runId) { return runs.get(runId) || null; },
-    list() { return [...runs.values()].reverse(); },
-    exportJson() { return JSON.stringify(this.list(), null, 2); },
+    list(options = {}) { return selectRuns([...runs.values()].reverse(), options); },
+    stats() { return summarizeRuns([...runs.values()]); },
+    exportJson(options = {}) { return JSON.stringify(this.list(options), null, 2); },
     clear() { runs.clear(); }
   };
 }
@@ -108,16 +141,22 @@ function createFileAuditStore({ filePath, maxRuns = 500, now = () => new Date().
         return runs.get(runId) || null;
       });
     },
-    list() {
+    list(options = {}) {
       return enqueue(async () => {
         await load();
-        return [...runs.values()].reverse();
+        return selectRuns([...runs.values()].reverse(), options);
       });
     },
-    exportJson() {
+    stats() {
       return enqueue(async () => {
         await load();
-        return JSON.stringify([...runs.values()].reverse(), null, 2);
+        return summarizeRuns([...runs.values()]);
+      });
+    },
+    exportJson(options = {}) {
+      return enqueue(async () => {
+        await load();
+        return JSON.stringify(selectRuns([...runs.values()].reverse(), options), null, 2);
       });
     },
     clear() {
@@ -152,4 +191,4 @@ function createAuditedHost({ host, store } = {}) {
   };
 }
 
-module.exports = { createAuditStore, createFileAuditStore, createAuditedHost, sanitize };
+module.exports = { createAuditStore, createFileAuditStore, createAuditedHost, sanitize, selectRuns, summarizeRuns };
