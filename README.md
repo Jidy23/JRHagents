@@ -68,6 +68,10 @@ repository/PR operations and an approval-required PR merge operation. See
 [`adapters/github/`](adapters/github/); credentials remain the host's secret,
 never the Skill or browser.
 
+Cloudflare Pages is supported by a separate server-side adapter for account,
+project, and deployment inspection plus approval-required deploy, retry, and
+rollback actions. See [`adapters/cloudflare/`](adapters/cloudflare/).
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
