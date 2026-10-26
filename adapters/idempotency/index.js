@@ -3,27 +3,42 @@
 const nodeFs = require('node:fs/promises');
 const nodePath = require('node:path');
 
-function createIdempotencyStore({ maxKeys = 1000 } = {}) {
+function validateTtl(ttlMs) {
+  if (ttlMs !== undefined && (!Number.isInteger(ttlMs) || ttlMs < 1)) throw new Error('ttlMs must be a positive integer.');
+}
+
+function createIdempotencyStore({ maxKeys = 1000, ttlMs, now = () => Date.now() } = {}) {
   if (!Number.isInteger(maxKeys) || maxKeys < 1) throw new Error('maxKeys must be a positive integer.');
+  validateTtl(ttlMs);
   const records = new Map();
+  const active = (key) => {
+    const record = records.get(key);
+    if (!record) return null;
+    if (record.expires_at !== null && record.expires_at <= now()) {
+      records.delete(key);
+      return null;
+    }
+    return record.value;
+  };
   return {
-    get(key) { return records.get(key) || null; },
+    get(key) { return active(key); },
     set(key, result) {
       if (typeof key !== 'string' || !key.trim()) throw new Error('Idempotency key is required.');
       records.delete(key);
-      records.set(key, result);
+      records.set(key, { value: result, expires_at: ttlMs === undefined ? null : now() + ttlMs });
       while (records.size > maxKeys) records.delete(records.keys().next().value);
       return result;
     },
-    has(key) { return records.has(key); },
+    has(key) { return active(key) !== null; },
     clear() { records.clear(); },
     size() { return records.size; }
   };
 }
 
-function createFileIdempotencyStore({ filePath, maxKeys = 1000, fs = nodeFs } = {}) {
+function createFileIdempotencyStore({ filePath, maxKeys = 1000, ttlMs, now = () => Date.now(), fs = nodeFs } = {}) {
   if (typeof filePath !== 'string' || !filePath.trim()) throw new Error('filePath is required.');
   if (!Number.isInteger(maxKeys) || maxKeys < 1) throw new Error('maxKeys must be a positive integer.');
+  validateTtl(ttlMs);
   if (!fs || typeof fs.readFile !== 'function' || typeof fs.writeFile !== 'function' || typeof fs.rename !== 'function') {
     throw new Error('File idempotency store requires readFile, writeFile, and rename.');
   }
@@ -36,7 +51,12 @@ function createFileIdempotencyStore({ filePath, maxKeys = 1000, fs = nodeFs } = 
     try {
       const parsed = JSON.parse(await fs.readFile(filePath, 'utf8'));
       if (!Array.isArray(parsed)) throw new Error('Idempotency file must contain an array.');
-      records = new Map(parsed.filter((entry) => Array.isArray(entry) && typeof entry[0] === 'string'));
+      records = new Map(parsed.filter((entry) => Array.isArray(entry) && typeof entry[0] === 'string').map(([key, value]) => [
+        key,
+        value && Object.prototype.hasOwnProperty.call(value, 'value') && Object.prototype.hasOwnProperty.call(value, 'expires_at')
+          ? value
+          : { value, expires_at: null }
+      ]));
       while (records.size > maxKeys) records.delete(records.keys().next().value);
     } catch (error) {
       if (error && error.code === 'ENOENT') records = new Map();
@@ -62,21 +82,38 @@ function createFileIdempotencyStore({ filePath, maxKeys = 1000, fs = nodeFs } = 
     return result;
   };
 
+  const active = (key) => {
+    const record = records.get(key);
+    if (!record) return null;
+    if (record.expires_at !== null && record.expires_at <= now()) {
+      records.delete(key);
+      return null;
+    }
+    return record.value;
+  };
+
   return {
     load: () => enqueue(load),
-    get(key) { return enqueue(async () => { await load(); return records.get(key) || null; }); },
+    get(key) {
+      return enqueue(async () => {
+        await load();
+        const value = active(key);
+        if (!value && !records.has(key)) await persist();
+        return value;
+      });
+    },
     set(key, result) {
       return enqueue(async () => {
         await load();
         if (typeof key !== 'string' || !key.trim()) throw new Error('Idempotency key is required.');
         records.delete(key);
-        records.set(key, result);
+        records.set(key, { value: result, expires_at: ttlMs === undefined ? null : now() + ttlMs });
         while (records.size > maxKeys) records.delete(records.keys().next().value);
         await persist();
         return result;
       });
     },
-    has(key) { return enqueue(async () => { await load(); return records.has(key); }); },
+    has(key) { return enqueue(async () => { await load(); return active(key) !== null; }); },
     size() { return enqueue(async () => { await load(); return records.size; }); },
     clear() { return enqueue(async () => { await load(); records.clear(); await persist(); }); }
   };
