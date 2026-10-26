@@ -64,6 +64,20 @@ test('concurrent identical requests execute the host once', async () => {
   assert.equal(secondResult.replayed, true);
 });
 
+test('namespaces isolate identical keys between workspaces', async () => {
+  let executions = 0;
+  const store = createIdempotencyStore();
+  const makeHost = (namespace) => createIdempotentHost({
+    namespace,
+    store,
+    host: { execute: async () => ({ run_id: `run-${++executions}`, status: 'completed', outputs: {}, events: [] }) }
+  });
+  await makeHost('workspace-a').execute({}, { idempotencyKey: 'publish-1' });
+  await makeHost('workspace-b').execute({}, { idempotencyKey: 'publish-1' });
+  await makeHost('workspace-a').execute({}, { idempotencyKey: 'publish-1' });
+  assert.equal(executions, 2);
+});
+
 test('idempotency validates key and bounds memory', () => {
   assert.throws(() => createIdempotencyStore({ maxKeys: 0 }), /positive integer/);
   assert.throws(() => createIdempotencyStore({ ttlMs: 0 }), /positive integer/);
