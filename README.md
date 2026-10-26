@@ -72,6 +72,11 @@ Cloudflare Pages is supported by a separate server-side adapter for account,
 project, and deployment inspection plus approval-required deploy, retry, and
 rollback actions. See [`adapters/cloudflare/`](adapters/cloudflare/).
 
+Supabase is supported by an allowlisted server-side table adapter with
+read-only selects by default and approval-required insert/update operations.
+It does not expose arbitrary SQL, delete, or auth-admin actions. See
+[`adapters/supabase/`](adapters/supabase/).
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |
