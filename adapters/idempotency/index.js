@@ -2,6 +2,7 @@
 
 const nodeFs = require('node:fs/promises');
 const nodePath = require('node:path');
+const { planFingerprint } = require('../planner/fingerprint');
 
 function validateTtl(ttlMs) {
   if (ttlMs !== undefined && (!Number.isInteger(ttlMs) || ttlMs < 1)) throw new Error('ttlMs must be a positive integer.');
@@ -133,21 +134,29 @@ function createIdempotentHost({ host, store, namespace = null } = {}) {
     async execute(plan, options = {}) {
       const key = options.idempotencyKey;
       if (typeof key !== 'string' || !key.trim()) throw new Error('idempotencyKey is required.');
+      const fingerprint = planFingerprint(plan);
       const storageKey = scopedKey(key);
       const concurrent = inFlight.get(storageKey);
-      if (concurrent) return { ...(await concurrent), replayed: true };
+      if (concurrent) {
+        if (concurrent.fingerprint !== fingerprint) throw new Error('Idempotency key reused for a different plan.');
+        return { ...(await concurrent.promise), replayed: true };
+      }
       const pending = (async () => {
         const existing = await store.get(storageKey);
-        if (existing) return { ...existing, replayed: true };
+        if (existing) {
+          if (existing.fingerprint !== fingerprint || !existing.result) throw new Error('Idempotency key reused for a different plan or legacy record.');
+          return { ...existing.result, replayed: true };
+        }
         const result = await host.execute(plan, options);
-        if (result && result.status === 'completed') await store.set(storageKey, result);
+        if (result && result.status === 'completed') await store.set(storageKey, { fingerprint, result });
         return result;
       })();
-      inFlight.set(storageKey, pending);
+      const active = { fingerprint, promise: pending };
+      inFlight.set(storageKey, active);
       try {
         return await pending;
       } finally {
-        if (inFlight.get(storageKey) === pending) inFlight.delete(storageKey);
+        if (inFlight.get(storageKey) === active) inFlight.delete(storageKey);
       }
     }
   };

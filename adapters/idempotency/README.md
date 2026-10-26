@@ -7,6 +7,7 @@ single intended action.
 - only successful results are cached;
 - failed, paused, cancelled, or budget-exceeded runs can be retried;
 - concurrent requests with the same key share one in-process execution;
+- a key is bound to the reviewed plan content; reusing it for another plan fails closed;
 - optional namespaces isolate keys between tenants, brands, or workspaces;
 - a replay returns the cached result with `replayed: true`;
 - the default store is bounded in-memory storage;
@@ -33,3 +34,5 @@ process-local; use a distributed lock when multiple workers share a store.
 Use a key scoped to the intended operation and authorization context. Never
 reuse one key for unrelated goals. The namespace should be derived from the
 already-authenticated tenant/workspace context, not from untrusted request text.
+Previously stored bare results have no plan fingerprint and cannot be replayed;
+let those keys expire or use a new key after upgrading.
