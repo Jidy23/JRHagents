@@ -142,8 +142,10 @@ function createAuditedHost({ host, store } = {}) {
         await store.record(result);
         return result;
       } catch (error) {
-        const runId = `failed_${Date.now().toString(36)}`;
-        await store.record({ run_id: runId, status: 'failed', outputs: {}, events: [{ type: 'run.failed', error: error.message }] });
+        const runId = error.run_id || `failed_${Date.now().toString(36)}`;
+        const status = error.status || 'failed';
+        const events = Array.isArray(error.events) ? error.events : [{ type: 'run.failed', error: error.message }];
+        await store.record({ run_id: runId, status, outputs: {}, events });
         throw error;
       }
     }
