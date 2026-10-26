@@ -36,6 +36,7 @@ An approval envelope is bound to the exact `plan_id` and, when produced by the
 planner, its content fingerprint. A mismatched plan is rejected before any
 handler starts. This is a workflow-binding check, not a replacement for the
 host's authentication or authorization system.
+If `expires_at` is present, expired approval is rejected before execution.
 
 `maxAttempts` means additional attempts after the first attempt. A cancelled
 run reports `status: 'cancelled'` on the thrown error and preserves its events;
