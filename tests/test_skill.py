@@ -62,6 +62,10 @@ class SkillFormatTests(unittest.TestCase):
         s=(ROOT/'UNIVERSAL_PROMPT.md').read_text(encoding='utf-8')
         self.assertIn('manual fallback',s)
         self.assertIn('tool',s.lower())
+        body=s.split('\n---\n\n',1)[1].split('\n\n---\n',1)[0].strip()
+        script=(ROOT/'docs/assets/universal.js').read_text(encoding='utf-8')
+        generated=script.split('window.JRHUniversalPrompt=',1)[1].strip().removesuffix(';')
+        self.assertEqual(json.loads(generated),body)
     def test_docs_no_fake_cloud(self):
         s=(ROOT/'README.md').read_text(encoding='utf-8')
         self.assertIn('not an AI model',s)

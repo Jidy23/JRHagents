@@ -1,3 +1,18 @@
+## Unreleased — evidence and optional project memory
+
+- Added opt-in local project memory, evidence summaries, reviewed improvement
+  proposals, a bounded agent-configuration auditor, and a source-checkout
+  quality command. These tools are separate from the portable Skill package.
+- Fail closed for string high-risk values in the Python runtime and preserve
+  failure/paused events when exception objects permit it.
+- Require plan ID and fingerprint for structured JavaScript approvals and
+  snapshot validated plans; the trusted host-only step-ID shortcut remains.
+- Avoid exposing handler error messages in audit events, and protect
+  idempotent runs from in-process mutation and repeated execution after a
+  failed cache write; cross-process guarantees remain host responsibilities.
+- Exercise all JavaScript adapter tests in CI and synchronize the portable
+  Skill guidance with the copied chat prompt.
+
 ## V35 — Support navbar, QR reliability & audit
 - Moved optional support to a single heart button right next to the language toggle, removed large Help/footer card.
 - Built compact accessible QRIS dialog with recipient disclosure, save image and GitHub contribution option.

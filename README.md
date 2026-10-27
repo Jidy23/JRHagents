@@ -101,6 +101,26 @@ successful action twice. It supports bounded in-memory or host-owned JSON file
 storage; expiry and tenant scoping remain host responsibilities. See
 [`adapters/idempotency/`](adapters/idempotency/).
 
+## Optional quality workflow for a source checkout
+
+Run the local checks from a trusted checkout with:
+
+```bash
+python tools/verify_project.py
+```
+
+The command reports observed check results and reviewable suggestions when a
+check fails or cannot run. It does not check browser interactions or live
+services. A local project-memory store is separately opt-in; no conversation
+or project data is saved automatically. The configuration auditor is a
+limited, read-only heuristic, not a comprehensive security scan. See the
+[quality workflow guide](docs/QUALITY_WORKFLOW.md) for commands, consent,
+privacy, and scope.
+
+These Python runtime modules and tools are **not included** in the standalone
+Skill or plugin package. The portable Skill follows the same evidence-first
+practice using only the host's actual tools.
+
 ## Platform pathways
 
 | Your AI | Recommended way | What you get |

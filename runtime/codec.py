@@ -2,11 +2,49 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any, Mapping
 
 from .core import ExecutionResult, RunEvent, StepSpec, WorkflowPlan
 
 SCHEMA_VERSION = 1
+
+
+def _validate_json(value: Any, ancestors: set[int] | None = None, depth: int = 0) -> None:
+    """Reject non-JSON values and non-finite numbers before a host sees a plan."""
+    if depth > 100:
+        raise ValueError("plan JSON exceeds maximum nesting depth")
+    if value is None or type(value) in (bool, int):
+        return
+    if isinstance(value, str):
+        try:
+            value.encode("utf-8")
+        except UnicodeEncodeError as exc:
+            raise ValueError("plan strings must be valid UTF-8") from exc
+        return
+    if type(value) is float:
+        if not math.isfinite(value):
+            raise ValueError("plan numbers must be finite")
+        return
+    if not isinstance(value, (list, Mapping)):
+        raise ValueError("plan must contain only JSON values")
+    if ancestors is None:
+        ancestors = set()
+    if id(value) in ancestors:
+        raise ValueError("plan must not contain cyclic data")
+    ancestors.add(id(value))
+    try:
+        if isinstance(value, Mapping):
+            for key, item in value.items():
+                if not isinstance(key, str):
+                    raise ValueError("plan object keys must be strings")
+                _validate_json(key, ancestors, depth + 1)
+                _validate_json(item, ancestors, depth + 1)
+        else:
+            for item in value:
+                _validate_json(item, ancestors, depth + 1)
+    finally:
+        ancestors.remove(id(value))
 
 
 def plan_from_dict(value: Mapping[str, Any]) -> WorkflowPlan:
@@ -16,7 +54,10 @@ def plan_from_dict(value: Mapping[str, Any]) -> WorkflowPlan:
     not execute anything or infer a handler from user input.
     """
 
-    if value.get("schema_version") != SCHEMA_VERSION:
+    if not isinstance(value, Mapping):
+        raise ValueError("plan must be an object")
+    _validate_json(value)
+    if type(value.get("schema_version")) is not int or value.get("schema_version") != SCHEMA_VERSION:
         raise ValueError(f"unsupported schema_version: {value.get('schema_version')!r}")
     goal = value.get("goal")
     raw_steps = value.get("steps")
@@ -32,7 +73,10 @@ def plan_from_dict(value: Mapping[str, Any]) -> WorkflowPlan:
         inputs = raw.get("input", {})
         if not isinstance(inputs, Mapping):
             raise ValueError(f"plan.steps[{index}].input must be an object")
-        steps.append(StepSpec(str(raw.get("id", "")), str(raw.get("skill_id", "")), dict(inputs)))
+        step_id, skill_id = raw.get("id"), raw.get("skill_id")
+        if not isinstance(step_id, str) or not isinstance(skill_id, str):
+            raise ValueError(f"plan.steps[{index}].id and skill_id must be strings")
+        steps.append(StepSpec(step_id, skill_id, dict(inputs)))
 
     plan_id = value.get("plan_id")
     if plan_id is not None and (not isinstance(plan_id, str) or not plan_id.strip()):

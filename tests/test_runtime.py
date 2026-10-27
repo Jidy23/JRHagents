@@ -50,6 +50,46 @@ class RuntimeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             SkillSpec("unsafe", "No approval", risk=Risk.HIGH)
 
+    def test_string_risk_cannot_bypass_approval(self):
+        with self.assertRaises(ValueError):
+            SkillSpec("unsafe", "No approval", risk="high")
+        with self.assertRaises(ValueError):
+            SkillSpec("unsafe", "Bad approval", risk="high", requires_approval="yes")
+        with self.assertRaises(ValueError):
+            SkillSpec("unsafe", "Unknown risk", risk="unknown")
+        skill = SkillSpec("protected", "Needs approval", risk="high", requires_approval=True)
+        self.assertIs(skill.risk, Risk.HIGH)
+        with self.assertRaises(ApprovalRequired):
+            RunManager(SkillRegistry([skill])).execute(
+                WorkflowPlan("protected", (StepSpec("step", "protected"),)),
+                {"protected": lambda _: "should not run"},
+            )
+
+    def test_failed_and_paused_runs_preserve_safe_evidence(self):
+        registry = SkillRegistry([SkillSpec("safe", "Safe"),
+                                  SkillSpec("high", "High", risk=Risk.HIGH, requires_approval=True)])
+        with self.assertRaises(ApprovalRequired) as paused:
+            RunManager(registry).execute(WorkflowPlan("pause", (StepSpec("s", "high"),)), {})
+        self.assertEqual(paused.exception.status, "paused")
+        self.assertEqual(paused.exception.events[-1].type, "run.paused")
+        with self.assertRaises(RuntimeError) as failed:
+            RunManager(registry).execute(
+                WorkflowPlan("fail", (StepSpec("s", "safe"),)),
+                {"safe": lambda _: (_ for _ in ()).throw(RuntimeError("secret-value"))},
+            )
+        self.assertEqual(failed.exception.status, "failed")
+        self.assertEqual(failed.exception.events[-1].type, "run.failed")
+        self.assertNotIn("secret-value", repr(failed.exception.events))
+
+    def test_missing_skill_or_handler_exposes_failure_events(self):
+        for registry, skill_id in [(SkillRegistry(), "unknown"),
+                                   (SkillRegistry([SkillSpec("known", "Known")]), "known")]:
+            with self.subTest(skill_id=skill_id):
+                with self.assertRaises(KeyError) as failed:
+                    RunManager(registry).execute(WorkflowPlan("x", (StepSpec("s", skill_id),)), {})
+                self.assertEqual(failed.exception.status, "failed")
+                self.assertEqual(failed.exception.events[-1].type, "run.failed")
+
 
 if __name__ == "__main__":
     unittest.main()

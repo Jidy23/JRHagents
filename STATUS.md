@@ -1,5 +1,27 @@
 # Current improvement milestone
 
+## ECC-inspired quality and runtime hardening — 2026-10-27
+
+Base: `main` at `92432a5`. Work is on `feature/ecc-workflows-20261027`.
+The existing portable Skill remains the product; optional source-checkout
+components add explicit project memory, host-supplied verification summaries,
+reviewable improvement proposals, and a limited offline configuration audit.
+The Python runtime now rejects string-valued high risk without approval; the
+JavaScript host strengthens structured approval and preserves a reviewed plan
+snapshot. The chat-only prompt and website copy remain in sync with the Skill.
+
+Baseline before changes: 53 Python tests and 58 JavaScript tests passed.
+Final local checks: 112 Python tests and 80 JavaScript tests passed; catalog
+generation was consistent and the public plugin package built and verified.
+The quality command and an opt-in local-memory round trip were exercised.
+Browser verification and GitHub CI are separate checks; report their actual
+results on the PR.
+The first Windows 3.13 CI run exposed a test-only SQLite connection that was
+not closed before deleting its temporary directory. The connection is now
+explicitly closed and a regression test covers connection cleanup.
+The configuration scan of this checkout reported `no_configs`, which is not a
+security clearance. Runtime modules are not in the standalone Skill package.
+
 Date: 2026-10-24. Base: `main` at `bda3f2833279e2b7704d61b4907a63aa8111884c`.
 
 ## Scope
