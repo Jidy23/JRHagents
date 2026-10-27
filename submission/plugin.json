@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "jrh-agents",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "JRH agents is a focused, evidence-based workflow skill for research, writing, data, software, design, business, and practical decisions.",
   "author": {
     "name": "JRH agents"
@@ -47,7 +47,7 @@
         ]
       },
       "publication": {
-        "release_notes": "JRHagents public submission candidate: includes the latest verified open-source skills-only workflows, bilingual support and policy links, and review prompts. No new AI models, MCP connections, account permissions, or background automation are added."
+        "release_notes": "Aligns the portable Skill with evidence-based verification, reviewable improvement suggestions, and careful handling of recalled notes. Optional local memory and runtime hardening live in the source repository, not this skills-only plugin. No new models, MCP connections, account permissions, or background automation are added."
       }
     }
   }
