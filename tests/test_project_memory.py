@@ -1,9 +1,11 @@
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import closing
 from pathlib import Path
 import os
 import sqlite3
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from runtime.project_memory import MemoryCapacityError, ProjectMemory
 
@@ -86,8 +88,34 @@ class ProjectMemoryTests(unittest.TestCase):
         with ThreadPoolExecutor(max_workers=8) as executor:
             outcomes = list(executor.map(attempt, range(16)))
         self.assertEqual(sum(outcomes), 4)
-        with sqlite3.connect(self.path) as db:
+        # Connection's context manager ends a transaction; it does not close
+        # the connection. Closing explicitly allows Windows to remove the DB.
+        with closing(sqlite3.connect(self.path)) as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM entries").fetchone()[0], 4)
+
+    def test_connections_close_after_success_and_error(self):
+        real_connect = sqlite3.connect
+        connections = []
+
+        def track_connect(*args, **kwargs):
+            connection = real_connect(*args, **kwargs)
+            connections.append(connection)
+            return connection
+
+        with patch("runtime.project_memory.sqlite3.connect", side_effect=track_connect):
+            store = self.memory(max_entries=1)
+            saved = self.save(store)
+            with self.assertRaises(MemoryCapacityError):
+                self.save(store)
+            store.search(project="project-a")
+            store.delete(project="project-a", entry_id=saved["id"])
+            with self.assertRaises(ValueError):
+                self.memory(max_entries=2)
+
+        self.assertGreater(len(connections), 0)
+        for connection in connections:
+            with self.assertRaises(sqlite3.ProgrammingError):
+                connection.execute("SELECT 1")
 
     def test_rejects_common_credential_shapes_without_echoing_them(self):
         store = self.memory()
