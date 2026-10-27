@@ -1,4 +1,4 @@
-## Unreleased — evidence and optional project memory
+## 1.2.1 — evidence and optional project memory (2026-10-28)
 
 - Added opt-in local project memory, evidence summaries, reviewed improvement
   proposals, a bounded agent-configuration auditor, and a source-checkout

@@ -51,7 +51,7 @@ jobs:
       - name: Upload complete candidate ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: JRHagents-public-submission-v1.2.0
-          path: dist/JRHagents-public-submission-v1.2.0.zip
+          name: JRHagents-public-submission-v1.2.1
+          path: dist/JRHagents-public-submission-v1.2.1.zip
           if-no-files-found: error
           retention-days: 30
