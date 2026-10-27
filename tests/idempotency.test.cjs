@@ -144,3 +144,169 @@ test('file idempotency store fails closed on malformed data', async () => {
   }
 });
 
+test('snapshots the plan and authority before waiting for the store', async () => {
+  let unblock;
+  const gate = new Promise((resolve) => { unblock = resolve; });
+  const underlyingStore = createIdempotencyStore();
+  let executions = 0;
+  let received;
+  const host = createIdempotentHost({
+    store: {
+      get: async (key) => { await gate; return underlyingStore.get(key); },
+      set: (key, value) => underlyingStore.set(key, value)
+    },
+    host: { execute: async (plan, options) => {
+      executions += 1;
+      received = { plan, options };
+      return { status: 'completed', outputs: { amount: plan.steps[0].input.amount } };
+    } }
+  });
+  const plan = { plan_id: 'p1', goal: 'write', steps: [{ id: 'write', skill_id: 'demo.write', input: { amount: 1 } }] };
+  const options = { idempotencyKey: 'snapshot', actorId: 'alice', approval: { approvedSteps: ['write'] }, approvedSteps: new Set(['write']), retryPolicy: { maxAttempts: 1, retryableSkills: ['demo.write'] } };
+  const running = host.execute(plan, options);
+  plan.steps[0].input.amount = 999;
+  options.actorId = 'bob';
+  options.approval.approvedSteps.push('extra');
+  options.approvedSteps.add('extra');
+  options.retryPolicy.retryableSkills.push('other');
+  unblock();
+  assert.equal((await running).outputs.amount, 1);
+  assert.equal(received.options.actorId, 'alice');
+  assert.deepEqual(received.options.approval.approvedSteps, ['write']);
+  assert.deepEqual([...received.options.approvedSteps], ['write']);
+  assert.deepEqual(received.options.retryPolicy.retryableSkills, ['demo.write']);
+  assert.equal(executions, 1);
+});
+
+test('replay cannot be changed through nested result references', async () => {
+  let executions = 0;
+  const host = createIdempotentHost({ store: createIdempotencyStore(), host: {
+    execute: async () => ({ status: 'completed', outputs: { nested: { value: ++executions } } })
+  } });
+  const first = await host.execute({ goal: 'x', steps: [] }, { idempotencyKey: 'result-copy' });
+  first.outputs.nested.value = 999;
+  const replay = await host.execute({ goal: 'x', steps: [] }, { idempotencyKey: 'result-copy' });
+  assert.equal(replay.outputs.nested.value, 1);
+  replay.outputs.nested.value = 777;
+  assert.equal((await host.execute({ goal: 'x', steps: [] }, { idempotencyKey: 'result-copy' })).outputs.nested.value, 1);
+  assert.equal(executions, 1);
+});
+
+test('a failed cache write retains a completed result for safe retry in the same process', async () => {
+  let writes = 0;
+  let executions = 0;
+  const backing = createIdempotencyStore();
+  const host = createIdempotentHost({
+    store: {
+      get: (key) => backing.get(key),
+      set: (key, value) => { if (++writes === 1) throw new Error('storage unavailable'); return backing.set(key, value); }
+    },
+    host: { execute: async () => ({ status: 'completed', outputs: { execution: ++executions } }) }
+  });
+  const plan = { goal: 'send once', steps: [] };
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'uncertain-write' }), /storage unavailable/);
+  await assert.rejects(() => host.execute({ goal: 'different', steps: [] }, { idempotencyKey: 'uncertain-write' }), /different plan/);
+  const replay = await host.execute(plan, { idempotencyKey: 'uncertain-write' });
+  assert.equal(replay.replayed, true);
+  assert.equal(replay.outputs.execution, 1);
+  assert.equal(executions, 1);
+  assert.equal(writes, 2);
+});
+
+test('a completed non-JSON result blocks replay instead of re-executing side effects', async () => {
+  let executions = 0;
+  const backing = createIdempotencyStore();
+  const host = createIdempotentHost({ store: backing, host: {
+    execute: async () => { executions += 1; return { status: 'completed', outputs: { invalid: () => 1 } }; }
+  } });
+  const plan = { goal: 'write', steps: [] };
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'non-json' }), /JSON|replay/i);
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'non-json' }), /already|replay|blocked/i);
+  const restarted = createIdempotentHost({ store: backing, host: {
+    execute: async () => { executions += 1; return { status: 'completed' }; }
+  } });
+  await assert.rejects(() => restarted.execute(plan, { idempotencyKey: 'non-json' }), /already|replay|blocked/i);
+  assert.equal(executions, 1);
+});
+
+test('a live cancellation signal is preserved while options are otherwise captured', async () => {
+  let unblock;
+  const gate = new Promise((resolve) => { unblock = resolve; });
+  const controller = new AbortController();
+  let seen;
+  const host = createIdempotentHost({
+    store: { get: async () => { await gate; return null; }, set: async () => {} },
+    host: { execute: async (_plan, options) => {
+      seen = options.signal;
+      return { status: 'completed', outputs: { cancelled: options.signal.aborted } };
+    } }
+  });
+  const options = { idempotencyKey: 'signal', signal: controller.signal };
+  const running = host.execute({}, options);
+  options.signal = new AbortController().signal;
+  controller.abort();
+  unblock();
+  assert.equal((await running).outputs.cancelled, true);
+  assert.equal(seen, controller.signal);
+});
+
+test('replay binds execution policies and host-specific data', async () => {
+  let executions = 0;
+  const host = createIdempotentHost({ store: createIdempotencyStore(), host: {
+    execute: async () => ({ status: 'completed', outputs: { execution: ++executions } })
+  } });
+  const plan = { goal: 'x', steps: [] };
+  await host.execute(plan, { idempotencyKey: 'policy', executionPolicy: { maxSteps: 2 }, target: { region: 'a' } });
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'policy', executionPolicy: { maxSteps: 3 }, target: { region: 'a' } }), /different plan/);
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'policy', executionPolicy: { maxSteps: 2 }, target: { region: 'b' } }), /different plan/);
+  assert.equal(executions, 1);
+});
+
+test('a failed tombstone write keeps the non-JSON action blocked until storage recovers', async () => {
+  let writes = 0;
+  let executions = 0;
+  const backing = createIdempotencyStore();
+  const host = createIdempotentHost({
+    store: { get: (key) => backing.get(key), set: (key, value) => { if (++writes === 1) throw new Error('offline'); return backing.set(key, value); } },
+    host: { execute: async () => { executions += 1; return { status: 'completed', outputs: { invalid: () => 1 } }; } }
+  });
+  const plan = { goal: 'write', steps: [] };
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'tombstone' }), /JSON/);
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'tombstone' }), /already/);
+  await assert.rejects(() => host.execute(plan, { idempotencyKey: 'tombstone' }), /already/);
+  assert.equal(executions, 1);
+  assert.equal(writes, 2);
+});
+
+test('outstanding-action limit fails closed instead of discarding an unsaved result', async () => {
+  let failWrite = true;
+  let executions = 0;
+  const backing = createIdempotencyStore();
+  const host = createIdempotentHost({
+    maxOutstanding: 1,
+    store: { get: (key) => backing.get(key), set: (key, value) => { if (failWrite) throw new Error('offline'); return backing.set(key, value); } },
+    host: { execute: async () => ({ status: 'completed', outputs: { execution: ++executions } }) }
+  });
+  await assert.rejects(() => host.execute({}, { idempotencyKey: 'one' }), /offline/);
+  await assert.rejects(() => host.execute({}, { idempotencyKey: 'two' }), /outstanding/);
+  assert.equal(executions, 1);
+  failWrite = false;
+  assert.equal((await host.execute({}, { idempotencyKey: 'one' })).replayed, true);
+  await host.execute({}, { idempotencyKey: 'two' });
+  assert.equal(executions, 2);
+});
+
+test('request accessors and non-JSON plans are rejected without calling the host', async () => {
+  let calls = 0;
+  let getterCalls = 0;
+  const host = createIdempotentHost({ store: createIdempotencyStore(), host: {
+    execute: async () => { calls += 1; return { status: 'completed' }; }
+  } });
+  const dangerous = { goal: 'x', steps: [] };
+  Object.defineProperty(dangerous, 'payload', { enumerable: true, get() { getterCalls += 1; return 'bad'; } });
+  await assert.rejects(() => host.execute(dangerous, { idempotencyKey: 'getter' }), /enumerable JSON data/);
+  await assert.rejects(() => host.execute({ goal: 'x', value: NaN }, { idempotencyKey: 'nan' }), /JSON/);
+  assert.equal(getterCalls, 0);
+  assert.equal(calls, 0);
+});
+

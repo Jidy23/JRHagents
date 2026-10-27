@@ -21,6 +21,30 @@ class RuntimeCodecTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             plan_from_dict({"schema_version": 2, "goal": "x", "steps": []})
 
+    def test_rejects_non_string_step_ids_and_boolean_schema(self):
+        for field, invalid in (("id", None), ("id", 4), ("skill_id", False)):
+            step = {"id": "step", "skill_id": "echo"}
+            step[field] = invalid
+            with self.subTest(field=field, value=invalid), self.assertRaises(ValueError):
+                plan_from_dict({"schema_version": 1, "goal": "x", "steps": [step]})
+        with self.assertRaises(ValueError):
+            plan_from_dict({"schema_version": True, "goal": "x", "steps": []})
+        for root in (None, [], "text", 3):
+            with self.subTest(root=root), self.assertRaisesRegex(ValueError, "plan must be an object"):
+                plan_from_dict(root)
+
+    def test_rejects_non_json_values_in_nested_input(self):
+        for value in (float("nan"), float("inf"), -float("inf"), object(), "\ud800"):
+            plan = {"schema_version": 1, "goal": "x", "steps": [
+                {"id": "one", "skill_id": "echo", "input": {"nested": [value]}}
+            ]}
+            with self.subTest(value=repr(value)), self.assertRaises(ValueError):
+                plan_from_dict(plan)
+        cyclic = []
+        cyclic.append(cyclic)
+        with self.assertRaisesRegex(ValueError, "cyclic"):
+            plan_from_dict({"schema_version": 1, "goal": "x", "steps": [], "data": cyclic})
+
     def test_result_is_json_serializable(self):
         plan = plan_from_dict({
             "schema_version": 1,

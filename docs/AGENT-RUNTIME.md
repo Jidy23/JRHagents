@@ -32,6 +32,14 @@ handler for every skill it allows.
 - Credentials, tokens, model calls, storage, and network access belong to the
   adapter, never to the portable core.
 
+The Python `RunManager` accepts a trusted host-provided set of approved step
+IDs; it does not authenticate that host, bind approval to a content
+fingerprint, or freeze nested step inputs. The embedding host must review and
+protect the plan and approval before execution. The separate JavaScript host
+offers a content-bound approval envelope; see `adapters/host/README.md`.
+Python exceptions retain their original type and, when supported by the
+exception object, expose `run_id`, `status`, and recorded `events`.
+
 ## Minimal host integration
 
 ```python
@@ -128,3 +136,8 @@ replace it with persistent storage when audit durability is required.
 
 The portable repository should ship the contract and reference implementation;
 deployment-specific adapters should live in their own applications.
+
+Optional Python building blocks for explicit project memory, host-supplied
+verification results, and reviewable improvement proposals are documented in
+[QUALITY_WORKFLOW.md](QUALITY_WORKFLOW.md). They do not run automatically and
+are not part of the standalone Skill or plugin package.

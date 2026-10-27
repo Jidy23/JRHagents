@@ -39,8 +39,8 @@ jobs:
           node --check docs/assets/app.js
           node --check docs/assets/catalog.js
           node --check docs/assets/universal.js
-      - name: Validate catalog and site contracts
-        run: node --test tests/catalog.test.cjs
+      - name: Validate catalog, site contracts, and host adapters
+        run: node --test tests/*.test.cjs
   browser:
     runs-on: ubuntu-latest
     steps:

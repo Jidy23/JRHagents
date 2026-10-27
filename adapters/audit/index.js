@@ -2,8 +2,71 @@
 
 const nodeFs = require('node:fs/promises');
 const nodePath = require('node:path');
+const { HOST_AUDIT_CAPTURE } = require('../host');
 
 const SENSITIVE_KEY = /(token|secret|password|authorization|api[_-]?key|private[_-]?key)/i;
+const FAILURE_STATUSES = new Set(['failed', 'blocked', 'paused', 'cancelled', 'budget_exceeded']);
+const APPROVAL_REASONS = new Set(['malformed', 'plan_id_mismatch', 'fingerprint_mismatch', 'expired', 'unknown_step']);
+const EVENT_REASONS = new Set([
+  'handler_error', 'skill_unavailable', 'approval_required', 'approval_expired',
+  'signal_aborted', 'max_steps', 'max_duration_ms', 'max_output_bytes', ...APPROVAL_REASONS
+]);
+const ERROR_TYPES = new Set(['Error', 'TypeError', 'RangeError', 'SyntaxError', 'ReferenceError', 'NonError']);
+const EVENT_TYPES = new Set([
+  'run.queued', 'run.started', 'run.failed', 'run.paused',
+  'run.blocked', 'run.cancelled', 'run.budget_exceeded', 'run.events_truncated',
+  'approval.accepted', 'approval.rejected', 'step.started', 'step.completed',
+  'step.failed', 'step.blocked', 'step.retrying', 'step.output_rejected'
+]);
+
+// An error can be null, frozen, or contain attacker-controlled getters and
+// strings. Only inspect own data properties, then copy an explicit allowlist.
+function ownData(value, key) {
+  if (value === null || (typeof value !== 'object' && typeof value !== 'function')) return undefined;
+  try {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    return descriptor && Object.prototype.hasOwnProperty.call(descriptor, 'value') ? descriptor.value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function safeFailureEvents(rawEvents, fallbackReason, context) {
+  const fallback = () => [{ type: fallbackReason === 'handler_error' ? 'run.failed' : 'approval.rejected', reason: fallbackReason }];
+  if (!Array.isArray(rawEvents)) return fallback();
+  try {
+    const selected = rawEvents.length > 1024
+      ? [...rawEvents.slice(0, 512), { type: 'run.events_truncated' }, ...rawEvents.slice(-511)]
+      : rawEvents;
+    const safe = [];
+    for (const event of selected) {
+      const type = ownData(event, 'type');
+      if (!EVENT_TYPES.has(type)) continue;
+      const item = { type };
+      for (const key of ['run_id', 'step_id', 'skill_id', 'plan_id']) {
+        const value = ownData(event, key);
+        const matches = key === 'run_id' ? value === context.runId
+          : key === 'step_id' ? context.stepIds.has(value)
+            : key === 'skill_id' ? context.skillIds.has(value) : value === context.planId;
+        if (matches && typeof value === 'string' && value.length <= 256 && !/[\x00-\x1f\x7f]/.test(value)) item[key] = value;
+      }
+      const at = ownData(event, 'at');
+      if (typeof at === 'string' && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{1,3})?Z$/.test(at)) item.at = at;
+      for (const key of ['attempt', 'approved_steps', 'output_bytes', 'max_output_bytes']) {
+        const value = ownData(event, key);
+        if (Number.isSafeInteger(value) && value >= 0) item[key] = value;
+      }
+      const reason = ownData(event, 'reason');
+      if (EVENT_REASONS.has(reason)) item.reason = reason;
+      const errorType = ownData(event, 'error_type');
+      if (ERROR_TYPES.has(errorType)) item.error_type = errorType;
+      safe.push(item);
+    }
+    return safe.length ? safe : fallback();
+  } catch {
+    return fallback();
+  }
+}
 
 function sanitize(value, depth = 0) {
   if (depth > 8) return '[depth-limited]';
@@ -176,20 +239,48 @@ function createAuditedHost({ host, store } = {}) {
     listSkills: (...args) => typeof host.listSkills === 'function' ? host.listSkills(...args) : [],
     statusFor: (...args) => typeof host.statusFor === 'function' ? host.statusFor(...args) : { available: false, requiresApproval: false },
     async execute(plan, options) {
+      const stepIds = new Set();
+      const skillIds = new Set();
+      const rawSteps = ownData(plan, 'steps');
+      if (Array.isArray(rawSteps)) {
+        try {
+          for (const step of rawSteps) {
+            if (typeof ownData(step, 'id') === 'string') stepIds.add(ownData(step, 'id'));
+            if (typeof ownData(step, 'skill_id') === 'string') skillIds.add(ownData(step, 'skill_id'));
+          }
+        } catch { /* Preserve execution even if a non-standard plan cannot be inspected. */ }
+      }
+      const planId = ownData(plan, 'plan_id');
+      const capture = Object.create(null);
+      let result;
       try {
-        const result = await host.execute(plan, options);
-        await store.record(result);
-        return result;
+        const hostOptions = host[HOST_AUDIT_CAPTURE] === true
+          ? { ...(options || {}), [HOST_AUDIT_CAPTURE]: capture }
+          : options;
+        result = await host.execute(plan, hostOptions);
       } catch (error) {
-        const runId = error.run_id || `failed_${Date.now().toString(36)}`;
-        const status = error.status || (error.code === 'APPROVAL_REJECTED' ? 'blocked' : 'failed');
-        const events = Array.isArray(error.events) ? error.events : [{
-          type: error.code === 'APPROVAL_REJECTED' ? 'approval.rejected' : 'run.failed',
-          reason: error.reason || error.code || 'unknown'
-        }];
-        await store.record({ run_id: runId, status, outputs: {}, events });
+        const failure = ownData(capture, 'failure');
+        const candidateId = ownData(failure, 'run_id');
+        const runId = typeof candidateId === 'string' && /^run_[a-z0-9]{1,12}_[a-z0-9]{1,6}$/i.test(candidateId)
+          ? candidateId : `failed_${Date.now().toString(36)}`;
+        const rawReason = ownData(failure, 'reason');
+        const reason = APPROVAL_REASONS.has(rawReason) ? rawReason : 'handler_error';
+        const rawStatus = ownData(failure, 'status');
+        const status = FAILURE_STATUSES.has(rawStatus) ? rawStatus : 'failed';
+        const events = safeFailureEvents(ownData(failure, 'events'), reason, { runId, stepIds, skillIds, planId });
+        try {
+          await store.record({ run_id: runId, status, outputs: {}, events });
+        } catch {
+          // Do not replace the handler's original exception with an audit-store
+          // exception; expose a controlled flag when the value is extensible.
+          if (error !== null && (typeof error === 'object' || typeof error === 'function')) {
+            try { error.audit_record_failed = true; } catch { /* immutable original */ }
+          }
+        }
         throw error;
       }
+      await store.record(result);
+      return result;
     }
   };
 }

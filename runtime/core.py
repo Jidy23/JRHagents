@@ -35,9 +35,18 @@ class SkillSpec:
     requires_approval: bool = False
 
     def __post_init__(self) -> None:
-        if not self.id.strip():
+        if not isinstance(self.id, str) or not self.id.strip():
             raise ValueError("skill id must not be empty")
-        if self.risk is Risk.HIGH and not self.requires_approval:
+        if not isinstance(self.description, str) or not self.description.strip():
+            raise ValueError("skill description must not be empty")
+        if type(self.requires_approval) is not bool:
+            raise ValueError("requires_approval must be a boolean")
+        try:
+            risk = Risk(self.risk)
+        except (ValueError, TypeError) as exc:
+            raise ValueError("risk must be low or high") from exc
+        object.__setattr__(self, "risk", risk)
+        if risk is Risk.HIGH and not self.requires_approval:
             raise ValueError("high-risk skills must require approval")
 
 
@@ -71,8 +80,11 @@ class StepSpec:
     input: Mapping[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        if not self.id.strip() or not self.skill_id.strip():
+        if (not isinstance(self.id, str) or not self.id.strip()
+                or not isinstance(self.skill_id, str) or not self.skill_id.strip()):
             raise ValueError("step id and skill id must not be empty")
+        if not isinstance(self.input, Mapping):
+            raise ValueError("step input must be a mapping")
 
 
 @dataclass(frozen=True)
@@ -82,7 +94,7 @@ class WorkflowPlan:
     plan_id: str = field(default_factory=lambda: f"plan_{uuid4().hex[:12]}")
 
     def __post_init__(self) -> None:
-        if not self.goal.strip():
+        if not isinstance(self.goal, str) or not self.goal.strip():
             raise ValueError("workflow goal must not be empty")
         ids = [step.id for step in self.steps]
         if len(ids) != len(set(ids)):
@@ -107,6 +119,19 @@ class ExecutionResult:
 
 
 Handler = Callable[[Mapping[str, Any]], Any]
+
+
+def _attach_run(exc: Exception, run_id: str, events: list[RunEvent], status: str) -> Exception:
+    """Preserve original exception types while exposing the recorded run state."""
+    try:
+        exc.run_id = run_id
+        exc.events = tuple(events)
+        exc.status = status
+    except (AttributeError, TypeError):
+        # A handler may raise an exception with immutable attributes; do not
+        # replace its original failure with an instrumentation error.
+        pass
+    return exc
 
 
 class RunManager:
@@ -139,25 +164,32 @@ class RunManager:
         outputs: dict[str, Any] = {}
 
         for step in plan.steps:
-            skill = self.registry.get(step.skill_id)
+            try:
+                skill = self.registry.get(step.skill_id)
+            except KeyError as exc:
+                events.append(self._event(run_id, "step.failed", step.id, reason="skill_unknown"))
+                events.append(self._event(run_id, "run.failed"))
+                raise _attach_run(exc, run_id, events, "failed")
             events.append(self._event(run_id, "step.ready", step.id, skill_id=skill.id))
 
             if skill.requires_approval and step.id not in approved_steps:
                 events.append(self._event(run_id, "step.blocked", step.id, reason="approval_required"))
                 events.append(self._event(run_id, "run.paused", detail="approval_required"))
-                raise ApprovalRequired(f"approval required for step: {step.id}")
+                raise _attach_run(ApprovalRequired(f"approval required for step: {step.id}"), run_id, events, "paused")
 
             handler = handlers.get(skill.id)
             if handler is None:
                 events.append(self._event(run_id, "step.failed", step.id, reason="handler_missing"))
-                raise KeyError(f"no handler supplied for skill: {skill.id}")
+                events.append(self._event(run_id, "run.failed"))
+                raise _attach_run(KeyError(f"no handler supplied for skill: {skill.id}"), run_id, events, "failed")
 
             events.append(self._event(run_id, "step.started", step.id))
             try:
                 outputs[step.id] = handler(step.input)
             except Exception as exc:
                 events.append(self._event(run_id, "step.failed", step.id, error=type(exc).__name__))
-                raise
+                events.append(self._event(run_id, "run.failed"))
+                raise _attach_run(exc, run_id, events, "failed")
             events.append(self._event(run_id, "step.completed", step.id))
 
         events.append(self._event(run_id, "run.completed"))
