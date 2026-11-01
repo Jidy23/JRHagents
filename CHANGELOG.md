@@ -1,3 +1,10 @@
+## 1.3.0 — goal-driven capability discovery (2026-11-01)
+
+- Add a goal-to-deliverable contract, host capability states, relevant Skill/connector discovery, dependency-aware execution, bounded retries and output verification.
+- Add a discovery/adaptation playbook for GitHub Skills, MCP, APIs and CLIs, including source provenance, actual tool-schema mapping and persistent-install boundaries.
+- Keep the 66 existing workflows; the catalog is a starting map rather than a claim of universal compatibility.
+- Behavioral evaluation scenarios are documented separately; package tests do not prove model behavior or live integrations.
+
 ## 1.2.1 — evidence and optional project memory (2026-10-28)
 
 - Added opt-in local project memory, evidence summaries, reviewed improvement
