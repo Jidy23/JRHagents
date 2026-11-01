@@ -119,7 +119,8 @@ body{-webkit-font-smoothing:antialiased;letter-spacing:0}
  .mobile-bottom small{font-size:.6875rem}
  .quick-switch .btn{width:100%}
  .setup-footer{font-size:.75rem}
- .mobile-next{margin-top:12px}
+ #screen-mulai[data-mobile-stage=choose] .main-panel{padding-bottom:76px}
+ .mobile-next{position:fixed;z-index:24;bottom:calc(78px + env(safe-area-inset-bottom));left:max(24px,env(safe-area-inset-left));right:max(24px,env(safe-area-inset-right));width:auto;margin:0;box-shadow:0 4px 18px #17253b30}
 }
 @media(max-width:380px){
  .header-actions{gap:4px}
