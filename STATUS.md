@@ -1,5 +1,13 @@
 # Current improvement milestone
 
+## Skill 1.3.0 first, then website prompt sync — 2026-11-01
+
+- Upgraded the canonical Skill with goal-to-deliverable coordination, capability readiness, external Skill/connector discovery, real host-tool mapping, bounded recovery, output verification and continuity rules.
+- Added DISCOVERY.md; retained the 66-workflow catalog. External agents/runtimes are not bundled. Behavioral evaluation cases are documented as NOT RUN.
+- Initial local checks: 112 Python tests, 9 catalog tests, catalog consistency and deterministic plugin packaging passed. Private plugin update returned version 1.3.0.
+- Website changes synchronize only the copied manual prompt and its cache key. Jakub Krehel interface guidance was read for later web design work; no UI redesign is included here.
+- Source PR #52 and CI/Pages results are tracked separately.
+
 ## ECC-inspired quality and runtime hardening — 2026-10-27
 
 Base: `main` at `92432a5`. Work is on `feature/ecc-workflows-20261027`.
