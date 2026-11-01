@@ -41,6 +41,7 @@ try:
    page.set_content(html,wait_until='load')
    page.add_style_tag(content=(ROOT/'docs/assets/style.css').read_text(encoding='utf-8'))
    page.add_style_tag(content=(ROOT/'docs/assets/support.css').read_text(encoding='utf-8'))
+   page.add_style_tag(content=(ROOT/'docs/assets/interface.css').read_text(encoding='utf-8'))
    page.evaluate('''() => {window.__copied = null; Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async(s)=>{window.__copied=s},readText:async()=>window.__copied}});try{Object.defineProperty(window,'isSecureContext',{configurable:true,value:true});}catch(e){} }''')
    for name in ('catalog.js','universal.js','app.js','support.js'):page.add_script_tag(content=(ROOT/'docs/assets'/name).read_text(encoding='utf-8'))
    assert page.locator('#screen-mulai').is_visible()
@@ -59,7 +60,10 @@ try:
    page.locator('#taskTemplates button').first.click()
    assert 'ringkasan riset' in page.locator('#taskGoal').input_value(),width
    page.locator('#taskConstraints').fill('Gunakan sumber primer')
-   if width<=720:page.locator('#nextSetup').click()
+   if width<=720:
+    assert page.locator('#taskGoal').evaluate('(el)=>getComputedStyle(el).fontSize')=='16px',width
+    page.locator('#nextSetup').click()
+    assert page.locator('#copyMain').evaluate('(el)=>el===document.activeElement'),width
    masked=page.locator('#previewContent').evaluate('(el)=>getComputedStyle(el).filter')
    assert masked.startswith('blur('),masked
    page.locator('#showPrompt').click()
@@ -75,6 +79,7 @@ try:
    assert page.locator('#catalogCount').inner_text()=='66 / 66',width
    assert page.locator('.cap-card').count()==12,width
    page.locator('#capSearch').fill('CV')
+   assert page.locator('.searchbox').evaluate('(el)=>getComputedStyle(el).outlineStyle')=='solid',width
    assert page.locator('#catalogCount').inner_text().split(' / ')[0]=='1',width
    page.locator('.cap-card').first.click()
    assert 'CV' in page.locator('#detailTitle').inner_text(),width
